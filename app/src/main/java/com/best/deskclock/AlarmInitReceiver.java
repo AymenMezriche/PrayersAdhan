@@ -13,6 +13,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager.WakeLock;
+import android.util.Log;
 
 import com.best.deskclock.alarms.AlarmNotifications;
 import com.best.deskclock.alarms.AlarmStateManager;
@@ -62,6 +63,7 @@ public class AlarmInitReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         final String action = intent.getAction();
         LogUtils.i("AlarmInitReceiver " + action);
+        Log.i("alarmTrackTag","receive action in AlarmInitReceiver class : " + action);
 
         final PendingResult result = goAsync();
         final WakeLock wl = AlarmAlertWakeLock.createPartialWakeLock(context);

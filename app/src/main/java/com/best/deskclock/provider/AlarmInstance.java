@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -315,8 +316,7 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
         return result;
     }
 
-    public static void addInstance(ContentResolver contentResolver,
-                                   AlarmInstance instance) {
+    public static void addInstance(ContentResolver contentResolver, AlarmInstance instance) {
         // Make sure we are not adding a duplicate instances. This is not a
         // fix and should never happen. This is only a safe guard against bad code, and you
         // should fix the root issue if you see the error message.
@@ -334,10 +334,12 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
         ContentValues values = createContentValues(instance);
         Uri uri = contentResolver.insert(CONTENT_URI, values);
         instance.mId = getId(uri);
+        Log.i("alarmTrackTag", "we inserted a new instance to db : H:M " + instance.mHour +" "+instance.mMinute);
     }
 
     public static void updateInstance(ContentResolver contentResolver, AlarmInstance instance) {
         if (instance.mId == INVALID_ID) return;
+        Log.i("alarmTrackTag", "Updating duplicate instance to db : : H:M " + instance.mHour +" "+instance.mMinute);
         ContentValues values = createContentValues(instance);
         contentResolver.update(getContentUri(instance.mId), values, null, null);
     }

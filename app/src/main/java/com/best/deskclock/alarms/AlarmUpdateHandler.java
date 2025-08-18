@@ -64,7 +64,8 @@ public final class AlarmUpdateHandler {
                 Alarm newAlarm = Alarm.addAlarm(cr, alarm);
 
                 // Be ready to scroll to this alarm on UI later.
-                mScrollHandler.setSmoothScrollStableId(newAlarm.id);
+                if (mScrollHandler != null)
+                    mScrollHandler.setSmoothScrollStableId(newAlarm.id);
 
                 // Create and add instance to db
                 if (newAlarm.enabled) {
@@ -190,9 +191,9 @@ public final class AlarmUpdateHandler {
         final Alarm deletedAlarm = mDeletedAlarm;
         final Snackbar snackbar = Snackbar.make(mSnackbarAnchor, localizedContext.getString(R.string.alarm_deleted),
                 Snackbar.LENGTH_LONG).setAction(android.R.string.cancel, v -> {
-                    mDeletedAlarm = null;
-                    asyncAddAlarm(deletedAlarm);
-                });
+            mDeletedAlarm = null;
+            asyncAddAlarm(deletedAlarm);
+        });
         SnackbarManager.show(snackbar);
     }
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright (C) 2007 The Android Open Source Project
     modified
     SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
@@ -10,12 +9,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddTestAlarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Open Add Alarms Activty"/>
+
     <!-- Due to the ViewPager and the location of FAB, paddings are set
          in the AlarmClockFragment.java file. -->
     <com.best.deskclock.AlarmRecyclerView
         android:id="@+id/alarms_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
         android:clipToPadding="false" />
 
     <com.google.android.material.textview.MaterialTextView

@@ -851,21 +851,27 @@ public final class DataModel {
         private static class ChangeSoundSettingsListener implements View.OnClickListener {
             @Override
             public void onClick(View v) {
+                /* todo reactivate the sound setting open code
                 final Context context = v.getContext();
                 context.startActivity(new Intent(ACTION_SOUND_SETTINGS)
                         .addFlags(FLAG_ACTIVITY_NEW_TASK));
+                */
             }
         }
 
         private static class ChangeSoundActionPredicate implements Predicate<Context> {
             @Override
             public boolean apply(Context context) {
-                final Intent intent = new Intent(ACTION_SOUND_SETTINGS);
+/*
+                /* todo reactivate the sound setting open code
+
+              final Intent intent = new Intent(ACTION_SOUND_SETTINGS);
                 try {
                     context.startActivity(intent);
                 } catch (ActivityNotFoundException ex) {
                     Toast.makeText(context, "application_not_found", Toast.LENGTH_SHORT).show();
                 }
+  */
                 return true;
             }
         }

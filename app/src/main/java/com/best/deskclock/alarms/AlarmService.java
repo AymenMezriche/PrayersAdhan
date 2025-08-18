@@ -125,7 +125,6 @@ public class AlarmService extends Service {
     private String mCameraId;
     private boolean mFlashState = false;
     private Handler mHandler;
-    private Runnable mFlashRunnable;
 
     private AlarmInstance mCurrentAlarm = null;
 
@@ -306,17 +305,6 @@ public class AlarmService extends Service {
         getBackCameraId();
 
         mHandler = new Handler(Looper.getMainLooper());
-        mFlashRunnable = new Runnable() {
-            @Override
-            public void run() {
-                // Toggle flash state
-                mFlashState = !mFlashState;
-                toggleFlash(mFlashState);
-
-                // Repeat action after 500ms
-                mHandler.postDelayed(this, 500);
-            }
-        };
     }
 
     @Override
@@ -392,11 +380,6 @@ public class AlarmService extends Service {
             stopCurrentAlarm();
         }
 
-        mHandler.removeCallbacks(mFlashRunnable);
-        if (AlarmUtils.hasBackFlash(this)) {
-            toggleFlash(false);
-        }
-
         if (mIsRegistered) {
             unregisterReceiver(mActionsReceiver);
             mIsRegistered = false;
@@ -415,9 +398,6 @@ public class AlarmService extends Service {
         mCurrentAlarm = instance;
         AlarmNotifications.showAlarmNotification(this, mCurrentAlarm);
         AlarmKlaxon.start(this, mPrefs, mCurrentAlarm);
-        if (mCurrentAlarm.mFlash) {
-            mHandler.post(mFlashRunnable);
-        }
         sendBroadcast(new Intent(ALARM_ALERT_ACTION));
         attachListeners();
     }
@@ -533,13 +513,7 @@ public class AlarmService extends Service {
     }
 
     private void toggleFlash(boolean state) {
-        try {
-            if (AlarmUtils.hasBackFlash(this) && mCameraId != null) {
-                mCameraManager.setTorchMode(mCameraId, state);
-            }
-        } catch (CameraAccessException e) {
-            LogUtils.e("AlarmService.toggleFlash - Failed to access the flash unit", e);
-        }
+
     }
 
     /**

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright (C) 2016 The Android Open Source Project
     modified
     SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
---><resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+-->
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Label shown on launcher icon -->
     <!-- Label for the this application displayed on-screen when this application must be represented to the user. -->
     <string name="app_label">Clock</string>
@@ -130,7 +130,7 @@
          6:      hours minutes
          7: days hours minutes
     -->
-    <skip/>
+    <skip />
     <!-- Timer notification: how long from now until timer goes off.
          (Also used for timer accessibility announcements.) -->
     <string name="timer_notifications_less_min">Less than a minute remaining</string>
@@ -530,7 +530,7 @@
     <!-- Setting title for the Power button setting. -->
     <string name="power_button_title">Power button</string>
     <!-- Accessibility labels for Clock activity buttons -->
-    <skip/>
+    <skip />
     <!-- Accessibility labels for alarm buttons -->
     <string name="label_description">Label</string>
     <string name="ringtone_description">Ringtone</string>
@@ -911,7 +911,7 @@
     <!-- Version for about screen -->
     <string name="version">Version</string>
     <!-- Version text [CHAR LIMIT=30] -->
-    <string name="version_text">Version <xliff:g id="VERSION_NUMBER" example="1.0">%1$s</xliff:g></string>
+    <string name="version_text">Version <xliff:g example="1.0" id="VERSION_NUMBER">%1$s</xliff:g></string>
     <!-- What's new features title -->
     <string name="whats_new_title">What\'s new</string>
     <!-- What's new dialog message in about screen -->

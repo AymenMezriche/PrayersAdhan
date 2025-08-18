@@ -26,6 +26,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.best.adhanclock.AddAlarmActivity;
 import com.best.deskclock.alarms.AlarmTimeClickHandler;
 import com.best.deskclock.alarms.AlarmUpdateHandler;
 import com.best.deskclock.alarms.CustomSpinnerTimePickerDialog;
@@ -60,6 +62,7 @@ import com.best.deskclock.utils.Utils;
 import com.best.deskclock.widget.EmptyViewController;
 import com.best.deskclock.widget.toast.SnackbarManager;
 import com.best.deskclock.widget.toast.ToastManager;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -108,6 +111,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     private EmptyViewController mEmptyViewController;
     private AlarmTimeClickHandler mAlarmTimeClickHandler;
     private LinearLayoutManager mLayoutManager;
+    private MaterialButton btnAddTestAlarm;
 
     /**
      * The public no-arg constructor required by all fragments.
@@ -134,6 +138,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         final View v = inflater.inflate(R.layout.alarm_clock, container, false);
         mContext = requireContext();
         mMainLayout = v.findViewById(R.id.main);
+        btnAddTestAlarm = v.findViewById(R.id.btnAddTestAlarm);
         mRecyclerView = v.findViewById(R.id.alarms_recycler_view);
         TextView alarmsEmptyView = v.findViewById(R.id.alarms_empty_view);
         final boolean isTablet = ThemeUtils.isTablet();
@@ -312,6 +317,8 @@ public final class AlarmClockFragment extends DeskClockFragment implements
                 }
             }).attachToRecyclerView(mRecyclerView);
         }
+
+        btnAddTestAlarm.setOnClickListener(v1 -> startActivity(new Intent(requireActivity(), AddAlarmActivity.class)));
 
         return v;
     }

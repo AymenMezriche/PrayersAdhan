@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationManagerCompat;
@@ -136,6 +137,9 @@ public final class AlarmStateManager extends BroadcastReceiver {
     private static void updateNextAlarm(Context context) {
         final AlarmInstance nextAlarm = getNextFiringAlarm(context);
 
+        Log.i("alarmTrackTag", "updateNextAlarm called ");
+        printAlarm(nextAlarm);
+
         if (nextAlarm != null) {
             setPowerOffAlarm(context, nextAlarm);
         }
@@ -152,6 +156,14 @@ public final class AlarmStateManager extends BroadcastReceiver {
             appwidgetUpdateIntent.setPackage(context.getPackageName());
             context.sendBroadcast(appwidgetUpdateIntent);
         }, 300);
+    }
+
+    private static void printAlarm(AlarmInstance nextAlarm) {
+        if (nextAlarm != null) {
+            Log.i("alarmTrackTag", nextAlarm.toString());
+        } else {
+            Log.i("alarmTrackTag", "No next alarm found");
+        }
     }
 
 
@@ -249,10 +261,39 @@ public final class AlarmStateManager extends BroadcastReceiver {
                 nextRepeatedInstance = alarm.createInstanceAfter(instance.getAlarmTime());
             }
 
+            //here we can change the alarm hour and minute based on day and string alarm label that hold prayer name
+
+            // Get alarm label (e.g., "Fajr", "Dhuhr"…)
+            String prayerName = alarm.label;
+
+            // Get the day of the next instance
+            Calendar nextCal = nextRepeatedInstance.getAlarmTime();
+
+            // Look up test prayer time
+            int[] hm = PrayerTimesProvider.getPrayerTimeForTest(nextCal, prayerName);
+
+            // Update the alarm time
+            nextCal.set(Calendar.HOUR_OF_DAY, hm[0]);
+            nextCal.set(Calendar.MINUTE, hm[1]);
+
+            nextRepeatedInstance.setAlarmTime(nextCal);
+
+            LogUtils.i("Updating next instance time for alarm " + prayerName + " to " + AlarmUtils.getFormattedTime(context, nextCal));
+
             LogUtils.i("Creating new instance for repeating alarm " + alarm.id + " at " +
                     AlarmUtils.getFormattedTime(context, nextRepeatedInstance.getAlarmTime()));
+
+            Log.i("alarmTrackTag", "calling AlarmInstance.addInstance with h:m " + nextRepeatedInstance.mHour + ":" + nextRepeatedInstance.mMinute);
+
+
             AlarmInstance.addInstance(cr, nextRepeatedInstance);
             registerInstance(context, nextRepeatedInstance, true);
+
+            //update the alarm item inside the templates alarm table in database
+            //because this table used to get show alarms list in alarms tap
+            alarm.hour = nextRepeatedInstance.mHour;
+            alarm.minutes = nextRepeatedInstance.mMinute;
+            Alarm.updateAlarm(cr, alarm);
         }
     }
 
@@ -438,7 +479,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
             final Handler mainHandler = new Handler(context.getMainLooper());
             final Runnable myRunnable = () -> {
                 String displayTime = String.format(context.getResources()
-                                .getQuantityText(R.plurals.alarm_alert_snooze_set, snoozeMinutes).toString(), snoozeMinutes);
+                        .getQuantityText(R.plurals.alarm_alert_snooze_set, snoozeMinutes).toString(), snoozeMinutes);
                 Toast.makeText(context, displayTime, Toast.LENGTH_LONG).show();
             };
             mainHandler.post(myRunnable);
@@ -788,6 +829,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
                 return;
             }
 
+
             int globalId = SettingsDAO.getGlobalIntentId(getDefaultSharedPreferences(context));
             int intentId = intent.getIntExtra(ALARM_GLOBAL_ID_EXTRA, -1);
             int alarmState = intent.getIntExtra(ALARM_STATE_EXTRA, -1);
@@ -809,8 +851,10 @@ public final class AlarmStateManager extends BroadcastReceiver {
             }
 
             if (alarmState >= 0) {
+                Log.i("alarmTrackTag", "set alarm state in AlarmStateManager class : " + alarmState);
                 setAlarmState(context, instance, alarmState);
             } else {
+                Log.i("alarmTrackTag", "calling registerInstance in AlarmStateManager class for state " + alarmState);
                 registerInstance(context, instance, true);
             }
         } else if (SHOW_AND_DISMISS_ALARM_ACTION.equals(action)) {
@@ -869,6 +913,8 @@ public final class AlarmStateManager extends BroadcastReceiver {
         if (INDICATOR_ACTION.equals(intent.getAction())) {
             return;
         }
+
+        Log.i("alarmTrackTag", "receive action in AlarmStateManager class : " + intent.getAction());
 
         final PendingResult result = goAsync();
         final PowerManager.WakeLock wl = AlarmAlertWakeLock.createPartialWakeLock(context);

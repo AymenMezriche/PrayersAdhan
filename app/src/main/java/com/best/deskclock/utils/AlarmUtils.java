@@ -213,28 +213,16 @@ public class AlarmUtils {
         final long alarmTimeDelta = alarmTime - System.currentTimeMillis();
         final String text = formatElapsedTimeUntilAlarm(
                 snackbarAnchor.getContext(), alarmTimeDelta);
+        /*
         SnackbarManager.show(Snackbar.make(snackbarAnchor, text, Snackbar.LENGTH_SHORT));
-        snackbarAnchor.announceForAccessibility(text);
+        snackbarAnchor.announceForAccessibility(text);*/
+        Toast.makeText(snackbarAnchor.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     /**
      * @return {@code true} if the device has a back flash. {@code false} otherwise.
      */
     public static boolean hasBackFlash(Context context) {
-        CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
-        try {
-            for (String cameraId : cameraManager.getCameraIdList()) {
-                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
-                Integer lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                Boolean hasFlash = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
-
-                if (lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK && hasFlash != null && hasFlash) {
-                    return true;
-                }
-            }
-        } catch (CameraAccessException e) {
-            LogUtils.e("AlarmUtils - Failed to access the flash unit", e);
-        }
         return false;
     }
 }
