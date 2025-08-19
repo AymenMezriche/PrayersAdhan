@@ -7,11 +7,8 @@
 package com.best.deskclock.data;
 
 import static android.content.Context.AUDIO_SERVICE;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.media.AudioManager.FLAG_SHOW_UI;
 import static android.media.AudioManager.STREAM_ALARM;
-import static android.provider.Settings.ACTION_SOUND_SETTINGS;
-
 import static com.best.deskclock.settings.PreferencesDefaultValues.DARK_THEME;
 import static com.best.deskclock.settings.PreferencesDefaultValues.LIGHT_THEME;
 import static com.best.deskclock.settings.PreferencesDefaultValues.SYSTEM_THEME;
@@ -19,10 +16,7 @@ import static com.best.deskclock.settings.PreferencesKeys.KEY_THEME;
 import static com.best.deskclock.utils.Utils.enforceMainLooper;
 import static com.best.deskclock.utils.Utils.enforceNotMainLooper;
 
-import android.app.Service;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -31,17 +25,13 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.text.format.DateFormat;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.best.deskclock.R;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 /**
