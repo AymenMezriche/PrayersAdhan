@@ -31,7 +31,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.best.deskclock.data.DataModel;
-import com.best.deskclock.data.Timer;
 import com.best.deskclock.provider.Alarm;
 
 import com.best.deskclock.utils.SdkUtils;
@@ -66,16 +65,6 @@ public class LabelDialogFragment extends DialogFragment {
         args.putString(ARG_LABEL, label);
         args.putParcelable(ARG_ALARM, alarm);
         args.putString(ARG_TAG, tag);
-
-        final LabelDialogFragment frag = new LabelDialogFragment();
-        frag.setArguments(args);
-        return frag;
-    }
-
-    public static LabelDialogFragment newInstance(Timer timer) {
-        final Bundle args = new Bundle();
-        args.putString(ARG_LABEL, timer.getLabel());
-        args.putInt(ARG_TIMER_ID, timer.getId());
 
         final LabelDialogFragment frag = new LabelDialogFragment();
         frag.setArguments(args);
@@ -203,20 +192,6 @@ public class LabelDialogFragment extends DialogFragment {
      * Sets the new label into the timer or alarm.
      */
     private void setLabel() {
-        String label = Objects.requireNonNull(mEditLabel.getText()).toString();
-        if (label.trim().isEmpty()) {
-            // Don't allow user to input label with only whitespace.
-            label = "";
-        }
-
-        if (mAlarm != null) {
-            ((AlarmLabelDialogHandler) requireActivity()).onDialogLabelSet(mAlarm, label, mTag);
-        } else if (mTimerId >= 0) {
-            final Timer timer = DataModel.getDataModel().getTimer(mTimerId);
-            if (timer != null) {
-                DataModel.getDataModel().setTimerLabel(timer, label);
-            }
-        }
     }
 
     public interface AlarmLabelDialogHandler {

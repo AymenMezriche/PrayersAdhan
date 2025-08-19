@@ -50,7 +50,6 @@ import com.best.deskclock.data.SettingsDAO;
 import com.best.deskclock.utils.InsetsUtils;
 import com.best.deskclock.utils.SdkUtils;
 import com.best.deskclock.utils.ThemeUtils;
-
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -103,12 +102,6 @@ public abstract class ScreenFragment extends PreferenceFragmentCompat {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == 0) {
-            Fragment existingFragment =
-                    requireActivity().getSupportFragmentManager().findFragmentByTag(AboutFragment.class.getSimpleName());
-
-            if (existingFragment == null) {
-                animateAndShowFragment(new AboutFragment());
-            }
 
             return true;
         }
@@ -212,8 +205,6 @@ public abstract class ScreenFragment extends PreferenceFragmentCompat {
                         }
                     }
                 }
-            } else if (Objects.equals(pref.getKey(), KEY_ABOUT_TITLE)) {
-                pref.setLayoutResource(R.layout.settings_about_title);
             } else {
                 if (isCardBackgroundDisplayed && isCardBorderDisplayed) {
                     pref.setLayoutResource(R.layout.settings_preference_layout_bordered);
@@ -249,31 +240,6 @@ public abstract class ScreenFragment extends PreferenceFragmentCompat {
         });
     }
 
-    /**
-     * Initiates a fragment transaction with custom animations to replace the current fragment.
-     * The new fragment is added to the back stack, allowing for back navigation, and custom
-     * slide-in/slide-out or fade_in/fade-out animations are applied to transition between fragments.
-     *
-     * @param fragment The new fragment to be displayed.
-     */
-    protected void animateAndShowFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
-
-        if (ThemeUtils.areSystemAnimationsDisabled(requireContext())) {
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
-        } else if (SettingsDAO.isFadeTransitionsEnabled(mPrefs)) {
-            fragmentTransaction.setCustomAnimations(
-                    R.anim.fade_in, R.anim.fade_out,
-                    R.anim.fade_in, R.anim.fade_out);
-        } else {
-            fragmentTransaction.setCustomAnimations(
-                    R.anim.fragment_slide_from_right, R.anim.fragment_slide_to_left,
-                    R.anim.fragment_slide_from_left, R.anim.fragment_slide_to_right);
-        }
-        fragmentTransaction.replace(R.id.content_frame, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
 
     /**
      * Recreate the activity while ensuring smooth animation when resetting the fragment view:

@@ -2,10 +2,7 @@
 
 package com.best.deskclock.utils;
 
-import static com.best.deskclock.DeskClockApplication.getDefaultSharedPreferences;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -18,12 +15,7 @@ import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.best.deskclock.R;
-import com.best.deskclock.alarms.AlarmActivity;
 import com.best.deskclock.data.DataModel;
-import com.best.deskclock.data.SettingsDAO;
-import com.best.deskclock.screensaver.Screensaver;
-import com.best.deskclock.screensaver.ScreensaverActivity;
-import com.best.deskclock.settings.AlarmDisplayPreviewActivity;
 import com.best.deskclock.widget.AnalogClock;
 
 import java.text.SimpleDateFormat;
@@ -71,26 +63,11 @@ public class ClockUtils {
                 final Context context = analogClock.getContext();
                 int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
 
-                // Optimally adjust the height and the width of the analog clock when displayed
-                // on a tablet or phone in portrait or landscape mode
-                if (context instanceof AlarmActivity || context instanceof AlarmDisplayPreviewActivity) {
-                    if (ThemeUtils.isTablet()) {
-                        analogClock.getLayoutParams().height = ThemeUtils.isLandscape()
-                                ? screenHeight / 2 : screenHeight / 4;
-                        analogClock.getLayoutParams().width = ThemeUtils.isLandscape()
-                                ? screenHeight / 2 : screenHeight / 4;
-                    } else {
-                        analogClock.getLayoutParams().height = ThemeUtils.isLandscape()
-                                ? (int) (screenHeight / 1.6) : (int) (screenHeight / 3.2);
-                        analogClock.getLayoutParams().width = ThemeUtils.isLandscape()
-                                ? (int) (screenHeight / 1.6) : (int) (screenHeight / 3.2);
-                    }
-                } else {
-                    analogClock.getLayoutParams().height = ThemeUtils.isLandscape()
-                            ? (int) (screenHeight / 2.6) : (int) (screenHeight / 3.8);
-                    analogClock.getLayoutParams().width = ThemeUtils.isLandscape()
-                            ? (int) (screenHeight / 2.6) : (int) (screenHeight / 3.8);
-                }
+                analogClock.getLayoutParams().height = ThemeUtils.isLandscape()
+                        ? (int) (screenHeight / 2.6) : (int) (screenHeight / 3.8);
+                analogClock.getLayoutParams().width = ThemeUtils.isLandscape()
+                        ? (int) (screenHeight / 2.6) : (int) (screenHeight / 3.8);
+
 
                 analogClock.setVisibility(View.VISIBLE);
                 digitalClock.setVisibility(View.GONE);
@@ -138,13 +115,7 @@ public class ClockUtils {
         if (amPmRatio <= 0) {
             pattern = pattern.replaceAll("\u200Aa", "").trim();
         } else {
-            if (context instanceof ScreensaverActivity || context instanceof Screensaver) {
-                if (SettingsDAO.isScreensaverDigitalClockInItalic(getDefaultSharedPreferences(context))) {
-                    // For screensaver, add a "Hair Space" (\u200A) at the end of the AM/PM to prevent
-                    // its display from being cut off on some devices when in italic.
-                    pattern = pattern.replaceAll("a", "a" + "\u200A");
-                }
-            }
+
         }
 
         // Build a spannable so that the am/pm will be formatted
@@ -162,17 +133,8 @@ public class ClockUtils {
     }
 
     public static CharSequence get24ModeFormat(Context context, boolean includeSeconds) {
-        if (context instanceof ScreensaverActivity || context instanceof Screensaver) {
-            if (SettingsDAO.isScreensaverDigitalClockInItalic(getDefaultSharedPreferences(context))) {
-                // For screensaver, add a "Thin Space" (\u2009) at the end of the time to prevent
-                // its display from being cut off on some devices when in italic.
-                return DateFormat.getBestDateTimePattern(Locale.getDefault(), includeSeconds ? "Hms" : "Hm") + "\u2009";
-            } else {
-                return DateFormat.getBestDateTimePattern(Locale.getDefault(), includeSeconds ? "Hms" : "Hm");
-            }
-        } else {
             return DateFormat.getBestDateTimePattern(Locale.getDefault(), includeSeconds ? "Hms" : "Hm");
-        }
+
     }
 
     /**
@@ -186,16 +148,7 @@ public class ClockUtils {
 
         final Locale l = Locale.getDefault();
         String datePattern = DateFormat.getBestDateTimePattern(l, dateSkeleton);
-        if (dateDisplay.getContext() instanceof ScreensaverActivity || dateDisplay.getContext() instanceof Screensaver) {
-            final SharedPreferences prefs = getDefaultSharedPreferences(clock.getContext());
-            // Add a "Thin Space" (\u2009) at the end of the date to prevent its display from being cut off on some devices.
-            // (The display of the date is only cut off at the end if it is defined in italics in the screensaver settings).
-            if (SettingsDAO.isScreensaverDateInItalic(prefs)) {
-                datePattern = "\u2009" + DateFormat.getBestDateTimePattern(l, dateSkeleton) + "\u2009";
-            } else if (SettingsDAO.isScreensaverNextAlarmInItalic(prefs)) {
-                datePattern = "\u2009" + DateFormat.getBestDateTimePattern(l, dateSkeleton);
-            }
-        }
+
 
         final String descriptionPattern = DateFormat.getBestDateTimePattern(l, descriptionSkeleton);
         final Date now = new Date();

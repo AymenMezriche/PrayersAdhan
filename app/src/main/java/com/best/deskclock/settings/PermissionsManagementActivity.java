@@ -346,11 +346,11 @@ public class PermissionsManagementActivity extends CollapsingToolbarBaseActivity
          * This can be used by the calling component to perform any subsequent actions based on the permission result.
          */
         private void sendPermissionResult() {
-            if (requireActivity() instanceof SettingsActivity) {
+            /*if (requireActivity() instanceof SettingsActivity) {
                 requireActivity().setResult(REQUEST_CHANGE_SETTINGS);
             } else {
                 requireActivity().setResult(REQUEST_CHANGE_PERMISSIONS);
-            }
+            }*/
         }
 
         /**

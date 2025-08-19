@@ -3,6 +3,7 @@
 package com.best.deskclock.controller;
 
 import static com.best.deskclock.DeskClockApplication.getDefaultSharedPreferences;
+import static com.best.deskclock.settings.PreferencesDefaultValues.AMOLED_DARK_MODE;
 import static com.best.deskclock.settings.PreferencesDefaultValues.BLACK_ACCENT_COLOR;
 import static com.best.deskclock.settings.PreferencesDefaultValues.BLUE_ACCENT_COLOR;
 import static com.best.deskclock.settings.PreferencesDefaultValues.BLUE_GRAY_ACCENT_COLOR;
@@ -11,7 +12,6 @@ import static com.best.deskclock.settings.PreferencesDefaultValues.DARK_THEME;
 import static com.best.deskclock.settings.PreferencesDefaultValues.DEFAULT_DARK_MODE;
 import static com.best.deskclock.settings.PreferencesDefaultValues.GREEN_ACCENT_COLOR;
 import static com.best.deskclock.settings.PreferencesDefaultValues.INDIGO_ACCENT_COLOR;
-import static com.best.deskclock.settings.PreferencesDefaultValues.AMOLED_DARK_MODE;
 import static com.best.deskclock.settings.PreferencesDefaultValues.LIGHT_THEME;
 import static com.best.deskclock.settings.PreferencesDefaultValues.ORANGE_ACCENT_COLOR;
 import static com.best.deskclock.settings.PreferencesDefaultValues.PINK_ACCENT_COLOR;
@@ -37,9 +37,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.collection.ArrayMap;
 import androidx.core.app.ActivityCompat;
 
-import com.best.alarmclock.materialyouwidgets.MaterialYouAnalogAppWidgetConfiguration;
-import com.best.alarmclock.standardwidgets.AnalogAppWidgetConfiguration;
-import com.best.deskclock.FirstLaunch;
 import com.best.deskclock.R;
 import com.best.deskclock.data.SettingsDAO;
 import com.best.deskclock.utils.SdkUtils;
@@ -246,11 +243,6 @@ public class ThemeController {
                 if (ThemeUtils.isNight(activity.getResources()) && darkMode.equals(AMOLED_DARK_MODE)) {
                     activity.getWindow().setNavigationBarColor(Color.BLACK);
                     activity.getWindow().getDecorView().setBackgroundColor(Color.BLACK);
-                } else if (activity instanceof AnalogAppWidgetConfiguration
-                        || activity instanceof MaterialYouAnalogAppWidgetConfiguration
-                        || activity instanceof FirstLaunch) {
-                    activity.getWindow().setNavigationBarColor(
-                            MaterialColors.getColor(activity, android.R.attr.colorBackground, Color.BLACK));
                 } else {
                     boolean isPhoneInLandscapeMode = !ThemeUtils.isTablet() && ThemeUtils.isLandscape();
                     activity.getWindow().setNavigationBarColor(

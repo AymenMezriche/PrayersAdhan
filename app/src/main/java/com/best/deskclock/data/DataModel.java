@@ -37,7 +37,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.best.deskclock.R;
-import com.best.deskclock.timer.TimerService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,16 +59,6 @@ public final class DataModel {
     private Context mContext;
 
     /**
-     * The model from which city data are fetched.
-     */
-    private CityModel mCityModel;
-
-    /**
-     * The model from which timer data are fetched.
-     */
-    private TimerModel mTimerModel;
-
-    /**
      * The model from which alarm data are fetched.
      */
     private AlarmModel mAlarmModel;
@@ -78,11 +67,6 @@ public final class DataModel {
      * The model from which data about settings that silence alarms are fetched.
      */
     private SilentSettingsModel mSilentSettingsModel;
-
-    /**
-     * The model from which stopwatch data are fetched.
-     */
-    private StopwatchModel mStopwatchModel;
 
     /**
      * The model from which notification data are fetched.
@@ -120,11 +104,8 @@ public final class DataModel {
 
             mNotificationModel = new NotificationModel();
             mRingtoneModel = new RingtoneModel(mContext, prefs);
-            mCityModel = new CityModel(mContext, prefs);
             mAlarmModel = new AlarmModel(prefs, mRingtoneModel);
             mSilentSettingsModel = new SilentSettingsModel(mContext, mNotificationModel);
-            mStopwatchModel = new StopwatchModel(mContext, prefs, mNotificationModel);
-            mTimerModel = new TimerModel(mContext, prefs, mRingtoneModel, mNotificationModel);
         }
     }
 
@@ -143,8 +124,6 @@ public final class DataModel {
      */
     public void updateAfterReboot() {
         enforceMainLooper();
-        mTimerModel.updateTimersAfterReboot();
-        mStopwatchModel.setStopwatch(getStopwatch().updateAfterReboot());
     }
 
     /**
@@ -152,13 +131,12 @@ public final class DataModel {
      */
     public void updateAfterTimeSet() {
         enforceMainLooper();
-        mTimerModel.updateTimersAfterTimeSet();
-        mStopwatchModel.setStopwatch(getStopwatch().updateAfterTimeSet());
     }
 
     /**
      * Posts a runnable to the main thread and blocks until the runnable executes. Used to access
      * the data model from the main thread.
+     *
      * @noinspection SynchronizationOnLocalVariableOrMethodParameter
      */
     public void run(Runnable runnable, long waitMillis) throws InterruptedException {
@@ -206,9 +184,6 @@ public final class DataModel {
             mNotificationModel.setApplicationInForeground(inForeground);
 
             // Refresh all notifications in response to a change in app open state.
-            mTimerModel.updateNotification();
-            mTimerModel.updateMissedNotification();
-            mStopwatchModel.updateNotification();
             mSilentSettingsModel.updateSilentState();
         }
     }
@@ -219,320 +194,9 @@ public final class DataModel {
      */
     public void updateAllNotifications() {
         enforceMainLooper();
-        mTimerModel.updateNotification();
-        mTimerModel.updateMissedNotification();
-        mStopwatchModel.updateNotification();
     }
 
-    /**
-     * @return a list of all cities in their display order
-     */
-    public List<City> getAllCities() {
-        enforceMainLooper();
-        return mCityModel.getAllCities();
-    }
 
-    /**
-     * @return a city representing the user's home timezone
-     */
-    public City getHomeCity() {
-        enforceMainLooper();
-        return mCityModel.getHomeCity();
-    }
-
-    /**
-     * @return a list of cities not selected for display
-     */
-    public List<City> getUnselectedCities() {
-        enforceMainLooper();
-        return mCityModel.getUnselectedCities();
-    }
-
-    /**
-     * @return a list of cities selected for display
-     */
-    public List<City> getSelectedCities() {
-        enforceMainLooper();
-        return mCityModel.getSelectedCities();
-    }
-
-    /**
-     * @param cities the new collection of cities selected for display by the user
-     */
-    public void setSelectedCities(Collection<City> cities) {
-        enforceMainLooper();
-        mCityModel.setSelectedCities(cities);
-    }
-
-    /**
-     * @return a comparator used to locate index positions
-     */
-    public Comparator<City> getCityIndexComparator() {
-        enforceMainLooper();
-        return mCityModel.getCityIndexComparator();
-    }
-
-    /**
-     * Adjust the order in which cities are sorted.
-     */
-    public void toggleCitySort() {
-        enforceMainLooper();
-        mCityModel.toggleCitySort();
-    }
-
-    /**
-     * @param cityListener listener to be notified when the world city list changes
-     */
-    public void addCityListener(CityListener cityListener) {
-        enforceMainLooper();
-        mCityModel.addCityListener(cityListener);
-    }
-
-    /**
-     * @param cityListener listener that no longer needs to be notified of world city list changes
-     */
-    public void removeCityListener(CityListener cityListener) {
-        enforceMainLooper();
-        mCityModel.removeCityListener(cityListener);
-    }
-
-    /**
-     * @param timerListener to be notified when timers are added, updated and removed
-     */
-    public void addTimerListener(TimerListener timerListener) {
-        enforceMainLooper();
-        mTimerModel.addTimerListener(timerListener);
-    }
-
-    /**
-     * @param timerListener to no longer be notified when timers are added, updated and removed
-     */
-    public void removeTimerListener(TimerListener timerListener) {
-        enforceMainLooper();
-        mTimerModel.removeTimerListener(timerListener);
-    }
-
-    /**
-     * @return a list of timers for display
-     */
-    public List<Timer> getTimers() {
-        enforceMainLooper();
-        return mTimerModel.getTimers();
-    }
-
-    /**
-     * @return {@code true} if at least one timer is running, paused, or has expired.
-     * {@code false} otherwise.
-     */
-    public boolean hasActiveTimer() {
-        for (Timer timer : getTimers()) {
-            if (!timer.isReset()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Load timers from SharedPreferences after a restore or reset of settings
-     */
-    public void loadTimers() {
-        mTimerModel.loadTimers();
-    }
-
-    /**
-     * @return a list of expired timers for display
-     */
-    public List<Timer> getExpiredTimers() {
-        enforceMainLooper();
-        return mTimerModel.getExpiredTimers();
-    }
-
-    /**
-     * @param timerId identifies the timer to return
-     * @return the timer with the given {@code timerId}
-     */
-    public Timer getTimer(int timerId) {
-        enforceMainLooper();
-        return mTimerModel.getTimer(timerId);
-    }
-
-    /**
-     * @param length         the length of the timer in milliseconds
-     * @param label          describes the purpose of the timer
-     * @param buttonTime     the time indicated in the timer time add button
-     * @param deleteAfterUse {@code true} indicates the timer should be deleted when it is reset
-     * @return the newly added timer
-     */
-    public Timer addTimer(long length, String label, String buttonTime, boolean deleteAfterUse) {
-        enforceMainLooper();
-        return mTimerModel.addTimer(length, label, buttonTime, deleteAfterUse);
-    }
-
-    /**
-     * @param timer the timer to be removed
-     */
-    public void removeTimer(Timer timer) {
-        enforceMainLooper();
-        mTimerModel.removeTimer(timer);
-    }
-
-    /**
-     * @param timer the timer to be started
-     */
-    public void startTimer(Timer timer) {
-        startTimer(null, timer);
-    }
-
-    /**
-     * @param service used to start foreground notifications for expired timers
-     * @param timer   the timer to be started
-     */
-    public void startTimer(Service service, Timer timer) {
-        enforceMainLooper();
-        final Timer started = timer.start();
-        mTimerModel.updateTimer(started);
-        if (timer.getRemainingTime() <= 0) {
-            if (service != null) {
-                expireTimer(service, started);
-            } else {
-                mContext.startService(TimerService.createTimerExpiredIntent(mContext, started));
-            }
-        }
-    }
-
-    /**
-     * @param timer the timer to be paused
-     */
-    public void pauseTimer(Timer timer) {
-        enforceMainLooper();
-        mTimerModel.updateTimer(timer.pause());
-    }
-
-    /**
-     * @param service used to start foreground notifications for expired timers
-     * @param timer   the timer to be expired
-     */
-    public void expireTimer(Service service, Timer timer) {
-        enforceMainLooper();
-        mTimerModel.expireTimer(service, timer);
-    }
-
-    /**
-     * If the given {@code timer} is expired and marked for deletion after use then this method
-     * removes the timer. The timer is otherwise transitioned to the reset state and continues
-     * to exist.
-     *
-     * @param timer        the timer to be reset
-     * @param eventLabelId the label of the timer event to send; 0 if no event should be sent
-     */
-    public void resetOrDeleteTimer(Timer timer, @StringRes int eventLabelId) {
-        enforceMainLooper();
-        mTimerModel.resetTimer(timer, true, eventLabelId);
-    }
-
-    /**
-     * Resets all expired timers.
-     *
-     * @param eventLabelId the label of the timer event to send; 0 if no event should be sent
-     */
-    public void resetOrDeleteExpiredTimers(@StringRes int eventLabelId) {
-        enforceMainLooper();
-        mTimerModel.resetOrDeleteExpiredTimers(eventLabelId);
-    }
-
-    /**
-     * Resets all missed timers.
-     *
-     * @param eventLabelId the label of the timer event to send; 0 if no event should be sent
-     */
-    public void resetMissedTimers(@StringRes int eventLabelId) {
-        enforceMainLooper();
-        mTimerModel.resetMissedTimers(eventLabelId);
-    }
-
-    /**
-     * @param timer the timer to which minutes or hours should be added to the remaining time
-     */
-    public void addCustomTimeToTimer(Timer timer) {
-        enforceMainLooper();
-        mTimerModel.updateTimer(timer.addCustomTime());
-    }
-
-    /**
-     * @param timer the timer to which the new {@code label} belongs
-     * @param label the new label to store for the {@code timer}
-     */
-    public void setTimerLabel(Timer timer, String label) {
-        enforceMainLooper();
-        mTimerModel.updateTimer(timer.setLabel(label));
-    }
-
-    /**
-     * @param timer the timer to which the new {@code newLength} belongs
-     * @param newLength the new duration to store for the {@code timer}
-     */
-    public void setNewTimerDuration(Timer timer, long newLength) {
-        enforceMainLooper();
-        mTimerModel.updateTimer(timer.setNewDuration(newLength));
-    }
-
-    /**
-     * @param timer the timer to which the new {@code buttonTime} belongs
-     * @param buttonTime the new add button text to store for the {@code timer}
-     */
-    public void setTimerButtonTime(Timer timer, String buttonTime) {
-        enforceMainLooper();
-        mTimerModel.updateTimer(timer.setButtonTime(buttonTime));
-    }
-
-    /**
-     * Updates the timer notifications to be current.
-     */
-    public void updateTimerNotification() {
-        enforceMainLooper();
-        mTimerModel.updateNotification();
-    }
-
-    /**
-     * @return the uri of the default ringtone to play for all timers when no user selection exists
-     */
-    public Uri getDefaultTimerRingtoneUri() {
-        enforceMainLooper();
-        return mTimerModel.getDefaultTimerRingtoneUri();
-    }
-
-    /**
-     * @return {@code true} iff the ringtone to play for all timers is the silent ringtone
-     */
-    public boolean isTimerRingtoneSilent() {
-        enforceMainLooper();
-        return mTimerModel.isTimerRingtoneSilent();
-    }
-
-    /**
-     * @return the uri of the ringtone to play for all timers
-     */
-    public Uri getTimerRingtoneUri() {
-        enforceMainLooper();
-        return mTimerModel.getTimerRingtoneUri();
-    }
-
-    /**
-     * @param uri the uri of the ringtone to play for all timers
-     */
-    public void setTimerRingtoneUri(Uri uri) {
-        enforceMainLooper();
-        mTimerModel.setTimerRingtoneUri(uri);
-    }
-
-    /**
-     * @return the title of the ringtone that is played for all timers
-     */
-    public String getTimerRingtoneTitle() {
-        enforceMainLooper();
-        return mTimerModel.getTimerRingtoneTitle();
-    }
 
     /**
      * @return the uri of the default ringtone from the settings to play for all alarms when no user selection exists
@@ -572,95 +236,6 @@ public final class DataModel {
     public void setSelectedAlarmRingtoneUri(Uri uri) {
         enforceMainLooper();
         mAlarmModel.setSelectedAlarmRingtoneUri(uri);
-    }
-
-    /**
-     * @param stopwatchListener to be notified when stopwatch changes or laps are added
-     */
-    public void addStopwatchListener(StopwatchListener stopwatchListener) {
-        enforceMainLooper();
-        mStopwatchModel.addStopwatchListener(stopwatchListener);
-    }
-
-    /**
-     * @param stopwatchListener to no longer be notified when stopwatch changes or laps are added
-     */
-    public void removeStopwatchListener(StopwatchListener stopwatchListener) {
-        enforceMainLooper();
-        mStopwatchModel.removeStopwatchListener(stopwatchListener);
-    }
-
-    /**
-     * @return the current state of the stopwatch
-     */
-    public Stopwatch getStopwatch() {
-        enforceMainLooper();
-        return mStopwatchModel.getStopwatch();
-    }
-
-    /**
-     *
-     */
-    public void startStopwatch() {
-        enforceMainLooper();
-        mStopwatchModel.setStopwatch(getStopwatch().start());
-    }
-
-    /**
-     *
-     */
-    public void pauseStopwatch() {
-        enforceMainLooper();
-        mStopwatchModel.setStopwatch(getStopwatch().pause());
-    }
-
-    /**
-     *
-     */
-    public void resetStopwatch() {
-        enforceMainLooper();
-        mStopwatchModel.setStopwatch(getStopwatch().reset());
-    }
-
-    /**
-     * @return the laps recorded for this stopwatch
-     */
-    public List<Lap> getLaps() {
-        enforceMainLooper();
-        return (mStopwatchModel != null) ? mStopwatchModel.getLaps() : new ArrayList<>();
-    }
-
-    /**
-     * @return a newly recorded lap completed now; {@code null} if no more laps can be added
-     */
-    public Lap addLap() {
-        enforceMainLooper();
-        return mStopwatchModel.addLap();
-    }
-
-    /**
-     * @return {@code true} iff more laps can be recorded
-     */
-    public boolean canAddMoreLaps() {
-        enforceMainLooper();
-        return mStopwatchModel.canAddMoreLaps();
-    }
-
-    /**
-     * @return the longest lap time of all recorded laps and the current lap
-     */
-    public long getLongestLapTime() {
-        enforceMainLooper();
-        return mStopwatchModel.getLongestLapTime();
-    }
-
-    /**
-     * @param time a point in time after the end of the last lap
-     * @return the elapsed time between the given {@code time} and the end of the previous lap
-     */
-    public long getCurrentLapTime(long time) {
-        enforceMainLooper();
-        return mStopwatchModel.getCurrentLapTime(time);
     }
 
     /**

@@ -57,15 +57,11 @@ import com.best.deskclock.data.SettingsDAO;
 import com.best.deskclock.events.Events;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.settings.PermissionsManagementActivity;
-import com.best.deskclock.settings.SettingsActivity;
-import com.best.deskclock.stopwatch.StopwatchService;
-import com.best.deskclock.timer.TimerService;
 import com.best.deskclock.uidata.TabListener;
 import com.best.deskclock.uidata.UiDataModel;
 import com.best.deskclock.utils.InsetsUtils;
 import com.best.deskclock.utils.ThemeUtils;
 import com.best.deskclock.widget.toast.SnackbarManager;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.navigation.NavigationBarView;
@@ -217,10 +213,6 @@ public class DeskClock extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         mPrefs = getDefaultSharedPreferences(this);
-
-        if (isFirstLaunch()) {
-            return;
-        }
 
         // To manually manage insets
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
@@ -437,12 +429,6 @@ public class DeskClock extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == 0) {
-            final Intent settingIntent = new Intent(this, SettingsActivity.class);
-            getSettingsActivity.launch(settingIntent);
-            return true;
-        }
-
         if (item.getItemId() == 1) {
             final Intent permissionManagementIntent = new Intent(this, PermissionsManagementActivity.class);
             getPermissionManagementActivity.launch(permissionManagementIntent);
@@ -548,30 +534,11 @@ public class DeskClock extends AppCompatActivity
         }
     }
 
-    /**
-     * Check if this is the first time the application has been launched.
-     */
-    private boolean isFirstLaunch() {
-        final boolean isFirstRun = mPrefs.getBoolean(FirstLaunch.KEY_IS_FIRST_LAUNCH, true);
-        if (isFirstRun) {
-            startActivity(new Intent(this, FirstLaunch.class));
-            finish();
-            return true;
-        }
-        return false;
-    }
-
     private final NavigationBarView.OnItemSelectedListener mNavigationListener = item -> {
         UiDataModel.Tab tab = null;
         int itemId = item.getItemId();
         if (itemId == R.id.page_alarm) {
             tab = UiDataModel.Tab.ALARMS;
-        } else if (itemId == R.id.page_clock) {
-            tab = UiDataModel.Tab.CLOCKS;
-        } else if (itemId == R.id.page_timer) {
-            tab = UiDataModel.Tab.TIMERS;
-        } else if (itemId == R.id.page_stopwatch) {
-            tab = UiDataModel.Tab.STOPWATCH;
         }
 
         if (tab != null) {
@@ -608,16 +575,7 @@ public class DeskClock extends AppCompatActivity
             final String action = intent.getAction();
             if (action != null) {
                 int label = intent.getIntExtra(Events.EXTRA_EVENT_LABEL, R.string.label_intent);
-                switch (action) {
-                    case TimerService.ACTION_SHOW_TIMER -> {
-                        Events.sendTimerEvent(R.string.action_show, label);
-                        UiDataModel.getUiDataModel().setSelectedTab(UiDataModel.Tab.TIMERS);
-                    }
-                    case StopwatchService.ACTION_SHOW_STOPWATCH -> {
-                        Events.sendStopwatchEvent(R.string.action_show, label);
-                        UiDataModel.getUiDataModel().setSelectedTab(UiDataModel.Tab.STOPWATCH);
-                    }
-                }
+
             }
         }
     }
@@ -660,17 +618,8 @@ public class DeskClock extends AppCompatActivity
         final boolean screenShouldStayOn;
 
         switch (selectedTab) {
-            case ALARMS, CLOCKS ->
+            case ALARMS ->
                 screenShouldStayOn = SettingsDAO.shouldScreenRemainOn(mPrefs);
-
-            case TIMERS ->
-                screenShouldStayOn = DataModel.getDataModel().hasActiveTimer()
-                        || SettingsDAO.shouldScreenRemainOn(mPrefs);
-
-            case STOPWATCH ->
-                screenShouldStayOn = DataModel.getDataModel().getStopwatch().isRunning()
-                        || SettingsDAO.shouldScreenRemainOn(mPrefs);
-
             default -> screenShouldStayOn = false;
 
         }
@@ -858,9 +807,6 @@ public class DeskClock extends AppCompatActivity
 
                 switch (newSelectedTab) {
                     case ALARMS -> Events.sendAlarmEvent(R.string.action_show, R.string.label_deskclock);
-                    case CLOCKS -> Events.sendClockEvent(R.string.action_show, R.string.label_deskclock);
-                    case TIMERS -> Events.sendTimerEvent(R.string.action_show, R.string.label_deskclock);
-                    case STOPWATCH -> Events.sendStopwatchEvent(R.string.action_show, R.string.label_deskclock);
                 }
             }
 

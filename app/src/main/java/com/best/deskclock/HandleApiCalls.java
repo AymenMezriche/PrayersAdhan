@@ -7,7 +7,6 @@
 package com.best.deskclock;
 
 import static android.media.AudioManager.STREAM_ALARM;
-import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 import static com.best.deskclock.AlarmSelectionActivity.ACTION_DISMISS;
 import static com.best.deskclock.AlarmSelectionActivity.EXTRA_ACTION;
 import static com.best.deskclock.AlarmSelectionActivity.EXTRA_ALARMS;
@@ -15,7 +14,6 @@ import static com.best.deskclock.DeskClockApplication.getDefaultSharedPreference
 import static com.best.deskclock.provider.AlarmInstance.FIRED_STATE;
 import static com.best.deskclock.provider.AlarmInstance.SNOOZE_STATE;
 import static com.best.deskclock.uidata.UiDataModel.Tab.ALARMS;
-import static com.best.deskclock.uidata.UiDataModel.Tab.TIMERS;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -28,7 +26,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.AlarmClock;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 
@@ -36,13 +33,10 @@ import com.best.deskclock.alarms.AlarmStateManager;
 import com.best.deskclock.controller.Controller;
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.data.SettingsDAO;
-import com.best.deskclock.data.Timer;
 import com.best.deskclock.data.Weekdays;
 import com.best.deskclock.events.Events;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.provider.AlarmInstance;
-import com.best.deskclock.timer.TimerFragment;
-import com.best.deskclock.timer.TimerService;
 import com.best.deskclock.uidata.UiDataModel;
 import com.best.deskclock.utils.AlarmUtils;
 import com.best.deskclock.utils.LogUtils;
@@ -88,11 +82,8 @@ public class HandleApiCalls extends Activity {
             switch (action) {
                 case AlarmClock.ACTION_SET_ALARM -> handleSetAlarm(intent);
                 case AlarmClock.ACTION_SHOW_ALARMS -> handleShowAlarms();
-                case AlarmClock.ACTION_SET_TIMER -> handleSetTimer(intent);
-                case AlarmClock.ACTION_SHOW_TIMERS -> handleShowTimers();
                 case AlarmClock.ACTION_DISMISS_ALARM -> handleDismissAlarm(intent);
                 case AlarmClock.ACTION_SNOOZE_ALARM -> handleSnoozeAlarm();
-                case AlarmClock.ACTION_DISMISS_TIMER -> handleDismissTimer(intent);
             }
         } catch (Exception e) {
             LOGGER.wtf(e);
@@ -368,135 +359,12 @@ public class HandleApiCalls extends Activity {
         Controller.getController().notifyVoiceSuccess(this, getString(R.string.alarm_is_set, time));
     }
 
-    private void handleDismissTimer(Intent intent) {
-        final Uri dataUri = intent.getData();
-        if (dataUri != null) {
-            final Timer selectedTimer = getSelectedTimer(dataUri);
-            if (selectedTimer != null) {
-                DataModel.getDataModel().resetOrDeleteTimer(selectedTimer, R.string.label_intent);
-                Controller.getController().notifyVoiceSuccess(this,
-                        getResources().getQuantityString(R.plurals.expired_timers_dismissed, 1));
-                LOGGER.i("Timer dismissed: " + selectedTimer);
-            } else {
-                Controller.getController().notifyVoiceFailure(this,
-                        getString(R.string.invalid_timer));
-                LOGGER.e("Could not dismiss timer: invalid URI");
-            }
-        } else {
-            final List<Timer> expiredTimers = DataModel.getDataModel().getExpiredTimers();
-            if (!expiredTimers.isEmpty()) {
-                for (Timer timer : expiredTimers) {
-                    DataModel.getDataModel().resetOrDeleteTimer(timer, R.string.label_intent);
-                }
-                final int numberOfTimers = expiredTimers.size();
-                final String timersDismissedMessage = getResources().getQuantityString(
-                        R.plurals.expired_timers_dismissed, numberOfTimers, numberOfTimers);
-                Controller.getController().notifyVoiceSuccess(this, timersDismissedMessage);
-                LOGGER.i(timersDismissedMessage);
-            } else {
-                Controller.getController().notifyVoiceFailure(this,
-                        getString(R.string.no_expired_timers));
-                LOGGER.e("Could not dismiss timer: no expired timers");
-            }
-        }
-    }
-
-    private Timer getSelectedTimer(Uri dataUri) {
-        try {
-            final int timerId = (int) ContentUris.parseId(dataUri);
-            return DataModel.getDataModel().getTimer(timerId);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
     private void handleShowAlarms() {
         Events.sendAlarmEvent(R.string.action_show, R.string.label_intent);
 
         // Open DeskClock positioned on the alarms tab.
         UiDataModel.getUiDataModel().setSelectedTab(ALARMS);
         startActivity(new Intent(this, DeskClock.class));
-    }
-
-    private void handleShowTimers() {
-        Events.sendTimerEvent(R.string.action_show, R.string.label_intent);
-
-        final Intent showTimersIntent = new Intent(this, DeskClock.class);
-
-        final List<Timer> timers = DataModel.getDataModel().getTimers();
-        if (!timers.isEmpty()) {
-            final Timer newestTimer = timers.get(timers.size() - 1);
-            showTimersIntent.putExtra(TimerService.EXTRA_TIMER_ID, newestTimer.getId());
-        }
-
-        // Open DeskClock positioned on the timers tab.
-        UiDataModel.getUiDataModel().setSelectedTab(TIMERS);
-        startActivity(showTimersIntent);
-    }
-
-    private void handleSetTimer(Intent intent) {
-        // If no length is supplied, show the timer setup view.
-        if (!intent.hasExtra(AlarmClock.EXTRA_LENGTH)) {
-            // Change to the timers tab.
-            UiDataModel.getUiDataModel().setSelectedTab(TIMERS);
-
-            // Open DeskClock which is now positioned on the timers tab and show the timer setup.
-            startActivity(TimerFragment.createTimerSetupIntent(this));
-            LOGGER.i("Showing timer setup");
-            return;
-        }
-
-        // Verify that the timer length is between one second and one day.
-        final long lengthMillis = SECOND_IN_MILLIS * intent.getIntExtra(AlarmClock.EXTRA_LENGTH, 0);
-        if (lengthMillis < Timer.MIN_LENGTH) {
-            final String voiceMessage = getString(R.string.invalid_timer_length);
-            Controller.getController().notifyVoiceFailure(this, voiceMessage);
-            LOGGER.i("Invalid timer length requested: " + lengthMillis);
-            return;
-        }
-
-        final String label = getLabelFromIntent(intent, "");
-        final boolean skipUi = intent.getBooleanExtra(AlarmClock.EXTRA_SKIP_UI, false);
-
-        // Attempt to reuse an existing timer that is Reset with the same length and label.
-        Timer timer = null;
-        for (Timer t : DataModel.getDataModel().getTimers()) {
-            if (!t.isReset()) {
-                continue;
-            }
-            if (t.getLength() != lengthMillis) {
-                continue;
-            }
-            if (!TextUtils.equals(label, t.getLabel())) {
-                continue;
-            }
-
-            timer = t;
-            break;
-        }
-
-        // Create a new timer if one could not be reused.
-        if (timer == null) {
-            String defaultTimeToAddToTimer = String.valueOf(
-                    SettingsDAO.getDefaultTimeToAddToTimer(getDefaultSharedPreferences(mAppContext)));
-            timer = DataModel.getDataModel().addTimer(lengthMillis, label, defaultTimeToAddToTimer, skipUi);
-            Events.sendTimerEvent(R.string.action_create, R.string.label_intent);
-        }
-
-        // Start the selected timer.
-        DataModel.getDataModel().startTimer(timer);
-        Events.sendTimerEvent(R.string.action_start, R.string.label_intent);
-        Controller.getController().notifyVoiceSuccess(this, getString(R.string.timer_created));
-
-        // If not instructed to skip the UI, display the running timer.
-        if (!skipUi) {
-            // Change to the timers tab.
-            UiDataModel.getUiDataModel().setSelectedTab(TIMERS);
-
-            // Open DeskClock which is now positioned on the timers tab.
-            startActivity(new Intent(this, DeskClock.class)
-                    .putExtra(TimerService.EXTRA_TIMER_ID, timer.getId()));
-        }
     }
 
     private void setupInstance(AlarmInstance instance, boolean skipUi) {

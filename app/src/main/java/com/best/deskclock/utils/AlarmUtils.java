@@ -6,13 +6,7 @@
 
 package com.best.deskclock.utils;
 
-import static com.best.deskclock.DeskClockApplication.getDefaultSharedPreferences;
-
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
@@ -28,13 +22,8 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.best.deskclock.R;
 import com.best.deskclock.alarms.AlarmStateManager;
-import com.best.deskclock.data.SettingsDAO;
 import com.best.deskclock.provider.AlarmInstance;
-import com.best.deskclock.screensaver.Screensaver;
-import com.best.deskclock.screensaver.ScreensaverActivity;
-import com.best.deskclock.widget.toast.SnackbarManager;
 import com.best.deskclock.widget.toast.ToastManager;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -141,18 +130,6 @@ public class AlarmUtils {
     public static String getFormattedTime(Context context, Calendar time) {
         final String skeleton = DateFormat.is24HourFormat(context) ? "EHm" : "Ehma";
         String pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton);
-        if (context instanceof ScreensaverActivity || context instanceof Screensaver) {
-            final SharedPreferences prefs = getDefaultSharedPreferences(context);
-            // Add a "Thin Space" (\u2009) at the end of the next alarm to prevent its display from being cut off on some devices.
-            // (The display of the next alarm is only cut off at the end if it is defined in italics in the screensaver settings).
-            if (SettingsDAO.isScreensaverDateInItalic(prefs)) {
-                // A "Thin Space" (\u2009) is also added at the beginning to correctly center the date,
-                // alarm icon and next alarm only when the date is in italics.
-                pattern = "\u2009" + DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton) + "\u2009";
-            } else if (SettingsDAO.isScreensaverNextAlarmInItalic(prefs)) {
-                pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton) + "\u2009";
-            }
-        }
         return (String) DateFormat.format(pattern, time);
     }
 

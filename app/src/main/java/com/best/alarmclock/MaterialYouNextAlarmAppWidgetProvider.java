@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-package com.best.alarmclock.materialyouwidgets;
+package com.best.alarmclock;
 
 import static android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE;
 import static android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT;
@@ -16,6 +16,7 @@ import static android.view.View.GONE;
 import static android.view.View.MeasureSpec.UNSPECIFIED;
 import static android.view.View.VISIBLE;
 
+import static com.best.alarmclock.WidgetUtils.ACTION_NEXT_ALARM_LABEL_CHANGED;
 import static com.best.deskclock.DeskClockApplication.getDefaultSharedPreferences;
 
 import static java.lang.Math.max;
@@ -38,13 +39,10 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.best.alarmclock.DailyWidgetUpdateReceiver;
-import com.best.alarmclock.WidgetUtils;
 import com.best.deskclock.DeskClock;
 import com.best.deskclock.R;
 import com.best.deskclock.data.WidgetDAO;
@@ -53,6 +51,7 @@ import com.best.deskclock.utils.ClockUtils;
 import com.best.deskclock.utils.LogUtils;
 import com.best.deskclock.utils.SdkUtils;
 import com.best.deskclock.utils.ThemeUtils;
+import com.best.deskclock.utils.Utils;
 
 import java.util.Locale;
 
@@ -61,26 +60,23 @@ import java.util.Locale;
  * <p>
  * If an alarm is scheduled to ring in the future:
  * <pre>
- *        WED, FEB 3
- *           12
- *           59
+ *        Next alarm
+ *        Alarm title
  *      ⏰ THU 9:30 AM
  * </pre>
  * <p>
  * If no alarm is scheduled to ring in the future:
  * <pre>
- *        WED, FEB 3
- *           12
- *           59
+ *      No upcoming alarm
  * </pre>
  * <p>
  * This widget is scaling the font sizes to fit within the widget bounds chosen by the user without
  * any clipping. To do so it measures layouts offscreen using a range of font sizes in order to
  * choose optimal values.
  */
-public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvider {
+public class MaterialYouNextAlarmAppWidgetProvider extends AppWidgetProvider {
 
-    private static final LogUtils.Logger LOGGER = new LogUtils.Logger("MYVertDgtlWidgetProv");
+    private static final LogUtils.Logger LOGGER = new LogUtils.Logger("MYNextAlarmWdgtProv");
 
     private static boolean sReceiversRegistered;
 
@@ -105,29 +101,77 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
     private static RemoteViews relayoutWidget(Context context, AppWidgetManager wm, int widgetId,
                                               Bundle options, boolean portrait) {
 
-        // Create a remote view for the digital clock.
+        final Context localizedContext = Utils.getLocalizedContext(context);
+
+        // Create a remote view for the next alarm.
         final SharedPreferences prefs = getDefaultSharedPreferences(context);
         final String packageName = context.getPackageName();
-        final RemoteViews rv = new RemoteViews(packageName, R.layout.material_you_vertical_digital_widget);
+        final RemoteViews rv = new RemoteViews(packageName, R.layout.material_you_next_alarm_widget);
 
         // Tapping on the widget opens the app (if not on the lock screen).
         if (WidgetUtils.isWidgetClickable(wm, widgetId)) {
             final Intent openApp = new Intent(context, DeskClock.class);
             final PendingIntent pi = PendingIntent.getActivity(context, 0, openApp, PendingIntent.FLAG_IMMUTABLE);
-            rv.setOnClickPendingIntent(R.id.material_you_vertical_digital_widget, pi);
+            rv.setOnClickPendingIntent(R.id.material_you_next_alarm_widget, pi);
         }
 
-        // Apply the color to the next alarm.
+        // Apply color to the next alarm and the next alarm title.
         // The default color is defined in the xml files to match the device's day/night theme.
         final String nextAlarmTime = AlarmUtils.getNextAlarm(context);
-        final int customNextAlarmColor = WidgetDAO.getMaterialYouVerticalDigitalWidgetCustomNextAlarmColor(prefs);
-        if (TextUtils.isEmpty(nextAlarmTime) || !WidgetDAO.isNextAlarmDisplayedOnMaterialYouVerticalDigitalWidget(prefs)) {
+        final String nextAlarmTitle = AlarmUtils.getNextAlarmTitle(context);
+        final String nextAlarmText = localizedContext.getString(R.string.next_alarm_widget_text);
+        final String noAlarmTitle = localizedContext.getString(R.string.next_alarm_widget_title_no_alarm);
+        final boolean isDefaultTitleColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultTitleColor(prefs);
+        final boolean isDefaultAlarmTitleColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultAlarmTitleColor(prefs);
+        final boolean isDefaultAlarmColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultAlarmColor(prefs);
+        final int customTitleColor = WidgetDAO.getMaterialYouNextAlarmWidgetCustomTitleColor(prefs);
+        final int customAlarmTitleColor = WidgetDAO.getMaterialYouNextAlarmWidgetCustomAlarmTitleColor(prefs);
+        final int customAlarmColor = WidgetDAO.getMaterialYouNextAlarmWidgetCustomAlarmColor(prefs);
+
+        if (TextUtils.isEmpty(nextAlarmTime) || TextUtils.isEmpty(nextAlarmTitle)) {
+            rv.setViewVisibility(R.id.nextAlarmTitle, GONE);
+            rv.setViewVisibility(R.id.nextAlarmTitleForCustomColor, GONE);
+        } else {
+            if (isDefaultAlarmTitleColor) {
+                rv.setViewVisibility(R.id.nextAlarmTitle, VISIBLE);
+                rv.setViewVisibility(R.id.nextAlarmTitleForCustomColor, GONE);
+                rv.setTextViewText(R.id.nextAlarmTitle, nextAlarmTitle);
+            } else {
+                rv.setViewVisibility(R.id.nextAlarmTitle, GONE);
+                rv.setViewVisibility(R.id.nextAlarmTitleForCustomColor, VISIBLE);
+                rv.setTextViewText(R.id.nextAlarmTitleForCustomColor, nextAlarmTitle);
+                rv.setTextColor(R.id.nextAlarmTitleForCustomColor, customAlarmTitleColor);
+            }
+        }
+
+        if (TextUtils.isEmpty(nextAlarmTime)) {
             rv.setViewVisibility(R.id.nextAlarm, GONE);
             rv.setViewVisibility(R.id.nextAlarmIcon, GONE);
             rv.setViewVisibility(R.id.nextAlarmForCustomColor, GONE);
             rv.setViewVisibility(R.id.nextAlarmIconForCustomColor, GONE);
+            if (isDefaultTitleColor) {
+                rv.setViewVisibility(R.id.nextAlarmText, VISIBLE);
+                rv.setViewVisibility(R.id.nextAlarmTextForCustomColor, GONE);
+                rv.setTextViewText(R.id.nextAlarmText, noAlarmTitle);
+            } else {
+                rv.setViewVisibility(R.id.nextAlarmText, GONE);
+                rv.setViewVisibility(R.id.nextAlarmTextForCustomColor, VISIBLE);
+                rv.setTextViewText(R.id.nextAlarmTextForCustomColor, noAlarmTitle);
+                rv.setTextColor(R.id.nextAlarmTextForCustomColor, customTitleColor);
+            }
         } else {
-            if (WidgetDAO.isMaterialYouVerticalDigitalWidgetDefaultNextAlarmColor(prefs)) {
+            if (isDefaultTitleColor) {
+                rv.setViewVisibility(R.id.nextAlarmText, VISIBLE);
+                rv.setViewVisibility(R.id.nextAlarmTextForCustomColor, GONE);
+                rv.setTextViewText(R.id.nextAlarmText, nextAlarmText);
+            } else {
+                rv.setViewVisibility(R.id.nextAlarmText, GONE);
+                rv.setViewVisibility(R.id.nextAlarmTextForCustomColor, VISIBLE);
+                rv.setTextViewText(R.id.nextAlarmTextForCustomColor, nextAlarmText);
+                rv.setTextColor(R.id.nextAlarmTextForCustomColor, customTitleColor);
+            }
+
+            if (isDefaultAlarmColor) {
                 rv.setViewVisibility(R.id.nextAlarm, VISIBLE);
                 rv.setViewVisibility(R.id.nextAlarmIcon, VISIBLE);
                 rv.setViewVisibility(R.id.nextAlarmForCustomColor, GONE);
@@ -139,7 +183,7 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
                 rv.setViewVisibility(R.id.nextAlarmForCustomColor, VISIBLE);
                 rv.setViewVisibility(R.id.nextAlarmIconForCustomColor, VISIBLE);
                 rv.setTextViewText(R.id.nextAlarmForCustomColor, nextAlarmTime);
-                rv.setTextColor(R.id.nextAlarmForCustomColor, customNextAlarmColor);
+                rv.setTextColor(R.id.nextAlarmForCustomColor, customAlarmColor);
             }
         }
 
@@ -156,11 +200,11 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
         final int maxHeightPx = (int) (density * options.getInt(OPTION_APPWIDGET_MAX_HEIGHT));
         final int targetWidthPx = portrait ? minWidthPx : maxWidthPx;
         final int targetHeightPx = portrait ? maxHeightPx : minHeightPx;
-        final int maxClockFontSize = WidgetDAO.getMaterialYouVerticalDigitalWidgetMaxClockFontSize(prefs);
-        final int largestClockFontSizePx = ThemeUtils.convertDpToPixels(maxClockFontSize, context);
+        final int widgetMaxFontSize = WidgetDAO.getMaterialYouNextAlarmWidgetMaxFontSize(prefs);
+        final int largestFontSizePx = ThemeUtils.convertDpToPixels(widgetMaxFontSize, context);
 
         // Create a size template that describes the widget bounds.
-        final Sizes template = new Sizes(targetWidthPx, targetHeightPx, largestClockFontSizePx);
+        final Sizes template = new Sizes(targetWidthPx, targetHeightPx, largestFontSizePx);
 
         // Compute optimal font sizes and icon sizes to fit within the widget bounds.
         final Sizes sizes = optimizeSizes(context, template, nextAlarmTime);
@@ -169,59 +213,15 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
         }
 
         // Apply the computed sizes to the remote views.
+        rv.setTextViewTextSize(R.id.nextAlarmText, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(R.id.nextAlarmTitle, COMPLEX_UNIT_PX, sizes.mFontSizePx);
         rv.setImageViewBitmap(R.id.nextAlarmIcon, sizes.mIconBitmap);
-        rv.setTextViewTextSize(R.id.date, COMPLEX_UNIT_PX, sizes.mFontSizePx);
         rv.setTextViewTextSize(R.id.nextAlarm, COMPLEX_UNIT_PX, sizes.mFontSizePx);
-        rv.setTextViewTextSize(R.id.clockHours, COMPLEX_UNIT_PX, sizes.mClockFontSizePx);
-        rv.setTextViewTextSize(R.id.clockMinutes, COMPLEX_UNIT_PX, sizes.mClockFontSizePx);
 
+        rv.setTextViewTextSize(R.id.nextAlarmTextForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(R.id.nextAlarmTitleForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
         rv.setImageViewBitmap(R.id.nextAlarmIconForCustomColor, sizes.mIconBitmap);
-        rv.setTextViewTextSize(R.id.dateForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
         rv.setTextViewTextSize(R.id.nextAlarmForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
-        rv.setTextViewTextSize(R.id.clockHoursForCustomColor, COMPLEX_UNIT_PX, sizes.mClockFontSizePx);
-        rv.setTextViewTextSize(R.id.clockMinutesForCustomColor, COMPLEX_UNIT_PX, sizes.mClockFontSizePx);
-
-        // Apply the custom color to the hours.
-        // The default color is defined in the xml files to match the device's day/night theme.
-        final int customHoursColor = WidgetDAO.getMaterialYouVerticalDigitalWidgetCustomHoursColor(prefs);
-        if (WidgetDAO.isMaterialYouVerticalDigitalWidgetDefaultHoursColor(prefs)) {
-            rv.setViewVisibility(R.id.clockHours, VISIBLE);
-            rv.setViewVisibility(R.id.clockHoursForCustomColor, GONE);
-        } else {
-            rv.setViewVisibility(R.id.clockHours, GONE);
-            rv.setViewVisibility(R.id.clockHoursForCustomColor, VISIBLE);
-            rv.setTextColor(R.id.clockHoursForCustomColor, customHoursColor);
-        }
-
-        // Apply the custom color to the minutes.
-        // The default color is defined in the xml files to match the device's day/night theme.
-        final int customMinutesColor = WidgetDAO.getMaterialYouVerticalDigitalWidgetCustomMinutesColor(prefs);
-        if (WidgetDAO.isMaterialYouVerticalDigitalWidgetDefaultMinutesColor(prefs)) {
-            rv.setViewVisibility(R.id.clockMinutes, VISIBLE);
-            rv.setViewVisibility(R.id.clockMinutesForCustomColor, GONE);
-        } else {
-            rv.setViewVisibility(R.id.clockMinutes, GONE);
-            rv.setViewVisibility(R.id.clockMinutesForCustomColor, VISIBLE);
-            rv.setTextColor(R.id.clockMinutesForCustomColor, customMinutesColor);
-        }
-
-        // Apply the custom color to the date.
-        // The default color is defined in the xml files to match the device's day/night theme.
-        if (WidgetDAO.isDateDisplayedOnMaterialYouVerticalDigitalWidget(prefs)) {
-            if (WidgetDAO.isMaterialYouVerticalDigitalWidgetDefaultDateColor(prefs)) {
-                rv.setViewVisibility(R.id.date, VISIBLE);
-                rv.setViewVisibility(R.id.dateForCustomColor, GONE);
-                rv.setTextViewText(R.id.date, WidgetUtils.getDateFormat(context));
-            } else {
-                rv.setViewVisibility(R.id.date, GONE);
-                rv.setViewVisibility(R.id.dateForCustomColor, VISIBLE);
-                rv.setTextViewText(R.id.dateForCustomColor, WidgetUtils.getDateFormat(context));
-                rv.setTextColor(R.id.dateForCustomColor, WidgetDAO.getMaterialYouVerticalDigitalWidgetCustomDateColor(prefs));
-            }
-        } else {
-            rv.setViewVisibility(R.id.date, GONE);
-            rv.setViewVisibility(R.id.dateForCustomColor, GONE);
-        }
 
         return rv;
     }
@@ -235,96 +235,109 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
         // Inflate a test layout to compute sizes at different font sizes.
         final LayoutInflater inflater = LayoutInflater.from(context);
         @SuppressLint("InflateParams") final View sizer =
-                inflater.inflate(R.layout.material_you_vertical_digital_widget_sizer, null);
+                inflater.inflate(R.layout.material_you_next_alarm_widget_sizer, null);
 
         int horizontalPadding = ThemeUtils.convertDpToPixels(
-                WidgetDAO.isMaterialYouVerticalDigitalWidgetHorizontalPaddingApplied(prefs) ? 10 : 0, context);
+                WidgetDAO.isMaterialYouNextAlarmWidgetHorizontalPaddingApplied(prefs) ? 20 : 0, context);
         sizer.setPadding(horizontalPadding, 0, horizontalPadding, 0);
 
-        final TextClock hours = sizer.findViewById(R.id.clockHours);
-        final TextClock hoursForCustomColor = sizer.findViewById(R.id.clockHoursForCustomColor);
-        if (WidgetDAO.isMaterialYouDigitalWidgetDefaultClockColor(prefs)) {
-            hours.setVisibility(VISIBLE);
-            hoursForCustomColor.setVisibility(GONE);
-        } else {
-            hours.setVisibility(GONE);
-            hoursForCustomColor.setVisibility(VISIBLE);
-        }
-
-        final TextClock minutes = sizer.findViewById(R.id.clockMinutes);
-        final TextClock minutesForCustomColor = sizer.findViewById(R.id.clockMinutesForCustomColor);
-        if (WidgetDAO.isMaterialYouVerticalDigitalWidgetDefaultMinutesColor(prefs)) {
-            minutes.setVisibility(VISIBLE);
-            minutesForCustomColor.setVisibility(GONE);
-        } else {
-            minutes.setVisibility(GONE);
-            minutesForCustomColor.setVisibility(VISIBLE);
-        }
-
-        // Configure the date to display the current date string.
-        final TextView date = sizer.findViewById(R.id.date);
-        final TextView dateForCustomColor = sizer.findViewById(R.id.dateForCustomColor);
-        if (WidgetDAO.isDateDisplayedOnMaterialYouVerticalDigitalWidget(prefs)) {
-            if (WidgetDAO.isMaterialYouVerticalDigitalWidgetDefaultDateColor(prefs)) {
-                date.setVisibility(VISIBLE);
-                dateForCustomColor.setVisibility(GONE);
-                date.setText(WidgetUtils.getDateFormat(context));
-            } else {
-                date.setVisibility(GONE);
-                dateForCustomColor.setVisibility(VISIBLE);
-                dateForCustomColor.setText(WidgetUtils.getDateFormat(context));
-            }
-        } else {
-            date.setVisibility(GONE);
-            dateForCustomColor.setVisibility(GONE);
-        }
+        final Context localizedContext = Utils.getLocalizedContext(context);
 
         // Configure the next alarm views to display the next alarm time or be gone.
+        final String nextAlarmTitle = AlarmUtils.getNextAlarmTitle(context);
+        final TextView nextAlarmTitleView = sizer.findViewById(R.id.nextAlarmTitle);
+        final TextView nextAlarmText = sizer.findViewById(R.id.nextAlarmText);
         final TextView nextAlarmIcon = sizer.findViewById(R.id.nextAlarmIcon);
         final TextView nextAlarm = sizer.findViewById(R.id.nextAlarm);
+        final TextView nextAlarmTitleViewForCustomColor = sizer.findViewById(R.id.nextAlarmTitleForCustomColor);
+        final TextView nextAlarmTextForCustomColor = sizer.findViewById(R.id.nextAlarmTextForCustomColor);
         final TextView nextAlarmIconForCustomColor = sizer.findViewById(R.id.nextAlarmIconForCustomColor);
         final TextView nextAlarmForCustomColor = sizer.findViewById(R.id.nextAlarmForCustomColor);
-        final int customNextAlarmColor = WidgetDAO.getMaterialYouVerticalDigitalWidgetCustomNextAlarmColor(prefs);
-        if (TextUtils.isEmpty(nextAlarmTime) || !WidgetDAO.isNextAlarmDisplayedOnMaterialYouVerticalDigitalWidget(prefs)) {
+        final boolean isDefaultTitleColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultTitleColor(prefs);
+        final boolean isDefaultAlarmTitleColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultAlarmTitleColor(prefs);
+        final boolean isDefaultAlarmColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultAlarmColor(prefs);
+        final int customTitleColor = WidgetDAO.getMaterialYouNextAlarmWidgetCustomTitleColor(prefs);
+        final int customAlarmTitleColor = WidgetDAO.getMaterialYouNextAlarmWidgetCustomAlarmTitleColor(prefs);
+        final int customAlarmColor = WidgetDAO.getMaterialYouNextAlarmWidgetCustomAlarmColor(prefs);
+
+        if (TextUtils.isEmpty(nextAlarmTime) || TextUtils.isEmpty(nextAlarmTitle)) {
+            nextAlarmTitleView.setVisibility(GONE);
+            nextAlarmTitleViewForCustomColor.setVisibility(GONE);
+        } else {
+            if (isDefaultAlarmTitleColor) {
+                nextAlarmTitleView.setVisibility(VISIBLE);
+                nextAlarmTitleViewForCustomColor.setVisibility(GONE);
+                nextAlarmTitleView.setText(nextAlarmTitle);
+            } else {
+                nextAlarmTitleView.setVisibility(GONE);
+                nextAlarmTitleViewForCustomColor.setVisibility(VISIBLE);
+                nextAlarmTitleView.setText(nextAlarmTitle);
+                nextAlarmTitleViewForCustomColor.setTextColor(customAlarmTitleColor);
+            }
+        }
+
+        if (TextUtils.isEmpty(nextAlarmTime)) {
             nextAlarm.setVisibility(GONE);
             nextAlarmIcon.setVisibility(GONE);
             nextAlarmForCustomColor.setVisibility(GONE);
             nextAlarmIconForCustomColor.setVisibility(GONE);
+            if (isDefaultTitleColor) {
+                nextAlarmText.setVisibility(VISIBLE);
+                nextAlarmTextForCustomColor.setVisibility(GONE);
+                nextAlarmText.setText(localizedContext.getString(R.string.next_alarm_widget_title_no_alarm));
+            } else {
+                nextAlarmText.setVisibility(GONE);
+                nextAlarmTextForCustomColor.setVisibility(VISIBLE);
+                nextAlarmTextForCustomColor.setText(localizedContext.getString(R.string.next_alarm_widget_title_no_alarm));
+                nextAlarmTextForCustomColor.setTextColor(customTitleColor);
+            }
         } else {
-            if (WidgetDAO.isMaterialYouVerticalDigitalWidgetDefaultNextAlarmColor(prefs)) {
-                nextAlarm.setText(nextAlarmTime);
+            if (isDefaultTitleColor) {
+                nextAlarmText.setVisibility(VISIBLE);
+                nextAlarmTextForCustomColor.setVisibility(GONE);
+                nextAlarmText.setText(localizedContext.getString(R.string.next_alarm_widget_text));
+            } else {
+                nextAlarmText.setVisibility(GONE);
+                nextAlarmTextForCustomColor.setVisibility(VISIBLE);
+                nextAlarmTextForCustomColor.setText(localizedContext.getString(R.string.next_alarm_widget_text));
+                nextAlarmTextForCustomColor.setTextColor(customTitleColor);
+            }
+
+            if (isDefaultAlarmColor) {
                 nextAlarm.setVisibility(VISIBLE);
                 nextAlarmIcon.setVisibility(VISIBLE);
                 nextAlarmForCustomColor.setVisibility(GONE);
                 nextAlarmIconForCustomColor.setVisibility(GONE);
+                nextAlarm.setText(nextAlarmTime);
                 nextAlarmIcon.setTypeface(ClockUtils.getAlarmIconTypeface(context));
             } else {
-                nextAlarmForCustomColor.setText(nextAlarmTime);
                 nextAlarm.setVisibility(GONE);
                 nextAlarmIcon.setVisibility(GONE);
                 nextAlarmForCustomColor.setVisibility(VISIBLE);
                 nextAlarmIconForCustomColor.setVisibility(VISIBLE);
+                nextAlarmForCustomColor.setText(nextAlarmTime);
+                nextAlarmForCustomColor.setTextColor(customAlarmColor);
                 nextAlarmIconForCustomColor.setTypeface(ClockUtils.getAlarmIconTypeface(context));
-                nextAlarmIconForCustomColor.setTextColor(customNextAlarmColor);
+                nextAlarmIconForCustomColor.setTextColor(customAlarmColor);
             }
         }
 
         // Measure the widget at the largest possible size.
-        Sizes high = measure(template, template.getLargestClockFontSizePx(), sizer);
+        Sizes high = measure(template, template.getLargestNextAlarmFontSizePx(), sizer);
         if (!high.hasViolations()) {
             return high;
         }
 
         // Measure the widget at the smallest possible size.
-        Sizes low = measure(template, template.getSmallestClockFontSizePx(), sizer);
+        Sizes low = measure(template, template.getSmallestNextAlarmFontSizePx(), sizer);
         if (low.hasViolations()) {
             return low;
         }
 
         // Binary search between the smallest and largest sizes until an optimum size is found.
-        while (low.getClockFontSizePx() != high.getClockFontSizePx()) {
-            final int midFontSize = (low.getClockFontSizePx() + high.getClockFontSizePx()) / 2;
-            if (midFontSize == low.getClockFontSizePx()) {
+        while (low.getNextAlarmFontSizePx() != high.getNextAlarmFontSizePx()) {
+            final int midFontSize = (low.getNextAlarmFontSizePx() + high.getNextAlarmFontSizePx()) / 2;
+            if (midFontSize == low.getNextAlarmFontSizePx()) {
                 return low;
             }
 
@@ -340,40 +353,37 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
     }
 
     /**
-     * Compute all font and icon sizes based on the given {@code clockFontSize} and apply them to
+     * Compute all font and icon sizes based on the given {@code nextAlarmFontSize} and apply them to
      * the offscreen {@code sizer} view. Measure the {@code sizer} view and return the resulting
      * size measurements.
      */
-    private static Sizes measure(Sizes template, int clockFontSize, View sizer) {
+    private static Sizes measure(Sizes template, int nextAlarmFontSize, View sizer) {
         // Create a copy of the given template sizes.
         final Sizes measuredSizes = template.newSize();
 
-        // Configure the clock to display the widest time string.
-        final TextView date = sizer.findViewById(R.id.date);
-        final TextClock hours = sizer.findViewById(R.id.clockHours);
-        final TextClock minutes = sizer.findViewById(R.id.clockMinutes);
+        // Configure the next alarm to display the widest time string.
+        final TextView nextAlarmText = sizer.findViewById(R.id.nextAlarmText);
+        final TextView nextAlarmTitle = sizer.findViewById(R.id.nextAlarmTitle);
         final TextView nextAlarm = sizer.findViewById(R.id.nextAlarm);
         final TextView nextAlarmIcon = sizer.findViewById(R.id.nextAlarmIcon);
-        final TextView dateForCustomColor = sizer.findViewById(R.id.dateForCustomColor);
-        final TextClock hoursForCustomColor = sizer.findViewById(R.id.clockHoursForCustomColor);
-        final TextClock minutesForCustomColor = sizer.findViewById(R.id.clockMinutesForCustomColor);
+
+        final TextView nextAlarmTextForCustomColor = sizer.findViewById(R.id.nextAlarmTextForCustomColor);
+        final TextView nextAlarmTitleForCustomColor = sizer.findViewById(R.id.nextAlarmTitleForCustomColor);
         final TextView nextAlarmForCustomColor = sizer.findViewById(R.id.nextAlarmForCustomColor);
         final TextView nextAlarmIconForCustomColor = sizer.findViewById(R.id.nextAlarmIconForCustomColor);
 
         // Adjust the font sizes.
-        measuredSizes.setClockFontSizePx(clockFontSize);
+        measuredSizes.setNextAlarmFontSizePx(nextAlarmFontSize);
 
-        hours.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mClockFontSizePx);
-        minutes.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mClockFontSizePx);
-        date.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
+        nextAlarmText.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
+        nextAlarmTitle.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
         nextAlarm.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
         nextAlarm.setPadding(0, 0, measuredSizes.mIconPaddingPx, 0);
         nextAlarmIcon.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mIconFontSizePx);
         nextAlarmIcon.setPadding(0, 0, measuredSizes.mIconPaddingPx, 0);
 
-        hoursForCustomColor.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mClockFontSizePx);
-        minutesForCustomColor.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mClockFontSizePx);
-        dateForCustomColor.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
+        nextAlarmTextForCustomColor.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
+        nextAlarmTitleForCustomColor.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
         nextAlarmForCustomColor.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
         nextAlarmForCustomColor.setPadding(0, 0, measuredSizes.mIconPaddingPx, 0);
         nextAlarmIconForCustomColor.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mIconFontSizePx);
@@ -392,16 +402,6 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
         measuredSizes.mMeasuredWidthPx = sizer.getMeasuredWidth();
         measuredSizes.mMeasuredHeightPx = sizer.getMeasuredHeight();
 
-        measuredSizes.mMeasuredTextClockWidthPx = hours.getMeasuredWidth();
-        measuredSizes.mMeasuredTextClockHeightPx = hours.getMeasuredHeight();
-        measuredSizes.mMeasuredTextClockMinutesWidthPx = hours.getMeasuredWidth();
-        measuredSizes.mMeasuredTextClockMinutesHeightPx = hours.getMeasuredHeight();
-
-        measuredSizes.mMeasuredTextClockForCustomColorWidthPx = hoursForCustomColor.getMeasuredWidth();
-        measuredSizes.mMeasuredTextClockForCustomColorHeightPx = hoursForCustomColor.getMeasuredHeight();
-        measuredSizes.mMeasuredTextClockMinutesForCustomColorWidthPx = hoursForCustomColor.getMeasuredWidth();
-        measuredSizes.mMeasuredTextClockMinutesForCustomColorHeightPx = hoursForCustomColor.getMeasuredHeight();
-
         // If an alarm icon is required, generate one from the TextView with the special font.
         if (nextAlarmIcon.getVisibility() == VISIBLE) {
             measuredSizes.mIconBitmap = ThemeUtils.createBitmap(nextAlarmIcon);
@@ -412,21 +412,6 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
         }
 
         return measuredSizes;
-    }
-
-    @Override
-    public void onEnabled(Context context) {
-        super.onEnabled(context);
-
-        // Schedule alarm for daily widget update at midnight
-        WidgetUtils.scheduleDailyWidgetUpdate(context, DailyWidgetUpdateReceiver.class);
-    }
-
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
-
-        WidgetUtils.cancelDailyWidgetUpdate(context, DailyWidgetUpdateReceiver.class);
     }
 
     @Override
@@ -450,6 +435,7 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
                 case ACTION_LOCALE_CHANGED:
                 case ACTION_TIME_CHANGED:
                 case ACTION_TIMEZONE_CHANGED:
+                case ACTION_NEXT_ALARM_LABEL_CHANGED:
                     for (int widgetId : widgetIds) {
                         relayoutWidget(context, wm, widgetId, wm.getAppWidgetOptions(widgetId));
                     }
@@ -457,10 +443,6 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
         }
 
         WidgetUtils.updateWidgetCount(context, getClass(), widgetIds.length, R.string.category_digital_widget);
-
-        if (widgetIds.length > 0) {
-            WidgetUtils.scheduleDailyWidgetUpdate(context, DailyWidgetUpdateReceiver.class);
-        }
     }
 
     /**
@@ -495,6 +477,7 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_APPWIDGET_UPDATE);
         intentFilter.addAction(ACTION_CONFIGURATION_CHANGED);
+        intentFilter.addAction(ACTION_NEXT_ALARM_LABEL_CHANGED);
         return intentFilter;
     }
 
@@ -505,74 +488,66 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager wm, int widgetId, Bundle options) {
         super.onAppWidgetOptionsChanged(context, wm, widgetId, options);
 
-        // scale the fonts of the clock to fit inside the new size
+        // scale the fonts of the next alarm to fit inside the new size
         relayoutWidget(context, AppWidgetManager.getInstance(context), widgetId, options);
     }
 
     /**
      * This class stores the target size of the widget as well as the measured size using a given
-     * clock font size. All other fonts and icons are scaled proportional to the clock font.
+     * font size. Icons are scaled proportional to the next alarm font.
      */
     private static final class Sizes {
 
         private final int mTargetWidthPx;
         private final int mTargetHeightPx;
-        private final int mLargestClockFontSizePx;
-        private final int mSmallestClockFontSizePx;
+        private final int mLargestNextAlarmFontSizePx;
+        private final int mSmallestNextAlarmFontSizePx;
         private Bitmap mIconBitmap;
 
         private int mMeasuredWidthPx;
         private int mMeasuredHeightPx;
-        private int mMeasuredTextClockWidthPx;
-        private int mMeasuredTextClockForCustomColorWidthPx;
-        private int mMeasuredTextClockHeightPx;
-        private int mMeasuredTextClockForCustomColorHeightPx;
-        private int mMeasuredTextClockMinutesWidthPx;
-        private int mMeasuredTextClockMinutesForCustomColorWidthPx;
-        private int mMeasuredTextClockMinutesHeightPx;
-        private int mMeasuredTextClockMinutesForCustomColorHeightPx;
 
         /**
-         * The size of the font to use on the date / next alarm time fields.
+         * The size of the font to use on next alarm time fields.
          */
         private int mFontSizePx;
 
         /**
-         * The size of the font to use on the clock field.
+         * The size of the font set for the next alarm field.
          */
-        private int mClockFontSizePx;
+        private int mNextAlarmFontSizePx;
 
         private int mIconFontSizePx;
         private int mIconPaddingPx;
 
-        private Sizes(int targetWidthPx, int targetHeightPx, int largestClockFontSizePx) {
+        private Sizes(int targetWidthPx, int targetHeightPx, int largestNextAlarmFontSizePx) {
             mTargetWidthPx = targetWidthPx;
             mTargetHeightPx = targetHeightPx;
-            mLargestClockFontSizePx = largestClockFontSizePx;
-            mSmallestClockFontSizePx = 1;
+            mLargestNextAlarmFontSizePx = largestNextAlarmFontSizePx;
+            mSmallestNextAlarmFontSizePx = 1;
         }
 
         private static void append(StringBuilder builder, String format, Object... args) {
             builder.append(String.format(Locale.ENGLISH, format, args));
         }
 
-        private int getLargestClockFontSizePx() {
-            return mLargestClockFontSizePx;
+        private int getLargestNextAlarmFontSizePx() {
+            return mLargestNextAlarmFontSizePx;
         }
 
-        private int getSmallestClockFontSizePx() {
-            return mSmallestClockFontSizePx;
+        private int getSmallestNextAlarmFontSizePx() {
+            return mSmallestNextAlarmFontSizePx;
         }
 
-        private int getClockFontSizePx() {
-            return mClockFontSizePx;
+        private int getNextAlarmFontSizePx() {
+            return mNextAlarmFontSizePx;
         }
 
-        private void setClockFontSizePx(int clockFontSizePx) {
-            mClockFontSizePx = clockFontSizePx;
-            mFontSizePx = max(1, round(clockFontSizePx / 4f));
+        private void setNextAlarmFontSizePx(int nextAlarmFontSizePx) {
+            mNextAlarmFontSizePx = nextAlarmFontSizePx;
+            mFontSizePx = max(1, round(nextAlarmFontSizePx / 3f));
             mIconFontSizePx = (int) (mFontSizePx * 1.4f);
-            mIconPaddingPx = mFontSizePx / 3;
+            mIconPaddingPx = mFontSizePx / 5;
         }
 
         private boolean hasViolations() {
@@ -580,7 +555,7 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
         }
 
         private Sizes newSize() {
-            return new Sizes(mTargetWidthPx, mTargetHeightPx, mLargestClockFontSizePx);
+            return new Sizes(mTargetWidthPx, mTargetHeightPx, mLargestNextAlarmFontSizePx);
         }
 
         @NonNull
@@ -592,14 +567,6 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
                     mTargetWidthPx, mTargetHeightPx);
             append(builder, "Last valid widget container measurement: %dpx x %dpx\n",
                     mMeasuredWidthPx, mMeasuredHeightPx);
-            append(builder, "Last text clock measurement: %dpx x %dpx\n",
-                    mMeasuredTextClockWidthPx, mMeasuredTextClockHeightPx);
-            append(builder, "Last text clock measurement: %dpx x %dpx\n",
-                    mMeasuredTextClockForCustomColorWidthPx, mMeasuredTextClockForCustomColorHeightPx);
-            append(builder, "Last text clock minutes measurement: %dpx x %dpx\n",
-                    mMeasuredTextClockMinutesWidthPx, mMeasuredTextClockMinutesHeightPx);
-            append(builder, "Last text clock minutes measurement: %dpx x %dpx\n",
-                    mMeasuredTextClockMinutesForCustomColorWidthPx, mMeasuredTextClockMinutesForCustomColorHeightPx);
 
             if (mMeasuredWidthPx > mTargetWidthPx) {
                 append(builder, "Measured width %dpx exceeded widget width %dpx\n",
@@ -609,7 +576,7 @@ public class MaterialYouVerticalDigitalAppWidgetProvider extends AppWidgetProvid
                 append(builder, "Measured height %dpx exceeded widget height %dpx\n",
                         mMeasuredHeightPx, mTargetHeightPx);
             }
-            append(builder, "Clock font: %dpx\n", mClockFontSizePx);
+            append(builder, "Next alarm font: %dpx\n", mNextAlarmFontSizePx);
             return builder.toString();
         }
     }

@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +27,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.best.deskclock.R;
 import com.best.deskclock.data.SettingsDAO;
 
-import com.best.deskclock.settings.SettingsActivity;
 import com.best.deskclock.utils.InsetsUtils;
 import com.best.deskclock.utils.SdkUtils;
 import com.best.deskclock.utils.ThemeUtils;
@@ -66,20 +64,12 @@ public abstract class CollapsingToolbarBaseActivity extends AppCompatActivity {
         final SharedPreferences prefs = getDefaultSharedPreferences(this);
         boolean isFadeTransitionEnabled = SettingsDAO.isFadeTransitionsEnabled(prefs);
 
-        if (isFadeTransitionEnabled) {
-            if (SdkUtils.isAtLeastAndroid14()) {
-                overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.fade_in, R.anim.fade_out);
-            } else {
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            }
+        if (SdkUtils.isAtLeastAndroid14()) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.fade_in, R.anim.fade_out);
         } else {
-            if (SdkUtils.isAtLeastAndroid14()) {
-                overrideActivityTransition(OVERRIDE_TRANSITION_OPEN,
-                        R.anim.activity_slide_from_right, R.anim.activity_slide_to_left);
-            } else {
-                overridePendingTransition(R.anim.activity_slide_from_right, R.anim.activity_slide_to_left);
-            }
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
+
 
         super.onCreate(savedInstanceState);
 
@@ -110,31 +100,7 @@ public abstract class CollapsingToolbarBaseActivity extends AppCompatActivity {
 
         applyWindowInsets();
 
-        // Exclude SettingsActivity as this is handled in SettingsFragment.
-        if (!(this instanceof SettingsActivity)) {
-            getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-                @Override
-                public void handleOnBackPressed() {
-                    finish();
-                    if (isFadeTransitionEnabled) {
-                        if (SdkUtils.isAtLeastAndroid14()) {
-                            overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE,
-                                    R.anim.fade_in, R.anim.fade_out);
-                        } else {
-                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        }
-                    } else {
-                        if (SdkUtils.isAtLeastAndroid14()) {
-                            overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE,
-                                    R.anim.activity_slide_from_left, R.anim.activity_slide_to_right);
-                        } else {
-                            overridePendingTransition(
-                                    R.anim.activity_slide_from_left, R.anim.activity_slide_to_right);
-                        }
-                    }
-                }
-            });
-        }
+
     }
 
     @Override
@@ -203,11 +169,11 @@ public abstract class CollapsingToolbarBaseActivity extends AppCompatActivity {
         final CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mAppBarLayout.getLayoutParams();
         final AppBarLayout.Behavior behavior = new AppBarLayout.Behavior();
         behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
-                    @Override
-                    public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
-                        return false;
-                    }
-                });
+            @Override
+            public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+                return false;
+            }
+        });
         params.setBehavior(behavior);
     }
 

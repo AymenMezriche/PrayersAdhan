@@ -34,13 +34,9 @@ import android.widget.ImageView;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
-import com.best.deskclock.DeskClock;
 import com.best.deskclock.R;
-import com.best.deskclock.alarms.AlarmActivity;
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.data.SettingsDAO;
-import com.best.deskclock.screensaver.ScreensaverActivity;
-import com.best.deskclock.settings.AlarmDisplayPreviewActivity;
 import com.best.deskclock.utils.SdkUtils;
 import com.best.deskclock.utils.ThemeUtils;
 import com.google.android.material.color.MaterialColors;
@@ -170,16 +166,8 @@ public class AnalogClock extends FrameLayout {
      * Helper method to determine the clock style based on the context.
      */
     private DataModel.ClockStyle getClockStyleForContext() {
-        if (mContext instanceof AlarmActivity || mContext instanceof AlarmDisplayPreviewActivity) {
-            return SettingsDAO.getAlarmClockStyle(mPrefs);
-        } else if (mContext instanceof ScreensaverActivity) {
-            return SettingsDAO.getScreensaverClockStyle(mPrefs);
-        } else if (mContext instanceof DeskClock) {
-            return SettingsDAO.getClockStyle(mPrefs);
-        } else {
-            // Default for DreamService or other unknown contexts
-            return SettingsDAO.getScreensaverClockStyle(mPrefs);
-        }
+        return SettingsDAO.getScreensaverClockStyle(mPrefs);
+
     }
 
     /**
@@ -263,7 +251,7 @@ public class AnalogClock extends FrameLayout {
      * Helper method to determine if the context is an alarm-related activity.
      */
     private boolean isAlarmContext() {
-        return mContext instanceof AlarmActivity || mContext instanceof AlarmDisplayPreviewActivity;
+        return true;
     }
 
     /**

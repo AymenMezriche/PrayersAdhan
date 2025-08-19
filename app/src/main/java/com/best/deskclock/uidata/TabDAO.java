@@ -31,7 +31,7 @@ final class TabDAO {
     static Tab getSelectedTab(SharedPreferences prefs) {
         int tabIndex = SettingsDAO.getTabToDisplay(prefs);
         if (tabIndex == -1) {
-            final int ordinal = prefs.getInt(KEY_SELECTED_TAB, Tab.CLOCKS.ordinal());
+            final int ordinal = prefs.getInt(KEY_SELECTED_TAB, Tab.ALARMS.ordinal());
             return Tab.values()[ordinal];
         } else {
             return Tab.values()[tabIndex];

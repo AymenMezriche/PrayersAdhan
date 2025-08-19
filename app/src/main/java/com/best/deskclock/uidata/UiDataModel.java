@@ -14,10 +14,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.StringRes;
 
 import com.best.deskclock.AlarmClockFragment;
-import com.best.deskclock.ClockFragment;
 import com.best.deskclock.R;
-import com.best.deskclock.stopwatch.StopwatchFragment;
-import com.best.deskclock.timer.TimerFragment;
 
 import java.util.Calendar;
 
@@ -265,11 +262,7 @@ public final class UiDataModel {
      * Identifies each of the primary tabs within the application.
      */
     public enum Tab {
-        ALARMS(AlarmClockFragment.class, R.id.page_alarm, R.string.menu_alarm),
-        CLOCKS(ClockFragment.class, R.id.page_clock, R.string.menu_clock),
-        TIMERS(TimerFragment.class, R.id.page_timer, R.string.menu_timer),
-        STOPWATCH(StopwatchFragment.class, R.id.page_stopwatch, R.string.menu_stopwatch);
-
+        ALARMS(AlarmClockFragment.class, R.id.page_alarm, R.string.menu_alarm);
         private final String mFragmentClassName;
         private final int mPageResId;
         private final int mLabelResId;

@@ -222,18 +222,6 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
     }
 
     /**
-     * @return an intent that launches the ringtone picker to edit the ringtone of all timers
-     */
-    public static Intent createTimerRingtonePickerIntent(Context context) {
-        final DataModel dataModel = DataModel.getDataModel();
-        return new Intent(context, RingtonePickerActivity.class)
-                .putExtra(EXTRA_TITLE, R.string.timer_sound)
-                .putExtra(EXTRA_RINGTONE_URI, dataModel.getTimerRingtoneUri())
-                .putExtra(EXTRA_DEFAULT_RINGTONE_URI, dataModel.getDefaultTimerRingtoneUri())
-                .putExtra(EXTRA_DEFAULT_RINGTONE_NAME, R.string.default_timer_ringtone_title);
-    }
-
-    /**
      * @return an intent that launches the ringtone picker to edit the ringtone of all alarms in the settings
      */
     public static Intent createAlarmRingtonePickerIntentForSettings(Context context) {
@@ -344,7 +332,7 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
                         }
                     });
                 } else {
-                    DataModel.getDataModel().setTimerRingtoneUri(mSelectedRingtoneUri);
+
                 }
             }
         }
@@ -758,12 +746,6 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
                 // Reset the default alarm ringtone if it was just removed.
                 if (removeUri.equals(DataModel.getDataModel().getAlarmRingtoneUriFromSettings())) {
                     DataModel.getDataModel().setAlarmRingtoneUriFromSettings(systemDefaultRingtoneUri);
-                }
-
-                // Reset the timer ringtone if it was just removed.
-                if (removeUri.equals(DataModel.getDataModel().getTimerRingtoneUri())) {
-                    final Uri timerRingtoneUri = DataModel.getDataModel().getDefaultTimerRingtoneUri();
-                    DataModel.getDataModel().setTimerRingtoneUri(timerRingtoneUri);
                 }
 
                 // Remove the corresponding custom ringtone.
