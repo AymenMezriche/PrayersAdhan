@@ -20,3 +20,4 @@ rootProject.name = "Clock"
 
 include ':app'
 include ':AlarmHelper'
+include ':PrayerAlarm'
