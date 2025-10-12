@@ -257,12 +257,12 @@ public final class RingtoneModel {
 
         // Special case: no ringtone has a title of "random" or "random_custom.
         if (RANDOM_RINGTONE.equals(uri) || RANDOM_CUSTOM_RINGTONE.equals(uri)) {
-            return localizedContext.getString(R.string.random_ringtone_title);
+            return localizedContext.getString(com.better.alarmhelper.R.string.random_ringtone_title);
         }
 
         // Special case: no ringtone has a title of "Silent".
         if (RingtoneUtils.RINGTONE_SILENT.equals(uri)) {
-            return localizedContext.getString(R.string.silent_ringtone_title);
+            return localizedContext.getString(com.better.alarmhelper.R.string.silent_ringtone_title);
         }
 
         // If the ringtone is custom, it has its own title.
@@ -279,7 +279,7 @@ public final class RingtoneModel {
             final Ringtone ringtone = RingtoneManager.getRingtone(mContext, uri);
             if (ringtone == null) {
                 LogUtils.e("No ringtone for uri: %s", uri);
-                return localizedContext.getString(R.string.unknown_ringtone_title);
+                return localizedContext.getString(com.better.alarmhelper.R.string.unknown_ringtone_title);
             }
 
             // Cache the title for later use.

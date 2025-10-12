@@ -36,11 +36,6 @@ public final class Controller {
      */
     private VoiceController mVoiceController;
 
-    /**
-     * The controller that creates and updates launcher shortcuts on N MR1+
-     */
-    private ShortcutController mShortcutController;
-
     private Controller() {
     }
 
@@ -53,9 +48,6 @@ public final class Controller {
             mContext = context.getApplicationContext();
             mEventController = new EventController();
             mVoiceController = new VoiceController();
-            if (SdkUtils.isAtLeastAndroid71()) {
-                mShortcutController = new ShortcutController(mContext);
-            }
         }
     }
 
@@ -101,8 +93,5 @@ public final class Controller {
 
     public void updateShortcuts() {
         enforceMainLooper();
-        if (mShortcutController != null && SdkUtils.isAtLeastAndroid71()) {
-            mShortcutController.updateShortcuts();
-        }
     }
 }

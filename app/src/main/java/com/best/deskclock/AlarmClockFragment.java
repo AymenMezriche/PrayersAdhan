@@ -7,6 +7,7 @@
 package com.best.deskclock;
 
 import static com.best.deskclock.DeskClockApplication.getDefaultSharedPreferences;
+import static com.best.deskclock.alarms.AlarmStateManager.fixAlarmInstances;
 import static com.best.deskclock.settings.PreferencesDefaultValues.SPINNER_TIME_PICKER_STYLE;
 import static com.best.deskclock.uidata.UiDataModel.Tab.ALARMS;
 
@@ -26,7 +27,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,6 +55,7 @@ import com.best.deskclock.data.SettingsDAO;
 import com.best.deskclock.events.Events;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.provider.AlarmInstance;
+import com.best.deskclock.settings.PermissionsManagementActivity;
 import com.best.deskclock.uidata.UiDataModel;
 import com.best.deskclock.utils.LogUtils;
 import com.best.deskclock.utils.ThemeUtils;
@@ -135,15 +136,15 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState) {
         // Inflate the layout for this fragment
-        final View v = inflater.inflate(R.layout.alarm_clock, container, false);
+        final View v = inflater.inflate(com.better.alarmhelper.R.layout.alarm_clock, container, false);
         mContext = requireContext();
-        mMainLayout = v.findViewById(R.id.main);
-        btnAddTestAlarm = v.findViewById(R.id.btnAddTestAlarm);
-        mRecyclerView = v.findViewById(R.id.alarms_recycler_view);
-        TextView alarmsEmptyView = v.findViewById(R.id.alarms_empty_view);
+        mMainLayout = v.findViewById(com.better.alarmhelper.R.id.main);
+        btnAddTestAlarm = v.findViewById(com.better.alarmhelper.R.id.btnAddTestAlarm);
+        mRecyclerView = v.findViewById(com.better.alarmhelper.R.id.alarms_recycler_view);
+        TextView alarmsEmptyView = v.findViewById(com.better.alarmhelper.R.id.alarms_empty_view);
         final boolean isTablet = ThemeUtils.isTablet();
         final boolean isPhoneInLandscapeMode = !isTablet && ThemeUtils.isLandscape();
-        final Drawable noAlarmsIcon = ThemeUtils.toScaledBitmapDrawable(mContext, R.drawable.ic_alarm_off, 2.5f);
+        final Drawable noAlarmsIcon = ThemeUtils.toScaledBitmapDrawable(mContext, com.better.alarmhelper.R.drawable.ic_alarm_off, 2.5f);
         if (noAlarmsIcon != null) {
             noAlarmsIcon.setTint(MaterialColors.getColor(
                     mContext, com.google.android.material.R.attr.colorOnSurfaceVariant, Color.BLACK));
@@ -243,7 +244,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
                         );
 
                         final GradientDrawable background = new GradientDrawable();
-                        background.setColor(mContext.getColor(R.color.colorAlert));
+                        background.setColor(mContext.getColor(com.better.alarmhelper.R.color.colorAlert));
                         background.setBounds(
                                 viewHolder.itemView.getLeft(),
                                 viewHolder.itemView.getTop(),
@@ -258,7 +259,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
                         int deleteIconHorizontalMargin = ThemeUtils.convertDpToPixels(16, mContext);
 
                         if (dX > deleteIconHorizontalMargin) {
-                            Drawable deleteIcon = AppCompatResources.getDrawable(mContext, R.drawable.ic_delete);
+                            Drawable deleteIcon = AppCompatResources.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_delete);
                             if (deleteIcon != null) {
                                 DrawableCompat.setTint(deleteIcon, MaterialColors.getColor(
                                         mContext, com.google.android.material.R.attr.colorOnError, Color.BLACK));
@@ -282,7 +283,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
                         }
 
                         // Delete text
-                        final String deleteText = mContext.getString(R.string.delete);
+                        final String deleteText = mContext.getString(com.better.alarmhelper.R.string.delete);
                         if (dX > deleteIconHorizontalMargin + deleteIconSize) {
                             TextPaint textPaint = new TextPaint();
                             textPaint.setAntiAlias(true);
@@ -312,13 +313,19 @@ public final class AlarmClockFragment extends DeskClockFragment implements
 
                     removeItem(itemHolder);
                     final Alarm alarm = itemHolder.item;
-                    Events.sendAlarmEvent(R.string.action_delete, R.string.label_deskclock);
+                    Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_delete, com.better.alarmhelper.R.string.label_deskclock);
                     mAlarmUpdateHandler.asyncDeleteAlarm(alarm);
                 }
             }).attachToRecyclerView(mRecyclerView);
         }
 
         btnAddTestAlarm.setOnClickListener(v1 -> startActivity(new Intent(requireActivity(), AddAlarmActivity.class)));
+
+        btnAddTestAlarm.setOnLongClickListener(v1 -> {
+//             startActivity(new Intent(requireActivity(), PermissionsManagementActivity.class));
+            fixAlarmInstances(requireActivity());
+             return true;
+        });
 
         return v;
     }
@@ -487,7 +494,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         } else {
             // Trying to display a deleted alarm should only happen from a missed notification for
             // an alarm that has been marked deleted after use.
-            SnackbarManager.show(Snackbar.make(mMainLayout, R.string
+            SnackbarManager.show(Snackbar.make(mMainLayout, com.better.alarmhelper.R.string
                     .missed_alarm_has_been_deleted, Snackbar.LENGTH_LONG));
         }
     }
@@ -510,8 +517,8 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     @Override
     public void onUpdateFab(@NonNull ImageView fab) {
         fab.setVisibility(View.VISIBLE);
-        fab.setImageResource(R.drawable.ic_add);
-        fab.setContentDescription(fab.getResources().getString(R.string.button_alarms));
+        fab.setImageResource(com.better.alarmhelper.R.drawable.ic_add);
+        fab.setContentDescription(fab.getResources().getString(com.better.alarmhelper.R.string.button_alarms));
     }
 
     @Override

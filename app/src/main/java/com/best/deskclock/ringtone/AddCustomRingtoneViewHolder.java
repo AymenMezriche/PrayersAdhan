@@ -47,17 +47,17 @@ final class AddCustomRingtoneViewHolder extends ItemViewHolder<AddCustomRingtone
 
         final Context context = itemView.getContext();
 
-        final View selectedView = itemView.findViewById(R.id.sound_image_selected);
+        final View selectedView = itemView.findViewById(com.better.alarmhelper.R.id.sound_image_selected);
         selectedView.setVisibility(GONE);
 
-        final TextView nameView = itemView.findViewById(R.id.ringtone_name);
+        final TextView nameView = itemView.findViewById(com.better.alarmhelper.R.id.ringtone_name);
         nameView.setSingleLine(false);
 
         //Add vertical spacing between lines
         nameView.setLineSpacing(ThemeUtils.convertDpToPixels(4, context), 1.0f);
 
-        String title = context.getString(R.string.add_new_sound);
-        String subtitle = context.getString(R.string.add_new_sound_subtitle);
+        String title = context.getString(com.better.alarmhelper.R.string.add_new_sound);
+        String subtitle = context.getString(com.better.alarmhelper.R.string.add_new_sound_subtitle);
 
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(title).append("\n").append(subtitle);
@@ -70,10 +70,10 @@ final class AddCustomRingtoneViewHolder extends ItemViewHolder<AddCustomRingtone
 
         nameView.setText(builder);
 
-        final ImageView imageView = itemView.findViewById(R.id.ringtone_image);
-        imageView.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_add));
+        final ImageView imageView = itemView.findViewById(com.better.alarmhelper.R.id.ringtone_image);
+        imageView.setImageDrawable(AppCompatResources.getDrawable(context, com.better.alarmhelper.R.drawable.ic_add));
         imageView.getDrawable().setTint(MaterialColors.getColor(context, android.R.attr.colorBackground, Color.BLACK));
-        imageView.setBackgroundResource(R.drawable.bg_circle);
+        imageView.setBackgroundResource(com.better.alarmhelper.R.drawable.bg_circle);
         imageView.setBackgroundTintList(ColorStateList.valueOf(
                 MaterialColors.getColor(context, com.google.android.material.R.attr.colorPrimary, Color.BLACK))
         );
@@ -110,7 +110,7 @@ final class AddCustomRingtoneViewHolder extends ItemViewHolder<AddCustomRingtone
 
         @Override
         public ItemViewHolder<?> createViewHolder(ViewGroup parent, int viewType) {
-            final View itemView = mInflater.inflate(R.layout.ringtone_item_sound, parent, false);
+            final View itemView = mInflater.inflate(com.better.alarmhelper.R.layout.ringtone_item_sound, parent, false);
             return new AddCustomRingtoneViewHolder(itemView);
         }
     }

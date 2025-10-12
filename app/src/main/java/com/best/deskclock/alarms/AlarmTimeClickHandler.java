@@ -91,7 +91,7 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
                 alarm.month = currentCalendar.get(Calendar.MONTH);
                 alarm.day = currentCalendar.get(Calendar.DAY_OF_MONTH);
             }
-            Events.sendAlarmEvent(newState ? R.string.action_enable : R.string.action_disable, R.string.label_deskclock);
+            Events.sendAlarmEvent(newState ? com.better.alarmhelper.R.string.action_enable : com.better.alarmhelper.R.string.action_disable, com.better.alarmhelper.R.string.label_deskclock);
             mAlarmUpdateHandler.asyncUpdateAlarm(alarm, alarm.enabled, false);
             Utils.setVibrationTime(mContext, 50);
             LOGGER.d("Updating alarm enabled state to " + newState);
@@ -101,7 +101,7 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
     public void setAlarmVibrationEnabled(Alarm alarm, boolean newState) {
         if (newState != alarm.vibrate) {
             alarm.vibrate = newState;
-            Events.sendAlarmEvent(R.string.action_toggle_vibrate, R.string.label_deskclock);
+            Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_toggle_vibrate, com.better.alarmhelper.R.string.label_deskclock);
             mAlarmUpdateHandler.asyncUpdateAlarm(alarm, false, true);
             LOGGER.d("Updating vibrate state to " + newState);
 
@@ -115,7 +115,7 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
     public void setAlarmFlashEnabled(Alarm alarm, boolean newState) {
         if (newState != alarm.flash) {
             alarm.flash = newState;
-            Events.sendAlarmEvent(R.string.action_toggle_flash, R.string.label_deskclock);
+            Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_toggle_flash, com.better.alarmhelper.R.string.label_deskclock);
             mAlarmUpdateHandler.asyncUpdateAlarm(alarm, false, true);
             LOGGER.d("Updating flash state to " + newState);
             Utils.setVibrationTime(mContext, 50);
@@ -125,7 +125,7 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
     public void deleteOccasionalAlarmAfterUse(Alarm alarm, boolean newState) {
         if (newState != alarm.deleteAfterUse) {
             alarm.deleteAfterUse = newState;
-            Events.sendAlarmEvent(R.string.action_delete_alarm_after_use, R.string.label_deskclock);
+            Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_delete_alarm_after_use, com.better.alarmhelper.R.string.label_deskclock);
             mAlarmUpdateHandler.asyncUpdateAlarm(alarm, false, true);
             LOGGER.d("Delete alarm after use state to " + newState);
             Utils.setVibrationTime(mContext, 50);
@@ -133,7 +133,7 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
     }
 
     public void setAutoSilenceDuration(Alarm alarm) {
-        Events.sendAlarmEvent(R.string.action_set_auto_silence_duration, R.string.label_deskclock);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_set_auto_silence_duration, com.better.alarmhelper.R.string.label_deskclock);
         int autoSilenceDuration = alarm.autoSilenceDuration;
         final AutoSilenceDurationDialogFragment fragment =
                 AutoSilenceDurationDialogFragment.newInstance(alarm, autoSilenceDuration,
@@ -143,21 +143,21 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
     }
 
     public void setSnoozeDuration(Alarm alarm) {
-        Events.sendAlarmEvent(R.string.action_set_snooze_duration, R.string.label_deskclock);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_set_snooze_duration, com.better.alarmhelper.R.string.label_deskclock);
         final AlarmSnoozeDurationDialogFragment fragment =
                 AlarmSnoozeDurationDialogFragment.newInstance(alarm, alarm.snoozeDuration, mFragment.getTag());
         AlarmSnoozeDurationDialogFragment.show(mFragment.getParentFragmentManager(), fragment);
     }
 
     public void setCrescendoDuration(Alarm alarm) {
-        Events.sendAlarmEvent(R.string.action_set_crescendo_duration, R.string.label_deskclock);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_set_crescendo_duration, com.better.alarmhelper.R.string.label_deskclock);
         final VolumeCrescendoDurationDialogFragment fragment =
                 VolumeCrescendoDurationDialogFragment.newInstance(alarm, alarm.crescendoDuration, mFragment.getTag());
         VolumeCrescendoDurationDialogFragment.show(mFragment.getParentFragmentManager(), fragment);
     }
 
     public void setAlarmVolume(Alarm alarm) {
-        Events.sendAlarmEvent(R.string.action_set_alarm_volume, R.string.label_deskclock);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_set_alarm_volume, com.better.alarmhelper.R.string.label_deskclock);
         final AlarmVolumeDialogFragment fragment =
                 AlarmVolumeDialogFragment.newInstance(alarm, alarm.alarmVolume, mFragment.getTag());
         AlarmVolumeDialogFragment.show(mFragment.getParentFragmentManager(), fragment);
@@ -191,7 +191,7 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
             ((AlarmClockFragment) mFragment).removeItem(itemHolder);
         }
         final Alarm alarm = itemHolder.item;
-        Events.sendAlarmEvent(R.string.action_delete, R.string.label_deskclock);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_delete, com.better.alarmhelper.R.string.label_deskclock);
         mAlarmUpdateHandler.asyncDeleteAlarm(alarm);
         LOGGER.d("Deleting alarm.");
     }
@@ -204,21 +204,21 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
 
     public void onRingtoneClicked(Alarm alarm) {
         mSelectedAlarm = alarm;
-        Events.sendAlarmEvent(R.string.action_set_ringtone, R.string.label_deskclock);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_set_ringtone, com.better.alarmhelper.R.string.label_deskclock);
 
         final Intent intent = RingtonePickerActivity.createAlarmRingtonePickerIntent(mContext, alarm);
         mContext.startActivity(intent);
     }
 
     public void onEditLabelClicked(Alarm alarm) {
-        Events.sendAlarmEvent(R.string.action_set_label, R.string.label_deskclock);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_set_label, com.better.alarmhelper.R.string.label_deskclock);
         final LabelDialogFragment fragment = LabelDialogFragment.newInstance(alarm, alarm.label, mFragment.getTag());
         LabelDialogFragment.show(mFragment.getParentFragmentManager(), fragment);
     }
 
     public void onClockClicked(Alarm alarm) {
         mSelectedAlarm = alarm;
-        Events.sendAlarmEvent(R.string.action_set_time, R.string.label_deskclock);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_set_time, com.better.alarmhelper.R.string.label_deskclock);
         if (SettingsDAO.getMaterialTimePickerStyle(
                 getDefaultSharedPreferences(mContext)).equals(SPINNER_TIME_PICKER_STYLE)) {
             showCustomSpinnerTimePicker(alarm.hour, alarm.minutes);
@@ -238,7 +238,7 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
 
     public void onDateClicked(Alarm alarm) {
         mSelectedAlarm = alarm;
-        Events.sendAlarmEvent(R.string.action_set_date, R.string.label_deskclock);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_set_date, com.better.alarmhelper.R.string.label_deskclock);
         if (SettingsDAO.getMaterialDatePickerStyle(
                 getDefaultSharedPreferences(mContext)).equals(SPINNER_DATE_PICKER_STYLE)) {
             showSpinnerDatePicker(alarm);
@@ -249,9 +249,9 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
 
     public void showSpinnerDatePicker(Alarm alarm) {
         LayoutInflater inflater = mFragment.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.spinner_date_picker, null);
+        View dialogView = inflater.inflate(com.better.alarmhelper.R.layout.spinner_date_picker, null);
 
-        DatePicker datePicker = dialogView.findViewById(R.id.spinner_date_picker);
+        DatePicker datePicker = dialogView.findViewById(com.better.alarmhelper.R.id.spinner_date_picker);
         Calendar currentCalendar = Calendar.getInstance();
         long currentDateInMillis = currentCalendar.getTimeInMillis();
 
@@ -276,9 +276,9 @@ public final class AlarmTimeClickHandler implements OnTimeSetListener {
 
         datePicker.init(alarm.year, alarm.month, alarm.day, null);
 
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext, R.style.SpinnerDialogTheme);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext, com.better.alarmhelper.R.style.SpinnerDialogTheme);
         builder
-                .setTitle(mContext.getString(R.string.date_picker_dialog_title))
+                .setTitle(mContext.getString(com.better.alarmhelper.R.string.date_picker_dialog_title))
                 .setView(dialogView)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     int newYear = datePicker.getYear();

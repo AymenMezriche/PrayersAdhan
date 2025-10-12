@@ -61,7 +61,9 @@ public final class RingtonePlayer {
 
     private static final LogUtils.Logger LOGGER = new LogUtils.Logger("RingtonePlayer");
 
-    private static final float IN_CALL_VOLUME = 0.12f;
+    private static final float IN_CALL_VOLUME = 0f;
+    private static final float MAX_VOLUME = 0.5f;
+
 
     private final Context mContext;
     private final SharedPreferences mPrefs;
@@ -161,7 +163,7 @@ public final class RingtonePlayer {
                     mExoPlayer.setVolume(0f);
                     mVolumeHandler.post(mVolumeAdjustmentRunnable);
                 } else {
-                    mExoPlayer.setVolume(1f);
+                    mExoPlayer.setVolume(MAX_VOLUME);
                 }
             }
         }
@@ -225,7 +227,8 @@ public final class RingtonePlayer {
             int reducedVolume = 0;
 
             if (mOriginalMediaVolume > reducedVolume) {
-                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, reducedVolume, 0);
+                //we have changed this from STREAM_MUSIC to STREAM_ALARM to control the volume of alarm stream instead of media stream
+                mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, reducedVolume, 0);
                 mMediaVolumeModified = true;
             }
         }
@@ -323,7 +326,7 @@ public final class RingtonePlayer {
 
         long currentTime = System.currentTimeMillis();
         if (currentTime > mCrescendoStopTime) {
-            mExoPlayer.setVolume(1f);
+            mExoPlayer.setVolume(MAX_VOLUME);
             return false;
         }
 
@@ -530,14 +533,14 @@ public final class RingtonePlayer {
      * @return Uri of the ringtone to play when the user is in a telephone call
      */
     private static Uri getInCallRingtoneUri(Context context) {
-        return RingtoneUtils.getResourceUri(context, R.raw.alarm_expire);
+        return RingtoneUtils.getResourceUri(context, com.better.alarmhelper.R.raw.alarm_expire);
     }
 
     /**
      * @return Uri of the ringtone to play when the chosen ringtone fails to play
      */
     private static Uri getFallbackRingtoneUri(Context context) {
-        return RingtoneUtils.getResourceUri(context, R.raw.alarm_expire);
+        return RingtoneUtils.getResourceUri(context, com.better.alarmhelper.R.raw.alarm_expire);
     }
 
     /**

@@ -65,9 +65,9 @@ public abstract class CollapsingToolbarBaseActivity extends AppCompatActivity {
         boolean isFadeTransitionEnabled = SettingsDAO.isFadeTransitionsEnabled(prefs);
 
         if (SdkUtils.isAtLeastAndroid14()) {
-            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.fade_in, R.anim.fade_out);
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, com.better.alarmhelper.R.anim.fade_in, com.better.alarmhelper.R.anim.fade_out);
         } else {
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            overridePendingTransition(com.better.alarmhelper.R.anim.fade_in, com.better.alarmhelper.R.anim.fade_out);
         }
 
 
@@ -78,12 +78,12 @@ public abstract class CollapsingToolbarBaseActivity extends AppCompatActivity {
 
         ThemeUtils.allowDisplayCutout(getWindow());
 
-        super.setContentView(R.layout.collapsing_toolbar_base_layout);
+        super.setContentView(com.better.alarmhelper.R.layout.collapsing_toolbar_base_layout);
 
-        mCoordinatorLayout = findViewById(R.id.coordinator_layout);
+        mCoordinatorLayout = findViewById(com.better.alarmhelper.R.id.coordinator_layout);
 
         final String getDarkMode = SettingsDAO.getDarkMode(prefs);
-        mCollapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
+        mCollapsingToolbarLayout = findViewById(com.better.alarmhelper.R.id.collapsing_toolbar);
         if (mCollapsingToolbarLayout == null) {
             return;
         }
@@ -92,10 +92,10 @@ public abstract class CollapsingToolbarBaseActivity extends AppCompatActivity {
             mCollapsingToolbarLayout.setContentScrimColor(getColor(android.R.color.black));
         }
 
-        mAppBarLayout = findViewById(R.id.app_bar);
+        mAppBarLayout = findViewById(com.better.alarmhelper.R.id.app_bar);
         disableCollapsingToolbarLayoutScrollingBehavior();
 
-        final Toolbar toolbar = findViewById(R.id.action_bar);
+        final Toolbar toolbar = findViewById(com.better.alarmhelper.R.id.action_bar);
         setSupportActionBar(toolbar);
 
         applyWindowInsets();
@@ -113,7 +113,7 @@ public abstract class CollapsingToolbarBaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(int layoutResID) {
-        final ViewGroup parent = findViewById(R.id.content_frame);
+        final ViewGroup parent = findViewById(com.better.alarmhelper.R.id.content_frame);
         if (parent != null) {
             parent.removeAllViews();
         }
@@ -122,7 +122,7 @@ public abstract class CollapsingToolbarBaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(View view) {
-        final ViewGroup parent = findViewById(R.id.content_frame);
+        final ViewGroup parent = findViewById(com.better.alarmhelper.R.id.content_frame);
         if (parent != null) {
             parent.addView(view);
         }
@@ -130,7 +130,7 @@ public abstract class CollapsingToolbarBaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(View view, ViewGroup.LayoutParams params) {
-        final ViewGroup parent = findViewById(R.id.content_frame);
+        final ViewGroup parent = findViewById(com.better.alarmhelper.R.id.content_frame);
         if (parent != null) {
             parent.addView(view, params);
         }

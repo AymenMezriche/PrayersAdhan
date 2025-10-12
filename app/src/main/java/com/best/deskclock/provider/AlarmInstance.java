@@ -361,7 +361,7 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
     }
 
     public String getLabelOrDefault(Context context) {
-        return mLabel.isEmpty() ? context.getString(R.string.default_label) : mLabel;
+        return mLabel.isEmpty() ? context.getString(com.better.alarmhelper.R.string.default_label) : mLabel;
     }
 
     /**

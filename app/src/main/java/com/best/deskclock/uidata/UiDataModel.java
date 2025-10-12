@@ -209,7 +209,7 @@ public final class UiDataModel {
      * @return the id of the shortcut
      */
     public String getShortcutId(@StringRes int category, @StringRes int action) {
-        if (category == R.string.category_stopwatch) {
+        if (category == com.better.alarmhelper.R.string.category_stopwatch) {
             return mContext.getString(category);
         }
         return mContext.getString(category) + "_" + mContext.getString(action);
@@ -262,7 +262,7 @@ public final class UiDataModel {
      * Identifies each of the primary tabs within the application.
      */
     public enum Tab {
-        ALARMS(AlarmClockFragment.class, R.id.page_alarm, R.string.menu_alarm);
+        ALARMS(AlarmClockFragment.class, com.better.alarmhelper.R.id.page_alarm, com.better.alarmhelper.R.string.menu_alarm);
         private final String mFragmentClassName;
         private final int mPageResId;
         private final int mLabelResId;

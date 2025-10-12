@@ -178,7 +178,7 @@ public class ThemeController {
                     case DARK_THEME -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 }
             } else if (darkMode.equals(AMOLED_DARK_MODE) && !theme.equals(SYSTEM_THEME) && !theme.equals(LIGHT_THEME)) {
-                activity.setTheme(R.style.AmoledTheme);
+                activity.setTheme(com.better.alarmhelper.R.style.AmoledTheme);
             }
         }
 
@@ -190,17 +190,17 @@ public class ThemeController {
                     : (ThemeUtils.isNight(activity.getResources()) ? nightAccentColor : accentColor);
 
             switch (color) {
-                case BLACK_ACCENT_COLOR -> activity.setTheme(R.style.BlackAccentColor);
-                case BLUE_ACCENT_COLOR -> activity.setTheme(R.style.BlueAccentColor);
-                case BLUE_GRAY_ACCENT_COLOR -> activity.setTheme(R.style.BlueGrayAccentColor);
-                case BROWN_ACCENT_COLOR -> activity.setTheme(R.style.BrownAccentColor);
-                case GREEN_ACCENT_COLOR -> activity.setTheme(R.style.GreenAccentColor);
-                case INDIGO_ACCENT_COLOR -> activity.setTheme(R.style.IndigoAccentColor);
-                case ORANGE_ACCENT_COLOR -> activity.setTheme(R.style.OrangeAccentColor);
-                case PINK_ACCENT_COLOR -> activity.setTheme(R.style.PinkAccentColor);
-                case PURPLE_ACCENT_COLOR -> activity.setTheme(R.style.PurpleAccentColor);
-                case RED_ACCENT_COLOR -> activity.setTheme(R.style.RedAccentColor);
-                case YELLOW_ACCENT_COLOR -> activity.setTheme(R.style.YellowAccentColor);
+                case BLACK_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.BlackAccentColor);
+                case BLUE_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.BlueAccentColor);
+                case BLUE_GRAY_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.BlueGrayAccentColor);
+                case BROWN_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.BrownAccentColor);
+                case GREEN_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.GreenAccentColor);
+                case INDIGO_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.IndigoAccentColor);
+                case ORANGE_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.OrangeAccentColor);
+                case PINK_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.PinkAccentColor);
+                case PURPLE_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.PurpleAccentColor);
+                case RED_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.RedAccentColor);
+                case YELLOW_ACCENT_COLOR -> activity.setTheme(com.better.alarmhelper.R.style.YellowAccentColor);
             }
         }
 

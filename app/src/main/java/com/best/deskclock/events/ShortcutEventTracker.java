@@ -28,11 +28,11 @@ public final class ShortcutEventTracker implements EventTracker {
     public ShortcutEventTracker(Context context) {
         mShortcutManager = context.getSystemService(ShortcutManager.class);
         final UiDataModel uidm = UiDataModel.getUiDataModel();
-        shortcuts.add(uidm.getShortcutId(R.string.category_alarm, R.string.action_create));
-        shortcuts.add(uidm.getShortcutId(R.string.category_timer, R.string.action_create));
-        shortcuts.add(uidm.getShortcutId(R.string.category_stopwatch, R.string.action_pause));
-        shortcuts.add(uidm.getShortcutId(R.string.category_stopwatch, R.string.action_start));
-        shortcuts.add(uidm.getShortcutId(R.string.category_screensaver, R.string.action_show));
+        shortcuts.add(uidm.getShortcutId(com.better.alarmhelper.R.string.category_alarm, com.better.alarmhelper.R.string.action_create));
+        shortcuts.add(uidm.getShortcutId(com.better.alarmhelper.R.string.category_timer, com.better.alarmhelper.R.string.action_create));
+        shortcuts.add(uidm.getShortcutId(com.better.alarmhelper.R.string.category_stopwatch, com.better.alarmhelper.R.string.action_pause));
+        shortcuts.add(uidm.getShortcutId(com.better.alarmhelper.R.string.category_stopwatch, com.better.alarmhelper.R.string.action_start));
+        shortcuts.add(uidm.getShortcutId(com.better.alarmhelper.R.string.category_screensaver, com.better.alarmhelper.R.string.action_show));
     }
 
     @Override

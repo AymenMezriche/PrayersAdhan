@@ -214,11 +214,11 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
      */
     public static Intent createAlarmRingtonePickerIntent(Context context, Alarm alarm) {
         return new Intent(context, RingtonePickerActivity.class)
-                .putExtra(EXTRA_TITLE, R.string.alarm_sound)
+                .putExtra(EXTRA_TITLE, com.better.alarmhelper.R.string.alarm_sound)
                 .putExtra(EXTRA_ALARM_ID, alarm.id)
                 .putExtra(EXTRA_RINGTONE_URI, alarm.alert)
                 .putExtra(EXTRA_DEFAULT_RINGTONE_URI, RingtoneManager.getDefaultUri(TYPE_ALARM))
-                .putExtra(EXTRA_DEFAULT_RINGTONE_NAME, R.string.default_alarm_ringtone_title);
+                .putExtra(EXTRA_DEFAULT_RINGTONE_NAME, com.better.alarmhelper.R.string.default_alarm_ringtone_title);
     }
 
     /**
@@ -227,15 +227,15 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
     public static Intent createAlarmRingtonePickerIntentForSettings(Context context) {
         final DataModel dataModel = DataModel.getDataModel();
         return new Intent(context, RingtonePickerActivity.class)
-                .putExtra(EXTRA_TITLE, R.string.default_alarm_ringtone_title)
+                .putExtra(EXTRA_TITLE, com.better.alarmhelper.R.string.default_alarm_ringtone_title)
                 .putExtra(EXTRA_RINGTONE_URI, dataModel.getAlarmRingtoneUriFromSettings())
                 .putExtra(EXTRA_DEFAULT_RINGTONE_URI, dataModel.getDefaultAlarmRingtoneUriFromSettings())
-                .putExtra(EXTRA_DEFAULT_RINGTONE_NAME, R.string.default_alarm_ringtone_title);
+                .putExtra(EXTRA_DEFAULT_RINGTONE_NAME, com.better.alarmhelper.R.string.default_alarm_ringtone_title);
     }
 
     @Override
     protected String getActivityTitle() {
-        return getString(R.string.alarm_sound);
+        return getString(com.better.alarmhelper.R.string.alarm_sound);
     }
 
     @Override
@@ -247,7 +247,7 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
         // To manually manage insets
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        setContentView(R.layout.ringtone_picker);
+        setContentView(com.better.alarmhelper.R.layout.ringtone_picker);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
 
@@ -289,7 +289,7 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
                 .withViewTypes(ringtoneFactory, listener, null, VIEW_TYPE_SYSTEM_SOUND)
                 .withViewTypes(ringtoneFactory, listener, null, VIEW_TYPE_CUSTOM_SOUND);
 
-        mRingtoneContent = findViewById(R.id.ringtone_content);
+        mRingtoneContent = findViewById(com.better.alarmhelper.R.id.ringtone_content);
         mRingtoneContent.setLayoutManager(new LinearLayoutManager(context));
         mRingtoneContent.setAdapter(mRingtoneAdapter);
         mRingtoneContent.setItemAnimator(null);
@@ -307,7 +307,7 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
     @Override
     protected void onPause() {
         if (mSelectedRingtoneUri != null) {
-            if (mTitleResourceId == R.string.default_alarm_ringtone_title) {
+            if (mTitleResourceId == com.better.alarmhelper.R.string.default_alarm_ringtone_title) {
                 DataModel.getDataModel().setAlarmRingtoneUriFromSettings(mSelectedRingtoneUri);
             } else {
                 if (mAlarmId != -1) {
@@ -527,7 +527,7 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
             final DialogInterface.OnClickListener okListener = (dialog, which) ->
                     ((RingtonePickerActivity) requireActivity()).removeCustomRingtoneAsync(toRemove);
 
-            final Drawable drawable = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error);
+            final Drawable drawable = AppCompatResources.getDrawable(requireContext(), com.better.alarmhelper.R.drawable.ic_error);
             if (drawable != null) {
                 drawable.setTint(MaterialColors.getColor(
                         requireContext(), com.google.android.material.R.attr.colorOnSurface, Color.BLACK));
@@ -535,14 +535,14 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
 
             MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(requireContext())
                     .setIcon(drawable)
-                    .setTitle(R.string.warning)
-                    .setPositiveButton(R.string.remove_sound, okListener)
+                    .setTitle(com.better.alarmhelper.R.string.warning)
+                    .setPositiveButton(com.better.alarmhelper.R.string.remove_sound, okListener)
                     .setNegativeButton(android.R.string.cancel, null);
 
             if (RingtoneUtils.isRingtoneUriReadable(requireContext(), toRemove)) {
-                dialogBuilder.setMessage(R.string.confirm_remove_custom_ringtone);
+                dialogBuilder.setMessage(com.better.alarmhelper.R.string.confirm_remove_custom_ringtone);
             } else {
-                dialogBuilder.setMessage(R.string.custom_ringtone_lost_permissions);
+                dialogBuilder.setMessage(com.better.alarmhelper.R.string.custom_ringtone_lost_permissions);
             }
 
             return dialogBuilder.create();
@@ -646,7 +646,7 @@ public class RingtonePickerActivity extends CollapsingToolbarBaseActivity
             }
 
             if (name == null) {
-                name = context.getString(R.string.unknown_ringtone_title);
+                name = context.getString(com.better.alarmhelper.R.string.unknown_ringtone_title);
             }
 
             final String title = name;

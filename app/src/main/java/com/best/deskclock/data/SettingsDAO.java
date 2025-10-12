@@ -688,8 +688,8 @@ public final class SettingsDAO {
         final Locale locale = Locale.getDefault();
         final Context localizedContext = Utils.getLocalizedContext(context);
         final Resources resources = localizedContext.getResources();
-        final String[] timeZoneIds = resources.getStringArray(R.array.timezone_values);
-        final String[] timeZoneNames = resources.getStringArray(R.array.timezone_labels);
+        final String[] timeZoneIds = resources.getStringArray(com.better.alarmhelper.R.array.timezone_values);
+        final String[] timeZoneNames = resources.getStringArray(com.better.alarmhelper.R.array.timezone_labels);
 
         // Verify the data is consistent.
         if (timeZoneIds.length != timeZoneNames.length) {

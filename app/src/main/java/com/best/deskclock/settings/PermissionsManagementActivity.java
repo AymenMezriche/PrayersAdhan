@@ -70,7 +70,7 @@ public class PermissionsManagementActivity extends CollapsingToolbarBaseActivity
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, new PermissionsManagementFragment())
+                    .replace(com.better.alarmhelper.R.id.content_frame, new PermissionsManagementFragment())
                     .disallowAddToBackStack()
                     .commit();
         }
@@ -98,7 +98,7 @@ public class PermissionsManagementActivity extends CollapsingToolbarBaseActivity
 
         @Override
         protected String getFragmentTitle() {
-            return getString(R.string.permission_management_settings);
+            return getString(com.better.alarmhelper.R.string.permission_management_settings);
         }
 
         @NonNull
@@ -106,33 +106,33 @@ public class PermissionsManagementActivity extends CollapsingToolbarBaseActivity
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.permissions_management_activity, container, false);
+            View rootView = inflater.inflate(com.better.alarmhelper.R.layout.permissions_management_activity, container, false);
 
-            mPermissionContainerView = rootView.findViewById(R.id.permission_container);
+            mPermissionContainerView = rootView.findViewById(com.better.alarmhelper.R.id.permission_container);
 
-            mIgnoreBatteryOptimizationsView = rootView.findViewById(R.id.IBO_view);
+            mIgnoreBatteryOptimizationsView = rootView.findViewById(com.better.alarmhelper.R.id.IBO_view);
             mIgnoreBatteryOptimizationsView.setOnClickListener(v -> launchIgnoreBatteryOptimizationsSettings());
 
-            mIgnoreBatteryOptimizationsDetails = rootView.findViewById(R.id.IBO_details_button);
+            mIgnoreBatteryOptimizationsDetails = rootView.findViewById(com.better.alarmhelper.R.id.IBO_details_button);
             mIgnoreBatteryOptimizationsDetails.setOnClickListener(v ->
                     displayPermissionDetailsDialog(
-                            R.drawable.ic_battery_settings,
-                            R.string.ignore_battery_optimizations_dialog_title,
-                            R.string.ignore_battery_optimizations_dialog_text));
+                            com.better.alarmhelper.R.drawable.ic_about_features,
+                            com.better.alarmhelper.R.string.ignore_battery_optimizations_dialog_title,
+                            com.better.alarmhelper.R.string.ignore_battery_optimizations_dialog_text));
 
-            mIgnoreBatteryOptimizationsStatus = rootView.findViewById(R.id.IBO_status_text);
+            mIgnoreBatteryOptimizationsStatus = rootView.findViewById(com.better.alarmhelper.R.id.IBO_status_text);
 
-            mNotificationView = rootView.findViewById(R.id.notification_view);
+            mNotificationView = rootView.findViewById(com.better.alarmhelper.R.id.notification_view);
             mNotificationView.setOnClickListener(v -> grantOrRevokeNotificationsPermission());
 
-            mNotificationDetails = rootView.findViewById(R.id.notification_details_button);
+            mNotificationDetails = rootView.findViewById(com.better.alarmhelper.R.id.notification_details_button);
             mNotificationDetails.setOnClickListener(v ->
                     displayPermissionDetailsDialog(
-                            R.drawable.ic_notifications,
-                            R.string.notifications_dialog_title,
-                            R.string.notifications_dialog_text));
+                            com.better.alarmhelper.R.drawable.ic_notifications,
+                            com.better.alarmhelper.R.string.notifications_dialog_title,
+                            com.better.alarmhelper.R.string.notifications_dialog_text));
 
-            mNotificationStatus = rootView.findViewById(R.id.notification_status_text);
+            mNotificationStatus = rootView.findViewById(com.better.alarmhelper.R.id.notification_status_text);
 
             final boolean isCardBackgroundDisplayed = SettingsDAO.isCardBackgroundDisplayed(mPrefs);
             final boolean isCardBorderDisplayed = SettingsDAO.isCardBorderDisplayed(mPrefs);
@@ -140,33 +140,33 @@ public class PermissionsManagementActivity extends CollapsingToolbarBaseActivity
             updateCardViews(isCardBackgroundDisplayed, isCardBorderDisplayed);
 
             if (SdkUtils.isAtLeastAndroid14()) {
-                mFullScreenNotificationsView = rootView.findViewById(R.id.FSN_view);
+                mFullScreenNotificationsView = rootView.findViewById(com.better.alarmhelper.R.id.FSN_view);
                 mFullScreenNotificationsView.setVisibility(View.VISIBLE);
                 mFullScreenNotificationsView.setOnClickListener(v -> grantOrRevokeFullScreenNotificationsPermission());
 
-                mFullScreenNotificationsDetails = rootView.findViewById(R.id.FSN_details_button);
+                mFullScreenNotificationsDetails = rootView.findViewById(com.better.alarmhelper.R.id.FSN_details_button);
                 mFullScreenNotificationsDetails.setOnClickListener(v ->
                         displayPermissionDetailsDialog(
-                                R.drawable.ic_fullscreen,
-                                R.string.FSN_dialog_title,
-                                R.string.FSN_dialog_text));
+                                com.better.alarmhelper.R.drawable.ic_fullscreen,
+                                com.better.alarmhelper.R.string.FSN_dialog_title,
+                                com.better.alarmhelper.R.string.FSN_dialog_text));
 
-                mFullScreenNotificationsStatus = rootView.findViewById(R.id.FSN_status_text);
+                mFullScreenNotificationsStatus = rootView.findViewById(com.better.alarmhelper.R.id.FSN_status_text);
 
                 updateFullScreenNotificationsCard(isCardBackgroundDisplayed, isCardBorderDisplayed);
             }
 
             if (MiuiCheck.isMiui()) {
-                mShowLockscreenView = rootView.findViewById(R.id.show_lockscreen_view);
+                mShowLockscreenView = rootView.findViewById(com.better.alarmhelper.R.id.show_lockscreen_view);
                 mShowLockscreenView.setVisibility(View.VISIBLE);
                 mShowLockscreenView.setOnClickListener(v -> grantShowOnLockScreenPermissionXiaomi());
 
-                mShowLockscreenDetails = rootView.findViewById(R.id.show_lockscreen_button);
+                mShowLockscreenDetails = rootView.findViewById(com.better.alarmhelper.R.id.show_lockscreen_button);
                 mShowLockscreenDetails.setOnClickListener(v ->
                         displayPermissionDetailsDialog(
-                                R.drawable.ic_screen_lock,
-                                R.string.show_lockscreen_dialog_title,
-                                R.string.show_lockscreen_dialog_text));
+                                com.better.alarmhelper.R.drawable.ic_screen_lock,
+                                com.better.alarmhelper.R.string.show_lockscreen_dialog_title,
+                                com.better.alarmhelper.R.string.show_lockscreen_dialog_text));
 
                 updateShowLockscreenCard(isCardBackgroundDisplayed, isCardBorderDisplayed);
             }
@@ -240,9 +240,9 @@ public class PermissionsManagementActivity extends CollapsingToolbarBaseActivity
                 displayRevocationDialog(intent);
             } else if (shouldShowRequestPermissionRationale(POST_NOTIFICATIONS)) {
                 new MaterialAlertDialogBuilder(requireContext())
-                        .setIcon(R.drawable.ic_notifications)
-                        .setTitle(R.string.notifications_dialog_title)
-                        .setMessage(R.string.notifications_dialog_text)
+                        .setIcon(com.better.alarmhelper.R.drawable.ic_notifications)
+                        .setTitle(com.better.alarmhelper.R.string.notifications_dialog_title)
+                        .setMessage(com.better.alarmhelper.R.string.notifications_dialog_text)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             startActivity(intent);
                             sendPermissionResult();
@@ -316,7 +316,7 @@ public class PermissionsManagementActivity extends CollapsingToolbarBaseActivity
                     .setIcon(iconId)
                     .setTitle(titleId)
                     .setMessage(messageId)
-                    .setPositiveButton(R.string.permission_dialog_close_button, null)
+                    .setPositiveButton(com.better.alarmhelper.R.string.permission_dialog_close_button, null)
                     .show();
         }
 
@@ -325,9 +325,9 @@ public class PermissionsManagementActivity extends CollapsingToolbarBaseActivity
          */
         private void displayRevocationDialog(Intent intent) {
             new MaterialAlertDialogBuilder(requireContext())
-                    .setIcon(R.drawable.ic_key_off)
-                    .setTitle(R.string.permission_dialog_revoke_title)
-                    .setMessage(R.string.revoke_permission_dialog_message)
+                    .setIcon(com.better.alarmhelper.R.drawable.ic_key_off)
+                    .setTitle(com.better.alarmhelper.R.string.permission_dialog_revoke_title)
+                    .setMessage(com.better.alarmhelper.R.string.revoke_permission_dialog_message)
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         startActivity(intent);
                         sendPermissionResult();
@@ -354,26 +354,26 @@ public class PermissionsManagementActivity extends CollapsingToolbarBaseActivity
          */
         private void setStatusText() {
             mIgnoreBatteryOptimizationsStatus.setText(isIgnoringBatteryOptimizations(requireContext())
-                    ? R.string.permission_granted
-                    : R.string.permission_denied);
+                    ? com.better.alarmhelper.R.string.permission_granted
+                    : com.better.alarmhelper.R.string.permission_denied);
             mIgnoreBatteryOptimizationsStatus.setTextColor(isIgnoringBatteryOptimizations(requireContext())
-                    ? requireContext().getColor(R.color.colorGranted)
-                    : requireContext().getColor(R.color.colorAlert));
+                    ? requireContext().getColor(com.better.alarmhelper.R.color.colorGranted)
+                    : requireContext().getColor(com.better.alarmhelper.R.color.colorAlert));
 
             mNotificationStatus.setText(areNotificationsEnabled(requireContext())
-                    ? R.string.permission_granted
-                    : R.string.permission_denied);
+                    ? com.better.alarmhelper.R.string.permission_granted
+                    : com.better.alarmhelper.R.string.permission_denied);
             mNotificationStatus.setTextColor(areNotificationsEnabled(requireContext())
-                    ? requireContext().getColor(R.color.colorGranted)
-                    : requireContext().getColor(R.color.colorAlert));
+                    ? requireContext().getColor(com.better.alarmhelper.R.color.colorGranted)
+                    : requireContext().getColor(com.better.alarmhelper.R.color.colorAlert));
 
             if (SdkUtils.isAtLeastAndroid14()) {
                 mFullScreenNotificationsStatus.setText(areFullScreenNotificationsEnabled(requireContext())
-                        ? R.string.permission_granted
-                        : R.string.permission_denied);
+                        ? com.better.alarmhelper.R.string.permission_granted
+                        : com.better.alarmhelper.R.string.permission_denied);
                 mFullScreenNotificationsStatus.setTextColor(areFullScreenNotificationsEnabled(requireContext())
-                        ? requireContext().getColor(R.color.colorGranted)
-                        : requireContext().getColor(R.color.colorAlert));
+                        ? requireContext().getColor(com.better.alarmhelper.R.color.colorGranted)
+                        : requireContext().getColor(com.better.alarmhelper.R.color.colorAlert));
             }
         }
 

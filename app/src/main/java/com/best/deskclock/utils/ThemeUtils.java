@@ -216,7 +216,7 @@ public class ThemeUtils {
         if (enabled) {
             button.setImageTintList(null);
         } else {
-            button.setImageTintList(ColorStateList.valueOf(context.getColor(R.color.colorDisabled)));
+            button.setImageTintList(ColorStateList.valueOf(context.getColor(com.better.alarmhelper.R.color.colorDisabled)));
         }
     }
 

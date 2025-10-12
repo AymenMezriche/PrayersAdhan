@@ -86,15 +86,15 @@ public class CustomSeekbarPreference extends SeekBarPreference {
 
         holder.itemView.setClickable(false);
 
-        mSeekBar = (SeekBar) holder.findViewById(R.id.seekbar);
+        mSeekBar = (SeekBar) holder.findViewById(com.better.alarmhelper.R.id.seekbar);
         configureSeekBarMinValue();
 
         final TextView seekBarSummary = (TextView) holder.findViewById(android.R.id.summary);
         setSeekBarProgress(seekBarSummary);
 
-        mSeekBarMinus = (ImageView) holder.findViewById(R.id.seekbar_minus_icon);
-        mSeekBarPlus = (ImageView) holder.findViewById(R.id.seekbar_plus_icon);
-        mResetSeekBar = (TextView) holder.findViewById(R.id.reset_seekbar_value);
+        mSeekBarMinus = (ImageView) holder.findViewById(com.better.alarmhelper.R.id.seekbar_minus_icon);
+        mSeekBarPlus = (ImageView) holder.findViewById(com.better.alarmhelper.R.id.seekbar_plus_icon);
+        mResetSeekBar = (TextView) holder.findViewById(com.better.alarmhelper.R.id.reset_seekbar_value);
 
         configureSeekBarButtonDrawables();
         setupSeekBarButton(mSeekBarMinus, isBluetoothVolumePreference() ? -10 : -5, seekBarSummary);
@@ -200,7 +200,7 @@ public class CustomSeekbarPreference extends SeekBarPreference {
         }
 
         if (progress == getDefaultSeekBarValue()) {
-            seekBarSummary.setText(R.string.label_default);
+            seekBarSummary.setText(com.better.alarmhelper.R.string.label_default);
         } else if (isScreensaverBrightnessPreference() || isBluetoothVolumePreference()) {
             String formattedText = String.format(Locale.getDefault(), "%d%%", progress);
             seekBarSummary.setText(formattedText);
@@ -214,17 +214,17 @@ public class CustomSeekbarPreference extends SeekBarPreference {
      */
     private void configureSeekBarButtonDrawables() {
         if (isScreensaverBrightnessPreference()) {
-            mSeekBarMinus.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_brightness_decrease));
-            mSeekBarPlus.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_brightness_increase));
+            mSeekBarMinus.setImageDrawable(ContextCompat.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_brightness_decrease));
+            mSeekBarPlus.setImageDrawable(ContextCompat.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_brightness_increase));
         } else if (isShakeIntensityPreference() || isTimerShakeIntensityPreference()) {
-            mSeekBarMinus.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_sensor_low));
-            mSeekBarPlus.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_sensor_high));
+            mSeekBarMinus.setImageDrawable(ContextCompat.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_sensor_low));
+            mSeekBarPlus.setImageDrawable(ContextCompat.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_sensor_high));
         } else if (isBluetoothVolumePreference()) {
-            mSeekBarMinus.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_volume_down));
-            mSeekBarPlus.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_volume_up));
+            mSeekBarMinus.setImageDrawable(ContextCompat.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_volume_down));
+            mSeekBarPlus.setImageDrawable(ContextCompat.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_volume_up));
         } else {
-            mSeekBarMinus.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_text_decrease));
-            mSeekBarPlus.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_text_increase));
+            mSeekBarMinus.setImageDrawable(ContextCompat.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_text_decrease));
+            mSeekBarPlus.setImageDrawable(ContextCompat.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_text_increase));
         }
     }
 
@@ -281,7 +281,7 @@ public class CustomSeekbarPreference extends SeekBarPreference {
             mResetSeekBar.setTextColor(enabledColor);
             TextViewCompat.setCompoundDrawableTintList(mResetSeekBar, ColorStateList.valueOf(enabledColor));
         } else {
-            int disabledColor = mContext.getColor(R.color.colorDisabled);
+            int disabledColor = mContext.getColor(com.better.alarmhelper.R.color.colorDisabled);
             mResetSeekBar.setTextColor(disabledColor);
             TextViewCompat.setCompoundDrawableTintList(mResetSeekBar, ColorStateList.valueOf(disabledColor));
         }

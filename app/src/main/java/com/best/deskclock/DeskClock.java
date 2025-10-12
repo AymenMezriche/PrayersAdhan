@@ -219,14 +219,14 @@ public class DeskClock extends AppCompatActivity
 
         ThemeUtils.allowDisplayCutout(getWindow());
 
-        setContentView(R.layout.desk_clock);
+        setContentView(com.better.alarmhelper.R.layout.desk_clock);
 
-        mDeskClockRootView = findViewById(R.id.desk_clock_root_view);
+        mDeskClockRootView = findViewById(com.better.alarmhelper.R.id.desk_clock_root_view);
 
-        mSnackbarAnchor = findViewById(R.id.content);
+        mSnackbarAnchor = findViewById(com.better.alarmhelper.R.id.content);
 
         // Configure the toolbar.
-        mToolbar = findViewById(R.id.toolbar);
+        mToolbar = findViewById(com.better.alarmhelper.R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         // Configure the buttons shared by the tabs.
@@ -235,18 +235,18 @@ public class DeskClock extends AppCompatActivity
         final int fabSize = isTablet ? 90 : isPortrait ? 75 : 60;
         final int leftOrRightButtonSize = isTablet ? 70 : isPortrait ? 55 : 50;
 
-        mFab = findViewById(R.id.fab);
+        mFab = findViewById(com.better.alarmhelper.R.id.fab);
         mFab.getLayoutParams().height = ThemeUtils.convertDpToPixels(fabSize, this);
         mFab.getLayoutParams().width = ThemeUtils.convertDpToPixels(fabSize, this);
         mFab.setScaleType(ImageView.ScaleType.CENTER);
         mFab.setOnClickListener(view -> getSelectedDeskClockFragment().onFabClick(mFab));
 
-        mLeftButton = findViewById(R.id.left_button);
+        mLeftButton = findViewById(com.better.alarmhelper.R.id.left_button);
         mLeftButton.getLayoutParams().height = ThemeUtils.convertDpToPixels(leftOrRightButtonSize, this);
         mLeftButton.getLayoutParams().width = ThemeUtils.convertDpToPixels(leftOrRightButtonSize, this);
         mLeftButton.setScaleType(ImageView.ScaleType.CENTER);
 
-        mRightButton = findViewById(R.id.right_button);
+        mRightButton = findViewById(com.better.alarmhelper.R.id.right_button);
         mRightButton.getLayoutParams().height = ThemeUtils.convertDpToPixels(leftOrRightButtonSize, this);
         mRightButton.getLayoutParams().width = ThemeUtils.convertDpToPixels(leftOrRightButtonSize, this);
         mRightButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -305,7 +305,7 @@ public class DeskClock extends AppCompatActivity
 
         // Customize the view pager.
         mFragmentTabPagerAdapter = new FragmentTabPagerAdapter(this);
-        mFragmentTabPager = findViewById(R.id.desk_clock_pager);
+        mFragmentTabPager = findViewById(com.better.alarmhelper.R.id.desk_clock_pager);
         // Keep all four tabs to minimize jank.
         mFragmentTabPager.setOffscreenPageLimit(3);
         // Set Accessibility Delegate to null so view pager doesn't intercept movements and
@@ -323,7 +323,7 @@ public class DeskClock extends AppCompatActivity
         final int onBackgroundColor = MaterialColors.getColor(
                 this, com.google.android.material.R.attr.colorOnBackground, Color.BLACK);
 
-        mBottomNavigation = findViewById(R.id.bottom_view);
+        mBottomNavigation = findViewById(com.better.alarmhelper.R.id.bottom_view);
         mBottomNavigation.setOnItemSelectedListener(mNavigationListener);
         mBottomNavigation.setItemActiveIndicatorEnabled(SettingsDAO.isTabIndicatorDisplayed(mPrefs));
 
@@ -413,15 +413,15 @@ public class DeskClock extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, Menu.NONE, 1, R.string.settings)
-                .setIcon(R.drawable.ic_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.add(0, Menu.NONE, 1, com.better.alarmhelper.R.string.settings)
+                .setIcon(com.better.alarmhelper.R.drawable.ic_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         if (areEssentialPermissionsNotGranted(this)) {
-            final Drawable warningIcon = AppCompatResources.getDrawable(this, R.drawable.ic_error);
+            final Drawable warningIcon = AppCompatResources.getDrawable(this, com.better.alarmhelper.R.drawable.ic_error);
             if (warningIcon != null) {
-                DrawableCompat.setTint(warningIcon, this.getColor(R.color.colorAlert));
+                DrawableCompat.setTint(warningIcon, this.getColor(com.better.alarmhelper.R.color.colorAlert));
             }
-            menu.add(0, Menu.FIRST, 0, R.string.denied_permission_label)
+            menu.add(0, Menu.FIRST, 0, com.better.alarmhelper.R.string.denied_permission_label)
                     .setIcon(warningIcon).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
         return true;
@@ -537,7 +537,7 @@ public class DeskClock extends AppCompatActivity
     private final NavigationBarView.OnItemSelectedListener mNavigationListener = item -> {
         UiDataModel.Tab tab = null;
         int itemId = item.getItemId();
-        if (itemId == R.id.page_alarm) {
+        if (itemId == com.better.alarmhelper.R.id.page_alarm) {
             tab = UiDataModel.Tab.ALARMS;
         }
 
@@ -574,7 +574,7 @@ public class DeskClock extends AppCompatActivity
         if (intent != null) {
             final String action = intent.getAction();
             if (action != null) {
-                int label = intent.getIntExtra(Events.EXTRA_EVENT_LABEL, R.string.label_intent);
+                int label = intent.getIntExtra(Events.EXTRA_EVENT_LABEL, com.better.alarmhelper.R.string.label_intent);
 
             }
         }
@@ -806,7 +806,7 @@ public class DeskClock extends AppCompatActivity
                 updateKeepScreenOn(newSelectedTab);
 
                 switch (newSelectedTab) {
-                    case ALARMS -> Events.sendAlarmEvent(R.string.action_show, R.string.label_deskclock);
+                    case ALARMS -> Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_show, com.better.alarmhelper.R.string.label_deskclock);
                 }
             }
 

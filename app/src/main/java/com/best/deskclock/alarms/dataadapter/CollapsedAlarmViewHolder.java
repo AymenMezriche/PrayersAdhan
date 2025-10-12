@@ -35,30 +35,30 @@ import com.best.deskclock.utils.ThemeUtils;
  */
 public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
 
-    public static final int VIEW_TYPE = R.layout.alarm_time_collapsed;
+    public static final int VIEW_TYPE = com.better.alarmhelper.R.layout.alarm_time_collapsed;
 
     final TextView alarmLabel;
 
     private CollapsedAlarmViewHolder(View itemView) {
         super(itemView);
 
-        alarmLabel = itemView.findViewById(R.id.label);
+        alarmLabel = itemView.findViewById(com.better.alarmhelper.R.id.label);
 
         // Expand handler
         itemView.setOnClickListener(v -> {
-            Events.sendAlarmEvent(R.string.action_expand_implied, R.string.label_deskclock);
+            Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_expand_implied, com.better.alarmhelper.R.string.label_deskclock);
             getItemHolder().expand();
         });
 
         // Arrow handler
         arrow.setOnClickListener(v -> {
-            Events.sendAlarmEvent(R.string.action_expand, R.string.label_deskclock);
+            Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_expand, com.better.alarmhelper.R.string.label_deskclock);
             getItemHolder().expand();
         });
 
         // Alarm label handler
         alarmLabel.setOnClickListener(v -> {
-            Events.sendAlarmEvent(R.string.action_expand_implied, R.string.label_deskclock);
+            Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_expand_implied, com.better.alarmhelper.R.string.label_deskclock);
             getItemHolder().expand();
         });
 
@@ -92,7 +92,7 @@ public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
             alarmLabel.setText(alarm.label);
             alarmLabel.setTypeface(alarm.enabled ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
             alarmLabel.setVisibility(View.VISIBLE);
-            alarmLabel.setContentDescription(context.getString(R.string.label_description)
+            alarmLabel.setContentDescription(context.getString(com.better.alarmhelper.R.string.label_description)
                     + " " + alarm.label);
 
             clockParams.setMargins(0, 0, 0, 0);
@@ -135,12 +135,12 @@ public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
                     super.onAnimationEnd(animator);
 
                     itemView.setOnClickListener(v -> {
-                        Events.sendAlarmEvent(R.string.action_expand_implied, R.string.label_deskclock);
+                        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_expand_implied, com.better.alarmhelper.R.string.label_deskclock);
                         getItemHolder().expand();
                     });
 
                     arrow.setOnClickListener(v -> {
-                        Events.sendAlarmEvent(R.string.action_expand, R.string.label_deskclock);
+                        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_expand, com.better.alarmhelper.R.string.label_deskclock);
                         getItemHolder().expand();
                     });
                 }

@@ -53,12 +53,12 @@ public class AlarmSelectionActivity extends AppCompatActivity implements AlarmSe
         // then we only show those alarms with that time
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.selection_layout);
+        setContentView(com.better.alarmhelper.R.layout.selection_layout);
 
-        final Button cancelButton = findViewById(R.id.cancel_button);
+        final Button cancelButton = findViewById(com.better.alarmhelper.R.id.cancel_button);
         cancelButton.setOnClickListener(v -> finish());
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(com.better.alarmhelper.R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         final Intent intent = getIntent();

@@ -71,7 +71,7 @@ class RingtoneLoader extends AsyncTaskLoader<List<ItemAdapter.ItemHolder<Uri>>> 
             final List<ItemAdapter.ItemHolder<Uri>> itemHolders = new ArrayList<>(itemCount);
 
             // Add the item holder for the Music heading.
-            itemHolders.add(new HeaderHolder(R.string.your_sounds));
+            itemHolders.add(new HeaderHolder(com.better.alarmhelper.R.string.your_sounds));
 
             // Add the item holder for the random custom ringtones only if at least 2 files can be read.
             int readableCount = 0;
@@ -96,7 +96,7 @@ class RingtoneLoader extends AsyncTaskLoader<List<ItemAdapter.ItemHolder<Uri>>> 
             itemHolders.add(new AddCustomRingtoneHolder());
 
             // Add an item holder for the Ringtones heading.
-            itemHolders.add(new HeaderHolder(R.string.device_sounds));
+            itemHolders.add(new HeaderHolder(com.better.alarmhelper.R.string.device_sounds));
 
             // Add the item holder for the random ringtones.
             itemHolders.add(new SystemRingtoneHolder(RANDOM_RINGTONE, null));

@@ -15,10 +15,8 @@ import static android.util.TypedValue.COMPLEX_UNIT_PX;
 import static android.view.View.GONE;
 import static android.view.View.MeasureSpec.UNSPECIFIED;
 import static android.view.View.VISIBLE;
-
 import static com.best.alarmclock.WidgetUtils.ACTION_NEXT_ALARM_LABEL_CHANGED;
 import static com.best.deskclock.DeskClockApplication.getDefaultSharedPreferences;
-
 import static java.lang.Math.max;
 import static java.lang.Math.round;
 
@@ -44,7 +42,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.best.deskclock.DeskClock;
-import com.best.deskclock.R;
 import com.best.deskclock.data.WidgetDAO;
 import com.best.deskclock.utils.AlarmUtils;
 import com.best.deskclock.utils.ClockUtils;
@@ -106,21 +103,21 @@ public class MaterialYouNextAlarmAppWidgetProvider extends AppWidgetProvider {
         // Create a remote view for the next alarm.
         final SharedPreferences prefs = getDefaultSharedPreferences(context);
         final String packageName = context.getPackageName();
-        final RemoteViews rv = new RemoteViews(packageName, R.layout.material_you_next_alarm_widget);
+        final RemoteViews rv = new RemoteViews(packageName, com.better.alarmhelper.R.layout.material_you_next_alarm_widget);
 
         // Tapping on the widget opens the app (if not on the lock screen).
         if (WidgetUtils.isWidgetClickable(wm, widgetId)) {
             final Intent openApp = new Intent(context, DeskClock.class);
             final PendingIntent pi = PendingIntent.getActivity(context, 0, openApp, PendingIntent.FLAG_IMMUTABLE);
-            rv.setOnClickPendingIntent(R.id.material_you_next_alarm_widget, pi);
+            rv.setOnClickPendingIntent(com.better.alarmhelper.R.id.material_you_next_alarm_widget, pi);
         }
 
         // Apply color to the next alarm and the next alarm title.
         // The default color is defined in the xml files to match the device's day/night theme.
         final String nextAlarmTime = AlarmUtils.getNextAlarm(context);
         final String nextAlarmTitle = AlarmUtils.getNextAlarmTitle(context);
-        final String nextAlarmText = localizedContext.getString(R.string.next_alarm_widget_text);
-        final String noAlarmTitle = localizedContext.getString(R.string.next_alarm_widget_title_no_alarm);
+        final String nextAlarmText = localizedContext.getString(com.better.alarmhelper.R.string.next_alarm_widget_text);
+        final String noAlarmTitle = localizedContext.getString(com.better.alarmhelper.R.string.next_alarm_widget_title_no_alarm);
         final boolean isDefaultTitleColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultTitleColor(prefs);
         final boolean isDefaultAlarmTitleColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultAlarmTitleColor(prefs);
         final boolean isDefaultAlarmColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultAlarmColor(prefs);
@@ -129,61 +126,61 @@ public class MaterialYouNextAlarmAppWidgetProvider extends AppWidgetProvider {
         final int customAlarmColor = WidgetDAO.getMaterialYouNextAlarmWidgetCustomAlarmColor(prefs);
 
         if (TextUtils.isEmpty(nextAlarmTime) || TextUtils.isEmpty(nextAlarmTitle)) {
-            rv.setViewVisibility(R.id.nextAlarmTitle, GONE);
-            rv.setViewVisibility(R.id.nextAlarmTitleForCustomColor, GONE);
+            rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTitle, GONE);
+            rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTitleForCustomColor, GONE);
         } else {
             if (isDefaultAlarmTitleColor) {
-                rv.setViewVisibility(R.id.nextAlarmTitle, VISIBLE);
-                rv.setViewVisibility(R.id.nextAlarmTitleForCustomColor, GONE);
-                rv.setTextViewText(R.id.nextAlarmTitle, nextAlarmTitle);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTitle, VISIBLE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTitleForCustomColor, GONE);
+                rv.setTextViewText(com.better.alarmhelper.R.id.nextAlarmTitle, nextAlarmTitle);
             } else {
-                rv.setViewVisibility(R.id.nextAlarmTitle, GONE);
-                rv.setViewVisibility(R.id.nextAlarmTitleForCustomColor, VISIBLE);
-                rv.setTextViewText(R.id.nextAlarmTitleForCustomColor, nextAlarmTitle);
-                rv.setTextColor(R.id.nextAlarmTitleForCustomColor, customAlarmTitleColor);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTitle, GONE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTitleForCustomColor, VISIBLE);
+                rv.setTextViewText(com.better.alarmhelper.R.id.nextAlarmTitleForCustomColor, nextAlarmTitle);
+                rv.setTextColor(com.better.alarmhelper.R.id.nextAlarmTitleForCustomColor, customAlarmTitleColor);
             }
         }
 
         if (TextUtils.isEmpty(nextAlarmTime)) {
-            rv.setViewVisibility(R.id.nextAlarm, GONE);
-            rv.setViewVisibility(R.id.nextAlarmIcon, GONE);
-            rv.setViewVisibility(R.id.nextAlarmForCustomColor, GONE);
-            rv.setViewVisibility(R.id.nextAlarmIconForCustomColor, GONE);
+            rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarm, GONE);
+            rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmIcon, GONE);
+            rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmForCustomColor, GONE);
+            rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmIconForCustomColor, GONE);
             if (isDefaultTitleColor) {
-                rv.setViewVisibility(R.id.nextAlarmText, VISIBLE);
-                rv.setViewVisibility(R.id.nextAlarmTextForCustomColor, GONE);
-                rv.setTextViewText(R.id.nextAlarmText, noAlarmTitle);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmText, VISIBLE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor, GONE);
+                rv.setTextViewText(com.better.alarmhelper.R.id.nextAlarmText, noAlarmTitle);
             } else {
-                rv.setViewVisibility(R.id.nextAlarmText, GONE);
-                rv.setViewVisibility(R.id.nextAlarmTextForCustomColor, VISIBLE);
-                rv.setTextViewText(R.id.nextAlarmTextForCustomColor, noAlarmTitle);
-                rv.setTextColor(R.id.nextAlarmTextForCustomColor, customTitleColor);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmText, GONE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor, VISIBLE);
+                rv.setTextViewText(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor, noAlarmTitle);
+                rv.setTextColor(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor, customTitleColor);
             }
         } else {
             if (isDefaultTitleColor) {
-                rv.setViewVisibility(R.id.nextAlarmText, VISIBLE);
-                rv.setViewVisibility(R.id.nextAlarmTextForCustomColor, GONE);
-                rv.setTextViewText(R.id.nextAlarmText, nextAlarmText);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmText, VISIBLE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor, GONE);
+                rv.setTextViewText(com.better.alarmhelper.R.id.nextAlarmText, nextAlarmText);
             } else {
-                rv.setViewVisibility(R.id.nextAlarmText, GONE);
-                rv.setViewVisibility(R.id.nextAlarmTextForCustomColor, VISIBLE);
-                rv.setTextViewText(R.id.nextAlarmTextForCustomColor, nextAlarmText);
-                rv.setTextColor(R.id.nextAlarmTextForCustomColor, customTitleColor);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmText, GONE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor, VISIBLE);
+                rv.setTextViewText(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor, nextAlarmText);
+                rv.setTextColor(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor, customTitleColor);
             }
 
             if (isDefaultAlarmColor) {
-                rv.setViewVisibility(R.id.nextAlarm, VISIBLE);
-                rv.setViewVisibility(R.id.nextAlarmIcon, VISIBLE);
-                rv.setViewVisibility(R.id.nextAlarmForCustomColor, GONE);
-                rv.setViewVisibility(R.id.nextAlarmIconForCustomColor, GONE);
-                rv.setTextViewText(R.id.nextAlarm, nextAlarmTime);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarm, VISIBLE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmIcon, VISIBLE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmForCustomColor, GONE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmIconForCustomColor, GONE);
+                rv.setTextViewText(com.better.alarmhelper.R.id.nextAlarm, nextAlarmTime);
             } else {
-                rv.setViewVisibility(R.id.nextAlarm, GONE);
-                rv.setViewVisibility(R.id.nextAlarmIcon, GONE);
-                rv.setViewVisibility(R.id.nextAlarmForCustomColor, VISIBLE);
-                rv.setViewVisibility(R.id.nextAlarmIconForCustomColor, VISIBLE);
-                rv.setTextViewText(R.id.nextAlarmForCustomColor, nextAlarmTime);
-                rv.setTextColor(R.id.nextAlarmForCustomColor, customAlarmColor);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarm, GONE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmIcon, GONE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmForCustomColor, VISIBLE);
+                rv.setViewVisibility(com.better.alarmhelper.R.id.nextAlarmIconForCustomColor, VISIBLE);
+                rv.setTextViewText(com.better.alarmhelper.R.id.nextAlarmForCustomColor, nextAlarmTime);
+                rv.setTextColor(com.better.alarmhelper.R.id.nextAlarmForCustomColor, customAlarmColor);
             }
         }
 
@@ -213,15 +210,15 @@ public class MaterialYouNextAlarmAppWidgetProvider extends AppWidgetProvider {
         }
 
         // Apply the computed sizes to the remote views.
-        rv.setTextViewTextSize(R.id.nextAlarmText, COMPLEX_UNIT_PX, sizes.mFontSizePx);
-        rv.setTextViewTextSize(R.id.nextAlarmTitle, COMPLEX_UNIT_PX, sizes.mFontSizePx);
-        rv.setImageViewBitmap(R.id.nextAlarmIcon, sizes.mIconBitmap);
-        rv.setTextViewTextSize(R.id.nextAlarm, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(com.better.alarmhelper.R.id.nextAlarmText, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(com.better.alarmhelper.R.id.nextAlarmTitle, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setImageViewBitmap(com.better.alarmhelper.R.id.nextAlarmIcon, sizes.mIconBitmap);
+        rv.setTextViewTextSize(com.better.alarmhelper.R.id.nextAlarm, COMPLEX_UNIT_PX, sizes.mFontSizePx);
 
-        rv.setTextViewTextSize(R.id.nextAlarmTextForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
-        rv.setTextViewTextSize(R.id.nextAlarmTitleForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
-        rv.setImageViewBitmap(R.id.nextAlarmIconForCustomColor, sizes.mIconBitmap);
-        rv.setTextViewTextSize(R.id.nextAlarmForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(com.better.alarmhelper.R.id.nextAlarmTitleForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setImageViewBitmap(com.better.alarmhelper.R.id.nextAlarmIconForCustomColor, sizes.mIconBitmap);
+        rv.setTextViewTextSize(com.better.alarmhelper.R.id.nextAlarmForCustomColor, COMPLEX_UNIT_PX, sizes.mFontSizePx);
 
         return rv;
     }
@@ -235,7 +232,7 @@ public class MaterialYouNextAlarmAppWidgetProvider extends AppWidgetProvider {
         // Inflate a test layout to compute sizes at different font sizes.
         final LayoutInflater inflater = LayoutInflater.from(context);
         @SuppressLint("InflateParams") final View sizer =
-                inflater.inflate(R.layout.material_you_next_alarm_widget_sizer, null);
+                inflater.inflate(com.better.alarmhelper.R.layout.material_you_next_alarm_widget_sizer, null);
 
         int horizontalPadding = ThemeUtils.convertDpToPixels(
                 WidgetDAO.isMaterialYouNextAlarmWidgetHorizontalPaddingApplied(prefs) ? 20 : 0, context);
@@ -245,14 +242,14 @@ public class MaterialYouNextAlarmAppWidgetProvider extends AppWidgetProvider {
 
         // Configure the next alarm views to display the next alarm time or be gone.
         final String nextAlarmTitle = AlarmUtils.getNextAlarmTitle(context);
-        final TextView nextAlarmTitleView = sizer.findViewById(R.id.nextAlarmTitle);
-        final TextView nextAlarmText = sizer.findViewById(R.id.nextAlarmText);
-        final TextView nextAlarmIcon = sizer.findViewById(R.id.nextAlarmIcon);
-        final TextView nextAlarm = sizer.findViewById(R.id.nextAlarm);
-        final TextView nextAlarmTitleViewForCustomColor = sizer.findViewById(R.id.nextAlarmTitleForCustomColor);
-        final TextView nextAlarmTextForCustomColor = sizer.findViewById(R.id.nextAlarmTextForCustomColor);
-        final TextView nextAlarmIconForCustomColor = sizer.findViewById(R.id.nextAlarmIconForCustomColor);
-        final TextView nextAlarmForCustomColor = sizer.findViewById(R.id.nextAlarmForCustomColor);
+        final TextView nextAlarmTitleView = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmTitle);
+        final TextView nextAlarmText = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmText);
+        final TextView nextAlarmIcon = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmIcon);
+        final TextView nextAlarm = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarm);
+        final TextView nextAlarmTitleViewForCustomColor = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmTitleForCustomColor);
+        final TextView nextAlarmTextForCustomColor = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor);
+        final TextView nextAlarmIconForCustomColor = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmIconForCustomColor);
+        final TextView nextAlarmForCustomColor = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmForCustomColor);
         final boolean isDefaultTitleColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultTitleColor(prefs);
         final boolean isDefaultAlarmTitleColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultAlarmTitleColor(prefs);
         final boolean isDefaultAlarmColor = WidgetDAO.isMaterialYouNextAlarmWidgetDefaultAlarmColor(prefs);
@@ -284,22 +281,22 @@ public class MaterialYouNextAlarmAppWidgetProvider extends AppWidgetProvider {
             if (isDefaultTitleColor) {
                 nextAlarmText.setVisibility(VISIBLE);
                 nextAlarmTextForCustomColor.setVisibility(GONE);
-                nextAlarmText.setText(localizedContext.getString(R.string.next_alarm_widget_title_no_alarm));
+                nextAlarmText.setText(localizedContext.getString(com.better.alarmhelper.R.string.next_alarm_widget_title_no_alarm));
             } else {
                 nextAlarmText.setVisibility(GONE);
                 nextAlarmTextForCustomColor.setVisibility(VISIBLE);
-                nextAlarmTextForCustomColor.setText(localizedContext.getString(R.string.next_alarm_widget_title_no_alarm));
+                nextAlarmTextForCustomColor.setText(localizedContext.getString(com.better.alarmhelper.R.string.next_alarm_widget_title_no_alarm));
                 nextAlarmTextForCustomColor.setTextColor(customTitleColor);
             }
         } else {
             if (isDefaultTitleColor) {
                 nextAlarmText.setVisibility(VISIBLE);
                 nextAlarmTextForCustomColor.setVisibility(GONE);
-                nextAlarmText.setText(localizedContext.getString(R.string.next_alarm_widget_text));
+                nextAlarmText.setText(localizedContext.getString(com.better.alarmhelper.R.string.next_alarm_widget_text));
             } else {
                 nextAlarmText.setVisibility(GONE);
                 nextAlarmTextForCustomColor.setVisibility(VISIBLE);
-                nextAlarmTextForCustomColor.setText(localizedContext.getString(R.string.next_alarm_widget_text));
+                nextAlarmTextForCustomColor.setText(localizedContext.getString(com.better.alarmhelper.R.string.next_alarm_widget_text));
                 nextAlarmTextForCustomColor.setTextColor(customTitleColor);
             }
 
@@ -362,15 +359,15 @@ public class MaterialYouNextAlarmAppWidgetProvider extends AppWidgetProvider {
         final Sizes measuredSizes = template.newSize();
 
         // Configure the next alarm to display the widest time string.
-        final TextView nextAlarmText = sizer.findViewById(R.id.nextAlarmText);
-        final TextView nextAlarmTitle = sizer.findViewById(R.id.nextAlarmTitle);
-        final TextView nextAlarm = sizer.findViewById(R.id.nextAlarm);
-        final TextView nextAlarmIcon = sizer.findViewById(R.id.nextAlarmIcon);
+        final TextView nextAlarmText = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmText);
+        final TextView nextAlarmTitle = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmTitle);
+        final TextView nextAlarm = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarm);
+        final TextView nextAlarmIcon = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmIcon);
 
-        final TextView nextAlarmTextForCustomColor = sizer.findViewById(R.id.nextAlarmTextForCustomColor);
-        final TextView nextAlarmTitleForCustomColor = sizer.findViewById(R.id.nextAlarmTitleForCustomColor);
-        final TextView nextAlarmForCustomColor = sizer.findViewById(R.id.nextAlarmForCustomColor);
-        final TextView nextAlarmIconForCustomColor = sizer.findViewById(R.id.nextAlarmIconForCustomColor);
+        final TextView nextAlarmTextForCustomColor = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmTextForCustomColor);
+        final TextView nextAlarmTitleForCustomColor = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmTitleForCustomColor);
+        final TextView nextAlarmForCustomColor = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmForCustomColor);
+        final TextView nextAlarmIconForCustomColor = sizer.findViewById(com.better.alarmhelper.R.id.nextAlarmIconForCustomColor);
 
         // Adjust the font sizes.
         measuredSizes.setNextAlarmFontSizePx(nextAlarmFontSize);
@@ -442,7 +439,7 @@ public class MaterialYouNextAlarmAppWidgetProvider extends AppWidgetProvider {
             }
         }
 
-        WidgetUtils.updateWidgetCount(context, getClass(), widgetIds.length, R.string.category_digital_widget);
+        WidgetUtils.updateWidgetCount(context, getClass(), widgetIds.length, com.better.alarmhelper.R.string.category_digital_widget);
     }
 
     /**

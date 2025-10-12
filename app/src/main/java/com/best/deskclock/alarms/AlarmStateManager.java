@@ -8,7 +8,7 @@ package com.best.deskclock.alarms;
 
 import static android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE;
 import static android.content.Context.ALARM_SERVICE;
-
+import static com.best.deskclock.DeskClockApplication.getContext;
 import static com.best.deskclock.DeskClockApplication.getDefaultSharedPreferences;
 import static com.best.deskclock.settings.PreferencesDefaultValues.ALARM_SNOOZE_DURATION_DISABLED;
 import static com.best.deskclock.settings.PreferencesDefaultValues.ALARM_TIMEOUT_NEVER;
@@ -31,11 +31,14 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationManagerCompat;
 
+import com.best.adhanclock.AppDatabase;
+import com.best.adhanclock.DatabaseClient;
+import com.best.adhanclock.DayPrayerTimes;
+import com.best.adhanclock.DayPrayerTimesDao;
 import com.best.deskclock.AlarmAlertWakeLock;
 import com.best.deskclock.AlarmClockFragment;
 import com.best.deskclock.AsyncHandler;
 import com.best.deskclock.DeskClock;
-import com.best.deskclock.R;
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.data.SettingsDAO;
 import com.best.deskclock.events.Events;
@@ -243,7 +246,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
                 Alarm.deleteAlarm(cr, alarm.id);
                 if (!DataModel.getDataModel().isApplicationInForeground()) {
                     final String time = DateFormat.getTimeFormat(context).format(instance.getAlarmTime().getTime());
-                    Toast.makeText(context, context.getString(R.string.occasional_alarm_deleted, time),
+                    Toast.makeText(context, context.getString(com.better.alarmhelper.R.string.occasional_alarm_deleted, time),
                             Toast.LENGTH_LONG).show();
                 }
             } else {
@@ -270,31 +273,98 @@ public final class AlarmStateManager extends BroadcastReceiver {
             Calendar nextCal = nextRepeatedInstance.getAlarmTime();
 
             // Look up test prayer time
-            int[] hm = PrayerTimesProvider.getPrayerTimeForTest(nextCal, prayerName);
+            AlarmInstance finalNextRepeatedInstance = nextRepeatedInstance;
+            getPrayerTimeForTest(nextCal, prayerName, hm -> {
 
-            // Update the alarm time
-            nextCal.set(Calendar.HOUR_OF_DAY, hm[0]);
-            nextCal.set(Calendar.MINUTE, hm[1]);
+                // Update the alarm time
+                nextCal.set(Calendar.HOUR_OF_DAY, hm[0]);
+                nextCal.set(Calendar.MINUTE, hm[1]);
 
-            nextRepeatedInstance.setAlarmTime(nextCal);
+                finalNextRepeatedInstance.setAlarmTime(nextCal);
 
-            LogUtils.i("Updating next instance time for alarm " + prayerName + " to " + AlarmUtils.getFormattedTime(context, nextCal));
+                LogUtils.i("Updating next instance time for alarm " + prayerName + " to " + AlarmUtils.getFormattedTime(context, nextCal));
 
-            LogUtils.i("Creating new instance for repeating alarm " + alarm.id + " at " +
-                    AlarmUtils.getFormattedTime(context, nextRepeatedInstance.getAlarmTime()));
+                LogUtils.i("Creating new instance for repeating alarm " + alarm.id + " at " +
+                        AlarmUtils.getFormattedTime(context, finalNextRepeatedInstance.getAlarmTime()));
 
-            Log.i("alarmTrackTag", "calling AlarmInstance.addInstance with h:m " + nextRepeatedInstance.mHour + ":" + nextRepeatedInstance.mMinute);
+                Log.i("alarmTrackTag", "calling AlarmInstance.addInstance with h:m " + finalNextRepeatedInstance.mHour + ":" + finalNextRepeatedInstance.mMinute);
 
 
-            AlarmInstance.addInstance(cr, nextRepeatedInstance);
-            registerInstance(context, nextRepeatedInstance, true);
+                AlarmInstance.addInstance(cr, finalNextRepeatedInstance);
+                registerInstance(context, finalNextRepeatedInstance, true);
 
-            //update the alarm item inside the templates alarm table in database
-            //because this table used to get show alarms list in alarms tap
-            alarm.hour = nextRepeatedInstance.mHour;
-            alarm.minutes = nextRepeatedInstance.mMinute;
-            Alarm.updateAlarm(cr, alarm);
+                //update the alarm item inside the templates alarm table in database
+                //because this table used to get show alarms list in alarms tap
+                alarm.hour = finalNextRepeatedInstance.mHour;
+                alarm.minutes = finalNextRepeatedInstance.mMinute;
+                Alarm.updateAlarm(cr, alarm);
+
+            });
         }
+    }
+
+    /**
+     * Returns hour/minute for a given alarm day + label (prayer name).
+     */
+    public static void getPrayerTimeForTest(Calendar day, String label, AlarmStateManager.Callback<int[]> callback) {
+        Thread thread = new Thread(() -> {
+            // Example key: "19-01-2025"
+            // String key = day.get(Calendar.DAY_OF_MONTH) + "-" + day.get(Calendar.MONTH) + "-" + day.get(Calendar.YEAR);
+
+            String key = String.format("%02d-%02d-%04d",
+                    day.get(Calendar.DAY_OF_MONTH),
+                    day.get(Calendar.MONTH) + 1, // add +1 because months are zero-based
+                    day.get(Calendar.YEAR));
+
+            Log.d("AddAlarmActivity", "the next day key is " + key);
+
+            AppDatabase db = DatabaseClient.getInstance(getContext()).getAppDatabase();
+            DayPrayerTimesDao dao = db.getDayPrayerTimesDao();
+            DayPrayerTimes dayPrayerTimes = dao.getByDate(key);
+            int hour = day.get(Calendar.HOUR_OF_DAY);
+            int minute = day.get(Calendar.MINUTE);
+
+            if (dayPrayerTimes != null) {
+                Log.d("AddAlarmActivity", "we retrieve the prayersTimes for "+label);
+                minute = switch (label) {
+                    case ("Fajr") -> {
+                        hour = getHourFrom(dayPrayerTimes.getFajr());
+                        yield getMinuteFrom(dayPrayerTimes.getFajr());
+                    }
+                    case ("Dhuhr") -> {
+                        hour = getHourFrom(dayPrayerTimes.getDhuhr());
+                        yield getMinuteFrom(dayPrayerTimes.getDhuhr());
+                    }
+                    case ("Asr") -> {
+                        hour = getHourFrom(dayPrayerTimes.getAsr());
+                        yield getMinuteFrom(dayPrayerTimes.getAsr());
+                    }
+                    case ("Maghrib") -> {
+                        hour = getHourFrom(dayPrayerTimes.getMaghrib());
+                        yield getMinuteFrom(dayPrayerTimes.getMaghrib());
+                    }
+                    case ("Isha") -> {
+                        hour = getHourFrom(dayPrayerTimes.getIsha());
+                        yield getMinuteFrom(dayPrayerTimes.getIsha());
+                    }
+                    default -> minute;
+                };
+                callback.onResult(new int[]{hour, minute});
+            } else
+                callback.onResult(new int[]{day.get(Calendar.HOUR_OF_DAY), day.get(Calendar.MINUTE)});
+        });
+        thread.start();
+    }
+
+
+    private static int getHourFrom(String prayerTimeHM) {
+        //it is in this format 02:45
+        return Integer.parseInt(prayerTimeHM.split(":")[0]);
+    }
+
+    private static int getMinuteFrom(String prayerTimeHM) {
+        //it is in this format 02:45
+        return Integer.parseInt(prayerTimeHM.split(":")[1]);
     }
 
     /**
@@ -422,7 +492,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
             AlarmInstance.deleteOtherInstances(context, contentResolver, instance.mAlarmId, instance.mId);
         }
 
-        Events.sendAlarmEvent(R.string.action_fire, 0);
+        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_fire, 0);
 
         Calendar timeout = instance.getTimeout(context);
         if (timeout != null) {
@@ -479,7 +549,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
             final Handler mainHandler = new Handler(context.getMainLooper());
             final Runnable myRunnable = () -> {
                 String displayTime = String.format(context.getResources()
-                        .getQuantityText(R.plurals.alarm_alert_snooze_set, snoozeMinutes).toString(), snoozeMinutes);
+                        .getQuantityText(com.better.alarmhelper.R.plurals.alarm_alert_snooze_set, snoozeMinutes).toString(), snoozeMinutes);
                 Toast.makeText(context, displayTime, Toast.LENGTH_LONG).show();
             };
             mainHandler.post(myRunnable);
@@ -844,9 +914,9 @@ public final class AlarmStateManager extends BroadcastReceiver {
 
             if (intent.getBooleanExtra(FROM_NOTIFICATION_EXTRA, false)) {
                 if (intent.hasCategory(ALARM_DISMISS_TAG)) {
-                    Events.sendAlarmEvent(R.string.action_dismiss, R.string.label_notification);
+                    Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_dismiss, com.better.alarmhelper.R.string.label_notification);
                 } else if (intent.hasCategory(ALARM_SNOOZE_TAG)) {
-                    Events.sendAlarmEvent(R.string.action_snooze, R.string.label_notification);
+                    Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_snooze, com.better.alarmhelper.R.string.label_notification);
                 }
             }
 
@@ -972,5 +1042,10 @@ public final class AlarmStateManager extends BroadcastReceiver {
                 pendingIntent.cancel();
             }
         }
+    }
+
+
+    public interface Callback<T> {
+        void onResult(T value);
     }
 }

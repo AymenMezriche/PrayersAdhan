@@ -8,7 +8,6 @@ package com.best.deskclock.alarms.dataadapter;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-
 import static com.best.deskclock.DeskClockApplication.getDefaultSharedPreferences;
 
 import android.animation.Animator;
@@ -27,7 +26,6 @@ import android.widget.TextView;
 
 import com.best.deskclock.ItemAdapter;
 import com.best.deskclock.ItemAnimator;
-import com.best.deskclock.R;
 import com.best.deskclock.alarms.AlarmTimeClickHandler;
 import com.best.deskclock.data.SettingsDAO;
 import com.best.deskclock.data.Weekdays;
@@ -72,12 +70,12 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
     public AlarmItemViewHolder(View itemView) {
         super(itemView);
 
-        arrow = itemView.findViewById(R.id.arrow);
-        clock = itemView.findViewById(R.id.digital_clock);
-        onOff = itemView.findViewById(R.id.onoff);
-        daysOfWeek = itemView.findViewById(R.id.days_of_week);
-        preemptiveDismissButton = itemView.findViewById(R.id.preemptive_dismiss_button);
-        bottomPaddingView = itemView.findViewById(R.id.bottom_padding_view);
+        arrow = itemView.findViewById(com.better.alarmhelper.R.id.arrow);
+        clock = itemView.findViewById(com.better.alarmhelper.R.id.digital_clock);
+        onOff = itemView.findViewById(com.better.alarmhelper.R.id.onoff);
+        daysOfWeek = itemView.findViewById(com.better.alarmhelper.R.id.days_of_week);
+        preemptiveDismissButton = itemView.findViewById(com.better.alarmhelper.R.id.preemptive_dismiss_button);
+        bottomPaddingView = itemView.findViewById(com.better.alarmhelper.R.id.bottom_padding_view);
 
         final Context context = itemView.getContext();
 
@@ -141,19 +139,19 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
             Calendar calendar = Calendar.getInstance();
 
             if (Alarm.isTomorrow(alarm, calendar) && !alarm.isSpecifiedDate()) {
-                daysOfWeek.setText(context.getString(R.string.alarm_tomorrow));
+                daysOfWeek.setText(context.getString(com.better.alarmhelper.R.string.alarm_tomorrow));
             } else if (alarm.isSpecifiedDate()) {
                 if (Alarm.isSpecifiedDateTomorrow(alarm.year, alarm.month, alarm.day)) {
-                    daysOfWeek.setText(context.getString(R.string.alarm_tomorrow));
+                    daysOfWeek.setText(context.getString(com.better.alarmhelper.R.string.alarm_tomorrow));
                 } else if (alarm.isDateInThePast()) {
                     // If the date has passed, the new alarm will be scheduled either the same day
                     // or the next day depending on the time; the text is therefore updated accordingly.
                     if (alarm.hour < calendar.get(Calendar.HOUR_OF_DAY)
                             || (alarm.hour == calendar.get(Calendar.HOUR_OF_DAY) && alarm.minutes < calendar.get(Calendar.MINUTE))
                             || (alarm.hour == calendar.get(Calendar.HOUR_OF_DAY) && alarm.minutes == calendar.get(Calendar.MINUTE))) {
-                        daysOfWeek.setText(context.getString(R.string.alarm_tomorrow));
+                        daysOfWeek.setText(context.getString(com.better.alarmhelper.R.string.alarm_tomorrow));
                     } else {
-                        daysOfWeek.setText(context.getString(R.string.alarm_today));
+                        daysOfWeek.setText(context.getString(com.better.alarmhelper.R.string.alarm_today));
                     }
                 } else {
                     int year = alarm.year;
@@ -168,10 +166,10 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
                     SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
                     String formattedDate = dateFormat.format(calendar.getTime());
 
-                    daysOfWeek.setText(context.getString(R.string.alarm_scheduled_for, formattedDate));
+                    daysOfWeek.setText(context.getString(com.better.alarmhelper.R.string.alarm_scheduled_for, formattedDate));
                 }
             } else {
-                daysOfWeek.setText(context.getString(R.string.alarm_today));
+                daysOfWeek.setText(context.getString(com.better.alarmhelper.R.string.alarm_today));
             }
         }
 
@@ -184,11 +182,11 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
         if (canBind) {
             preemptiveDismissButton.setVisibility(VISIBLE);
             final String dismissText = alarm.instanceState == AlarmInstance.SNOOZE_STATE
-                    ? context.getString(R.string.alarm_alert_snooze_until,
+                    ? context.getString(com.better.alarmhelper.R.string.alarm_alert_snooze_until,
                     AlarmUtils.getAlarmText(context, alarmInstance, false))
                     : alarm.deleteAfterUse && !alarm.daysOfWeek.isRepeating()
-                    ? context.getString(R.string.alarm_alert_dismiss_and_delete_text)
-                    : context.getString(R.string.alarm_alert_dismiss_text);
+                    ? context.getString(com.better.alarmhelper.R.string.alarm_alert_dismiss_and_delete_text)
+                    : context.getString(com.better.alarmhelper.R.string.alarm_alert_dismiss_text);
             preemptiveDismissButton.setText(dismissText);
 
             if (!getItemHolder().isExpanded()) {

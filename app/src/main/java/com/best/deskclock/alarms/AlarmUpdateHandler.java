@@ -14,7 +14,6 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.best.deskclock.R;
 import com.best.deskclock.events.Events;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.provider.AlarmInstance;
@@ -57,7 +56,7 @@ public final class AlarmUpdateHandler {
         executor.execute(() -> {
             AlarmInstance instance = null;
             if (alarm != null) {
-                Events.sendAlarmEvent(R.string.action_create, R.string.label_deskclock);
+                Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_create, com.better.alarmhelper.R.string.label_deskclock);
                 ContentResolver cr = mAppContext.getContentResolver();
 
                 // Add alarm to db
@@ -173,8 +172,8 @@ public final class AlarmUpdateHandler {
         final Context localizedContext = Utils.getLocalizedContext(mAppContext);
         final String time = DateFormat.getTimeFormat(mAppContext).format(instance.getAlarmTime().getTime());
         final String text = alarm.deleteAfterUse && !alarm.daysOfWeek.isRepeating()
-                ? localizedContext.getString(R.string.alarm_is_dismissed_and_deleted, time)
-                : localizedContext.getString(R.string.alarm_is_dismissed, time);
+                ? localizedContext.getString(com.better.alarmhelper.R.string.alarm_is_dismissed_and_deleted, time)
+                : localizedContext.getString(com.better.alarmhelper.R.string.alarm_is_dismissed, time);
         SnackbarManager.show(Snackbar.make(mSnackbarAnchor, text, Snackbar.LENGTH_SHORT));
     }
 
@@ -189,7 +188,7 @@ public final class AlarmUpdateHandler {
     private void showUndoBar() {
         final Context localizedContext = Utils.getLocalizedContext(mAppContext);
         final Alarm deletedAlarm = mDeletedAlarm;
-        final Snackbar snackbar = Snackbar.make(mSnackbarAnchor, localizedContext.getString(R.string.alarm_deleted),
+        final Snackbar snackbar = Snackbar.make(mSnackbarAnchor, localizedContext.getString(com.better.alarmhelper.R.string.alarm_deleted),
                 Snackbar.LENGTH_LONG).setAction(android.R.string.cancel, v -> {
             mDeletedAlarm = null;
             asyncAddAlarm(deletedAlarm);

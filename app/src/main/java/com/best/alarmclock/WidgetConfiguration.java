@@ -20,7 +20,7 @@ public class WidgetConfiguration {
 
         @Override
         protected String getActivityTitle() {
-            return getString(R.string.digital_widget);
+            return getString(com.better.alarmhelper.R.string.digital_widget);
         }
 
         @Override
@@ -36,7 +36,7 @@ public class WidgetConfiguration {
 
         if (savedInstanceState == null) {
             activity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, fragment)
+                    .replace(com.better.alarmhelper.R.id.content_frame, fragment)
                     .disallowAddToBackStack()
                     .commit();
         }

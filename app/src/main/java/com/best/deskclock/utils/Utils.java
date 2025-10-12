@@ -126,12 +126,12 @@ public class Utils {
      */
     public static String getTimeString(Context context, int hours, int minutes, int seconds) {
         if (hours != 0) {
-            return context.getString(R.string.hours_minutes_seconds, hours, minutes, seconds);
+            return context.getString(com.better.alarmhelper.R.string.hours_minutes_seconds, hours, minutes, seconds);
         }
         if (minutes != 0) {
-            return context.getString(R.string.minutes_seconds, minutes, seconds);
+            return context.getString(com.better.alarmhelper.R.string.minutes_seconds, minutes, seconds);
         }
-        return context.getString(R.string.seconds_only, seconds);
+        return context.getString(com.better.alarmhelper.R.string.seconds_only, seconds);
     }
 
     /**

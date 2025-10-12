@@ -150,12 +150,12 @@ public class AlarmService extends Service {
                         // If this broadcast receiver is handling the snooze intent then AlarmActivity
                         // must not be showing, so always show snooze toast.
                         AlarmStateManager.setSnoozeState(context, mCurrentAlarm, true);
-                        Events.sendAlarmEvent(R.string.action_snooze, R.string.label_intent);
+                        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_snooze, com.better.alarmhelper.R.string.label_intent);
                     }
                     case ALARM_DISMISS_ACTION -> {
                         // Set the alarm state to dismissed.
                         AlarmStateManager.deleteInstanceAndUpdateParent(context, mCurrentAlarm);
-                        Events.sendAlarmEvent(R.string.action_dismiss, R.string.label_intent);
+                        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_dismiss, com.better.alarmhelper.R.string.label_intent);
                     }
                 }
             }

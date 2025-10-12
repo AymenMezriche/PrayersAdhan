@@ -204,10 +204,10 @@ public class AnalogClock extends FrameLayout {
         ImageView secondHand = new ImageView(mContext);
 
         if (mClockStyle == DataModel.ClockStyle.ANALOG_MATERIAL) {
-            secondHand.setImageDrawable(AppCompatResources.getDrawable(mContext, R.drawable.material_you_analog_widget_clock_second));
+            secondHand.setImageDrawable(AppCompatResources.getDrawable(mContext, com.better.alarmhelper.R.drawable.material_you_analog_widget_clock_second));
             secondHand.setColorFilter(getMaterialAnalogClockColor(accentColor, SECOND_HAND));
         } else {
-            secondHand.setImageDrawable(AppCompatResources.getDrawable(mContext, R.drawable.clock_analog_second));
+            secondHand.setImageDrawable(AppCompatResources.getDrawable(mContext, com.better.alarmhelper.R.drawable.clock_analog_second));
             boolean isAutoNightAccentColorEnabled = SettingsDAO.isAutoNightAccentColorEnabled(mPrefs);
             String nightAccentColor = SettingsDAO.getNightAccentColor(mPrefs);
 
@@ -228,9 +228,9 @@ public class AnalogClock extends FrameLayout {
      */
     private int getMaterialAnalogDrawableResId(String componentType) {
         return switch (componentType) {
-            case DIAL -> R.drawable.material_you_analog_widget_clock_dial;
-            case HOUR_HAND -> R.drawable.material_you_analog_widget_clock_hour;
-            case MINUTE_HAND -> R.drawable.material_you_analog_widget_clock_minute;
+            case DIAL -> com.better.alarmhelper.R.drawable.material_you_analog_widget_clock_dial;
+            case HOUR_HAND -> com.better.alarmhelper.R.drawable.material_you_analog_widget_clock_hour;
+            case MINUTE_HAND -> com.better.alarmhelper.R.drawable.material_you_analog_widget_clock_minute;
             default -> 0; // Default, should never happen
         };
     }
@@ -240,9 +240,9 @@ public class AnalogClock extends FrameLayout {
      */
     private int getAnalogDrawableResId(String componentType) {
         return switch (componentType) {
-            case DIAL -> R.drawable.clock_analog_dial;
-            case HOUR_HAND -> R.drawable.clock_analog_hour;
-            case MINUTE_HAND -> R.drawable.clock_analog_minute;
+            case DIAL -> com.better.alarmhelper.R.drawable.clock_analog_dial;
+            case HOUR_HAND -> com.better.alarmhelper.R.drawable.clock_analog_hour;
+            case MINUTE_HAND -> com.better.alarmhelper.R.drawable.clock_analog_minute;
             default -> 0; // Default, should never happen
         };
     }
@@ -263,18 +263,18 @@ public class AnalogClock extends FrameLayout {
                 : (ThemeUtils.isNight(mContext.getResources()) ? nightAccentColor : accentColor);
 
         return switch (colorKey) {
-            case BLACK_ACCENT_COLOR -> mContext.getColor(R.color.blackColorPrimary);
-            case BLUE_ACCENT_COLOR -> mContext.getColor(R.color.blueColorPrimary);
-            case BLUE_GRAY_ACCENT_COLOR -> mContext.getColor(R.color.blueGrayColorPrimary);
-            case BROWN_ACCENT_COLOR -> mContext.getColor(R.color.brownColorPrimary);
-            case GREEN_ACCENT_COLOR -> mContext.getColor(R.color.greenColorPrimary);
-            case INDIGO_ACCENT_COLOR -> mContext.getColor(R.color.indigoColorPrimary);
-            case ORANGE_ACCENT_COLOR -> mContext.getColor(R.color.orangeColorPrimary);
-            case PINK_ACCENT_COLOR -> mContext.getColor(R.color.pinkColorPrimary);
-            case PURPLE_ACCENT_COLOR -> mContext.getColor(R.color.purpleColorPrimary);
-            case RED_ACCENT_COLOR -> mContext.getColor(R.color.redColorPrimary);
-            case YELLOW_ACCENT_COLOR -> mContext.getColor(R.color.yellowColorPrimary);
-            default -> mContext.getColor(R.color.md_theme_primary);
+            case BLACK_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.blackColorPrimary);
+            case BLUE_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.blueColorPrimary);
+            case BLUE_GRAY_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.blueGrayColorPrimary);
+            case BROWN_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.brownColorPrimary);
+            case GREEN_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.greenColorPrimary);
+            case INDIGO_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.indigoColorPrimary);
+            case ORANGE_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.orangeColorPrimary);
+            case PINK_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.pinkColorPrimary);
+            case PURPLE_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.purpleColorPrimary);
+            case RED_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.redColorPrimary);
+            case YELLOW_ACCENT_COLOR -> mContext.getColor(com.better.alarmhelper.R.color.yellowColorPrimary);
+            default -> mContext.getColor(com.better.alarmhelper.R.color.md_theme_primary);
         };
     }
 
@@ -284,76 +284,76 @@ public class AnalogClock extends FrameLayout {
     private int getMaterialAnalogClockColor(String accentColor, String componentType) {
         int colorResId = switch (accentColor) {
             case BLACK_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.blackColorGray1,
-                    R.color.blackColorSecondary,
-                    R.color.blackColorPrimary,
-                    R.color.blackColorTertiary,
+                    com.better.alarmhelper.R.color.blackColorGray1,
+                    com.better.alarmhelper.R.color.blackColorSecondary,
+                    com.better.alarmhelper.R.color.blackColorPrimary,
+                    com.better.alarmhelper.R.color.blackColorTertiary,
                     componentType);
             case BLUE_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.blueSecondaryContainer,
-                    R.color.blueColorSecondary,
-                    R.color.blueColorPrimary,
-                    R.color.blueColorTertiary,
+                    com.better.alarmhelper.R.color.blueSecondaryContainer,
+                    com.better.alarmhelper.R.color.blueColorSecondary,
+                    com.better.alarmhelper.R.color.blueColorPrimary,
+                    com.better.alarmhelper.R.color.blueColorTertiary,
                     componentType);
             case BLUE_GRAY_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.blueGraySecondaryContainer,
-                    R.color.blueGrayColorSecondary,
-                    R.color.blueGrayColorPrimary,
-                    R.color.blueGrayColorTertiary,
+                    com.better.alarmhelper.R.color.blueGraySecondaryContainer,
+                    com.better.alarmhelper.R.color.blueGrayColorSecondary,
+                    com.better.alarmhelper.R.color.blueGrayColorPrimary,
+                    com.better.alarmhelper.R.color.blueGrayColorTertiary,
                     componentType);
             case BROWN_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.brownSecondaryContainer,
-                    R.color.brownColorSecondary,
-                    R.color.brownColorPrimary,
-                    R.color.brownColorTertiary,
+                    com.better.alarmhelper.R.color.brownSecondaryContainer,
+                    com.better.alarmhelper.R.color.brownColorSecondary,
+                    com.better.alarmhelper.R.color.brownColorPrimary,
+                    com.better.alarmhelper.R.color.brownColorTertiary,
                     componentType);
             case GREEN_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.greenSecondaryContainer,
-                    R.color.greenColorSecondary,
-                    R.color.greenColorPrimary,
-                    R.color.greenColorTertiary,
+                    com.better.alarmhelper.R.color.greenSecondaryContainer,
+                    com.better.alarmhelper.R.color.greenColorSecondary,
+                    com.better.alarmhelper.R.color.greenColorPrimary,
+                    com.better.alarmhelper.R.color.greenColorTertiary,
                     componentType);
             case INDIGO_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.indigoSecondaryContainer,
-                    R.color.indigoColorSecondary,
-                    R.color.indigoColorPrimary,
-                    R.color.indigoColorTertiary,
+                    com.better.alarmhelper.R.color.indigoSecondaryContainer,
+                    com.better.alarmhelper.R.color.indigoColorSecondary,
+                    com.better.alarmhelper.R.color.indigoColorPrimary,
+                    com.better.alarmhelper.R.color.indigoColorTertiary,
                     componentType);
             case ORANGE_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.orangeSecondaryContainer,
-                    R.color.orangeColorSecondary,
-                    R.color.orangeColorPrimary,
-                    R.color.orangeColorTertiary,
+                    com.better.alarmhelper.R.color.orangeSecondaryContainer,
+                    com.better.alarmhelper.R.color.orangeColorSecondary,
+                    com.better.alarmhelper.R.color.orangeColorPrimary,
+                    com.better.alarmhelper.R.color.orangeColorTertiary,
                     componentType);
             case PINK_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.pinkSecondaryContainer,
-                    R.color.pinkColorSecondary,
-                    R.color.pinkColorPrimary,
-                    R.color.pinkColorTertiary,
+                    com.better.alarmhelper.R.color.pinkSecondaryContainer,
+                    com.better.alarmhelper.R.color.pinkColorSecondary,
+                    com.better.alarmhelper.R.color.pinkColorPrimary,
+                    com.better.alarmhelper.R.color.pinkColorTertiary,
                     componentType);
             case PURPLE_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.purpleSecondaryContainer,
-                    R.color.purpleColorSecondary,
-                    R.color.purpleColorPrimary,
-                    R.color.purpleColorTertiary,
+                    com.better.alarmhelper.R.color.purpleSecondaryContainer,
+                    com.better.alarmhelper.R.color.purpleColorSecondary,
+                    com.better.alarmhelper.R.color.purpleColorPrimary,
+                    com.better.alarmhelper.R.color.purpleColorTertiary,
                     componentType);
             case RED_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.redSecondaryContainer,
-                    R.color.redColorSecondary,
-                    R.color.redColorPrimary,
-                    R.color.redColorTertiary,
+                    com.better.alarmhelper.R.color.redSecondaryContainer,
+                    com.better.alarmhelper.R.color.redColorSecondary,
+                    com.better.alarmhelper.R.color.redColorPrimary,
+                    com.better.alarmhelper.R.color.redColorTertiary,
                     componentType);
             case YELLOW_ACCENT_COLOR -> getColorResourceForComponent(
-                    R.color.yellowSecondaryContainer,
-                    R.color.yellowColorSecondary,
-                    R.color.yellowColorPrimary,
-                    R.color.yellowColorTertiary,
+                    com.better.alarmhelper.R.color.yellowSecondaryContainer,
+                    com.better.alarmhelper.R.color.yellowColorSecondary,
+                    com.better.alarmhelper.R.color.yellowColorPrimary,
+                    com.better.alarmhelper.R.color.yellowColorTertiary,
                     componentType);
             default -> getColorResourceForComponent(
-                    R.color.md_theme_secondaryContainer,
-                    R.color.md_theme_secondary,
-                    R.color.md_theme_primary,
-                    R.color.md_theme_tertiary,
+                    com.better.alarmhelper.R.color.md_theme_secondaryContainer,
+                    com.better.alarmhelper.R.color.md_theme_secondary,
+                    com.better.alarmhelper.R.color.md_theme_primary,
+                    com.better.alarmhelper.R.color.md_theme_tertiary,
                     componentType);
         };
 

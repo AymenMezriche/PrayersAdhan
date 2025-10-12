@@ -16,13 +16,13 @@ import com.best.deskclock.R;
 
 final class HeaderViewHolder extends ItemAdapter.ItemViewHolder<HeaderHolder> {
 
-    static final int VIEW_TYPE_ITEM_HEADER = R.layout.ringtone_item_header;
+    static final int VIEW_TYPE_ITEM_HEADER = com.better.alarmhelper.R.layout.ringtone_item_header;
 
     private final TextView mItemHeader;
 
     private HeaderViewHolder(View itemView) {
         super(itemView);
-        mItemHeader = itemView.findViewById(R.id.ringtone_item_header);
+        mItemHeader = itemView.findViewById(com.better.alarmhelper.R.id.ringtone_item_header);
     }
 
     @Override

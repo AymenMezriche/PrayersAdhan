@@ -40,8 +40,8 @@ import com.google.android.material.color.MaterialColors;
 final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder>
         implements OnClickListener {
 
-    static final int VIEW_TYPE_SYSTEM_SOUND = R.layout.ringtone_item_sound;
-    static final int VIEW_TYPE_CUSTOM_SOUND = -R.layout.ringtone_item_sound;
+    static final int VIEW_TYPE_SYSTEM_SOUND = com.better.alarmhelper.R.layout.ringtone_item_sound;
+    static final int VIEW_TYPE_CUSTOM_SOUND = -com.better.alarmhelper.R.layout.ringtone_item_sound;
     static final int CLICK_NORMAL = 0;
     static final int CLICK_REMOVE = -1;
 
@@ -54,10 +54,10 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
         super(itemView);
         itemView.setOnClickListener(this);
 
-        mSelectedView = itemView.findViewById(R.id.sound_image_selected);
-        mNameView = itemView.findViewById(R.id.ringtone_name);
-        mImageView = itemView.findViewById(R.id.ringtone_image);
-        mDeleteRingtone = itemView.findViewById(R.id.delete_ringtone);
+        mSelectedView = itemView.findViewById(com.better.alarmhelper.R.id.sound_image_selected);
+        mNameView = itemView.findViewById(com.better.alarmhelper.R.id.ringtone_name);
+        mImageView = itemView.findViewById(com.better.alarmhelper.R.id.ringtone_image);
+        mDeleteRingtone = itemView.findViewById(com.better.alarmhelper.R.id.delete_ringtone);
     }
 
     @Override
@@ -71,12 +71,12 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
         mImageView.setAlpha(opaque ? 1f : .63f);
         mImageView.clearColorFilter();
 
-        final Drawable ringtone = AppCompatResources.getDrawable(context, R.drawable.ic_ringtone_active_animated);
+        final Drawable ringtone = AppCompatResources.getDrawable(context, com.better.alarmhelper.R.drawable.ic_ringtone_active_animated);
 
         final int itemViewType = getItemViewType();
         if (itemViewType == VIEW_TYPE_CUSTOM_SOUND) {
             if (!RingtoneUtils.isRingtoneUriReadable(context, itemHolder.getUri())) {
-                final Drawable error = AppCompatResources.getDrawable(context, R.drawable.ic_error);
+                final Drawable error = AppCompatResources.getDrawable(context, com.better.alarmhelper.R.drawable.ic_error);
                 if (error != null) {
                     error.setTint(Color.parseColor("#FF4444"));
                 }
@@ -88,14 +88,14 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
             mDeleteRingtone.setVisibility(VISIBLE);
             mDeleteRingtone.setOnClickListener(v -> notifyItemClicked(RingtoneViewHolder.CLICK_REMOVE));
         } else if (itemHolder.item == RINGTONE_SILENT) {
-            final Drawable ringtoneSilent = AppCompatResources.getDrawable(context, R.drawable.ic_ringtone_silent);
+            final Drawable ringtoneSilent = AppCompatResources.getDrawable(context, com.better.alarmhelper.R.drawable.ic_ringtone_silent);
             if (ringtoneSilent != null) {
                 ringtoneSilent.setTint(MaterialColors.getColor(
                         context, com.google.android.material.R.attr.colorOnSurfaceVariant, Color.BLACK));
             }
             mImageView.setImageDrawable(ringtoneSilent);
         } else if (itemHolder.item == RANDOM_RINGTONE || itemHolder.item == RANDOM_CUSTOM_RINGTONE) {
-            final Drawable randomRingtone = AppCompatResources.getDrawable(context, R.drawable.ic_random);
+            final Drawable randomRingtone = AppCompatResources.getDrawable(context, com.better.alarmhelper.R.drawable.ic_random);
             mImageView.setImageDrawable(randomRingtone);
         } else {
             mImageView.setImageDrawable(ringtone);
@@ -139,7 +139,7 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
 
         @Override
         public ItemAdapter.ItemViewHolder<?> createViewHolder(ViewGroup parent, int viewType) {
-            final View itemView = mInflater.inflate(R.layout.ringtone_item_sound, parent, false);
+            final View itemView = mInflater.inflate(com.better.alarmhelper.R.layout.ringtone_item_sound, parent, false);
             return new RingtoneViewHolder(itemView);
         }
     }

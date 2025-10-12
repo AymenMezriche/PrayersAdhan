@@ -91,8 +91,8 @@ public abstract class ScreenFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        menu.add(0, Menu.NONE, 0, R.string.about_title)
-                .setIcon(R.drawable.ic_about)
+        menu.add(0, Menu.NONE, 0, com.better.alarmhelper.R.string.about_title)
+                .setIcon(com.better.alarmhelper.R.drawable.ic_about)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
@@ -110,9 +110,9 @@ public abstract class ScreenFragment extends PreferenceFragmentCompat {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mCoordinatorLayout = requireActivity().findViewById(R.id.coordinator_layout);
-        mCollapsingToolbarLayout = requireActivity().findViewById(R.id.collapsing_toolbar);
-        mAppBarLayout = requireActivity().findViewById(R.id.app_bar);
+        mCoordinatorLayout = requireActivity().findViewById(com.better.alarmhelper.R.id.coordinator_layout);
+        mCollapsingToolbarLayout = requireActivity().findViewById(com.better.alarmhelper.R.id.collapsing_toolbar);
+        mAppBarLayout = requireActivity().findViewById(com.better.alarmhelper.R.id.app_bar);
         mAppBarLayout.setExpanded(true, true);
 
         mRecyclerView = getListView();
@@ -163,7 +163,7 @@ public abstract class ScreenFragment extends PreferenceFragmentCompat {
         for (int i = 0; i < count; i++) {
             final Preference pref = preferenceScreen.getPreference(i);
             if (pref instanceof PreferenceCategory category) {
-                category.setLayoutResource(R.layout.settings_preference_category_layout);
+                category.setLayoutResource(com.better.alarmhelper.R.layout.settings_preference_category_layout);
 
                 final int subPrefCount = category.getPreferenceCount();
                 for (int j = 0; j < subPrefCount; j++) {
@@ -181,37 +181,13 @@ public abstract class ScreenFragment extends PreferenceFragmentCompat {
                             || Objects.equals(subPref.getKey(), KEY_MATERIAL_YOU_VERTICAL_DIGITAL_WIDGET_MAXIMUM_CLOCK_FONT_SIZE)
                             || Objects.equals(subPref.getKey(), KEY_NEXT_ALARM_WIDGET_MAXIMUM_FONT_SIZE)
                             || Objects.equals(subPref.getKey(), KEY_VERTICAL_DIGITAL_WIDGET_MAXIMUM_CLOCK_FONT_SIZE)) {
-                        if (isCardBackgroundDisplayed && isCardBorderDisplayed) {
-                            subPref.setLayoutResource(R.layout.settings_preference_seekbar_layout_bordered);
-                        } else if (isCardBackgroundDisplayed) {
-                            subPref.setLayoutResource(R.layout.settings_preference_seekbar_layout);
-                        } else if (isCardBorderDisplayed) {
-                            subPref.setLayoutResource(R.layout.settings_preference_seekbar_layout_transparent_bordered);
-                        } else {
-                            subPref.setLayoutResource(R.layout.settings_preference_seekbar_layout_transparent);
-                        }
+
                     } else {
-                        if (isCardBackgroundDisplayed && isCardBorderDisplayed) {
-                            subPref.setLayoutResource(R.layout.settings_preference_layout_bordered);
-                        } else if (isCardBackgroundDisplayed) {
-                            subPref.setLayoutResource(R.layout.settings_preference_layout);
-                        } else if (isCardBorderDisplayed) {
-                            subPref.setLayoutResource(R.layout.settings_preference_layout_transparent_bordered);
-                        } else {
-                            subPref.setLayoutResource(R.layout.settings_preference_layout_transparent);
-                        }
+
                     }
                 }
             } else {
-                if (isCardBackgroundDisplayed && isCardBorderDisplayed) {
-                    pref.setLayoutResource(R.layout.settings_preference_layout_bordered);
-                } else if (isCardBackgroundDisplayed) {
-                    pref.setLayoutResource(R.layout.settings_preference_layout);
-                } else if (isCardBorderDisplayed) {
-                    pref.setLayoutResource(R.layout.settings_preference_layout_transparent_bordered);
-                } else {
-                    pref.setLayoutResource(R.layout.settings_preference_layout_transparent);
-                }
+
             }
         }
     }

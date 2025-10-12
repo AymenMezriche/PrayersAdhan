@@ -176,16 +176,16 @@ public class AlarmSnoozeDurationDialogFragment extends DialogFragment {
             editMinutes = savedInstanceState.getLong(ARG_EDIT_ALARM_MINUTES, editMinutes);
         }
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.alarm_snooze_duration_dialog, null);
+        View view = LayoutInflater.from(mContext).inflate(com.better.alarmhelper.R.layout.alarm_snooze_duration_dialog, null);
 
-        mHoursInputLayout = view.findViewById(R.id.dialog_input_layout_hours);
-        mHoursInputLayout.setHelperText(getString(R.string.timer_hours_warning_box_text));
+        mHoursInputLayout = view.findViewById(com.better.alarmhelper.R.id.dialog_input_layout_hours);
+        mHoursInputLayout.setHelperText(getString(com.better.alarmhelper.R.string.timer_hours_warning_box_text));
 
-        mMinutesInputLayout = view.findViewById(R.id.dialog_input_layout_minutes);
-        mMinutesInputLayout.setHelperText(getString(R.string.timer_minutes_warning_box_text));
+        mMinutesInputLayout = view.findViewById(com.better.alarmhelper.R.id.dialog_input_layout_minutes);
+        mMinutesInputLayout.setHelperText(getString(com.better.alarmhelper.R.string.timer_minutes_warning_box_text));
 
-        mEditHours = view.findViewById(R.id.edit_hours);
-        mEditMinutes = view.findViewById(R.id.edit_minutes);
+        mEditHours = view.findViewById(com.better.alarmhelper.R.id.edit_hours);
+        mEditMinutes = view.findViewById(com.better.alarmhelper.R.id.edit_minutes);
 
         mEditHours.setText(String.valueOf(editHours));
         if (editHours == 24) {
@@ -224,7 +224,7 @@ public class AlarmSnoozeDurationDialogFragment extends DialogFragment {
         mInput = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         final MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(mContext)
-                .setTitle(getString(R.string.snooze_duration_title))
+                .setTitle(getString(com.better.alarmhelper.R.string.snooze_duration_title))
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, (dialog, which) ->
                         setAlarmSnoozeDuration())
@@ -332,7 +332,7 @@ public class AlarmSnoozeDurationDialogFragment extends DialogFragment {
      * The outline color of the edit box and the hint color are also changed.
      */
     private void updateDialogForInvalidInput() {
-        final Drawable drawable = AppCompatResources.getDrawable(mContext, R.drawable.ic_error);
+        final Drawable drawable = AppCompatResources.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_error);
         if (drawable != null) {
             drawable.setTint(MaterialColors.getColor(
                     mContext, com.google.android.material.R.attr.colorOnSurface, Color.BLACK));
@@ -340,7 +340,7 @@ public class AlarmSnoozeDurationDialogFragment extends DialogFragment {
 
         AlertDialog alertDialog = (AlertDialog) requireDialog();
         alertDialog.setIcon(drawable);
-        alertDialog.setTitle(getString(R.string.timer_time_warning_box_title));
+        alertDialog.setTitle(getString(com.better.alarmhelper.R.string.timer_time_warning_box_title));
 
         String hoursText = Objects.requireNonNull(mEditHours.getText()).toString();
         String minutesText = Objects.requireNonNull(mEditMinutes.getText()).toString();
@@ -348,7 +348,7 @@ public class AlarmSnoozeDurationDialogFragment extends DialogFragment {
                 || (!hoursText.isEmpty() && Integer.parseInt(hoursText) > 24);
         boolean minutesInvalid = (!minutesText.isEmpty() && Integer.parseInt(minutesText) < 0)
                 || (!minutesText.isEmpty() && Integer.parseInt(minutesText) > 59);
-        int invalidColor = ContextCompat.getColor(mContext, R.color.md_theme_error);
+        int invalidColor = ContextCompat.getColor(mContext, com.better.alarmhelper.R.color.md_theme_error);
         int validColor = MaterialColors.getColor(mContext, com.google.android.material.R.attr.colorPrimary, Color.BLACK);
 
         mHoursInputLayout.setBoxStrokeColor(hoursInvalid ? invalidColor : validColor);
@@ -369,7 +369,7 @@ public class AlarmSnoozeDurationDialogFragment extends DialogFragment {
     private void updateDialogForValidInput() {
         AlertDialog alertDialog = (AlertDialog) requireDialog();
         alertDialog.setIcon(null);
-        alertDialog.setTitle(getString(R.string.snooze_duration_title));
+        alertDialog.setTitle(getString(com.better.alarmhelper.R.string.snooze_duration_title));
 
         int validColor = MaterialColors.getColor(mContext, com.google.android.material.R.attr.colorPrimary, Color.BLACK);
         mHoursInputLayout.setBoxStrokeColor(validColor);

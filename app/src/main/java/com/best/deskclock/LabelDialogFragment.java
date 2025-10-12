@@ -120,13 +120,13 @@ public class LabelDialogFragment extends DialogFragment {
             label = savedInstanceState.getString(ARG_LABEL, label);
         }
 
-        final Drawable drawable = AppCompatResources.getDrawable(mContext, R.drawable.ic_label);
+        final Drawable drawable = AppCompatResources.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_label);
         if (drawable != null) {
             drawable.setTint(MaterialColors.getColor(
                     mContext, com.google.android.material.R.attr.colorOnSurface, Color.BLACK));
         }
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_edit_text, null);
+        View view = LayoutInflater.from(mContext).inflate(com.better.alarmhelper.R.layout.dialog_edit_text, null);
 
         mEditLabel = view.findViewById(android.R.id.edit);
         mEditLabel.setText(label);
@@ -145,9 +145,9 @@ public class LabelDialogFragment extends DialogFragment {
         final MaterialAlertDialogBuilder dialogBuilder =
                 new MaterialAlertDialogBuilder(mContext)
                         .setTitle(mAlarm != null
-                                ? R.string.alarm_label_box_title
+                                ? com.better.alarmhelper.R.string.alarm_label_box_title
                                 : mTimerId >= 0
-                                ? R.string.timer_label_box_title
+                                ? com.better.alarmhelper.R.string.timer_label_box_title
                                 : 0)
                         .setIcon(drawable)
                         .setView(view)

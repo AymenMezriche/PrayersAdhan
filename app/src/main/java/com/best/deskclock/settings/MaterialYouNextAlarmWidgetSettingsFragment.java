@@ -45,14 +45,14 @@ public class MaterialYouNextAlarmWidgetSettingsFragment extends ScreenFragment
 
     @Override
     protected String getFragmentTitle() {
-        return getString(R.string.material_you_next_alarm_widget);
+        return getString(com.better.alarmhelper.R.string.material_you_next_alarm_widget);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addPreferencesFromResource(R.xml.settings_customize_material_you_next_alarm_widget);
+        addPreferencesFromResource(com.better.alarmhelper.R.xml.settings_customize_material_you_next_alarm_widget);
 
         mDefaultTitleColorPref = findPreference(KEY_MATERIAL_YOU_NEXT_ALARM_WIDGET_DEFAULT_TITLE_COLOR);
         mCustomTitleColorPref = findPreference(KEY_MATERIAL_YOU_NEXT_ALARM_WIDGET_CUSTOM_TITLE_COLOR);

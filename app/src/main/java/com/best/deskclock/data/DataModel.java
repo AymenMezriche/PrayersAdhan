@@ -358,13 +358,13 @@ public final class DataModel {
      * Indicates the reason alarms may not fire or may fire silently.
      */
     public enum SilentSetting {
-        DO_NOT_DISTURB(R.string.alarms_blocked_by_dnd, 0, Predicate.FALSE, null),
-        MUTED_VOLUME(R.string.alarm_volume_muted,
-                R.string.unmute_alarm_volume,
+        DO_NOT_DISTURB(com.better.alarmhelper.R.string.alarms_blocked_by_dnd, 0, Predicate.FALSE, null),
+        MUTED_VOLUME(com.better.alarmhelper.R.string.alarm_volume_muted,
+                com.better.alarmhelper.R.string.unmute_alarm_volume,
                 Predicate.TRUE,
                 new UnmuteAlarmVolumeListener()),
-        SILENT_RINGTONE(R.string.silent_default_alarm_ringtone,
-                R.string.change_setting_action,
+        SILENT_RINGTONE(com.better.alarmhelper.R.string.silent_default_alarm_ringtone,
+                com.better.alarmhelper.R.string.change_setting_action,
                 new ChangeSoundActionPredicate(),
                 new ChangeSoundSettingsListener());
 

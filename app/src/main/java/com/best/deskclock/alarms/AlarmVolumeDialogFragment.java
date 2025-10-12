@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.best.deskclock.R;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.ringtone.RingtonePreviewKlaxon;
 import com.best.deskclock.utils.RingtoneUtils;
@@ -128,12 +127,12 @@ public class AlarmVolumeDialogFragment  extends DialogFragment {
             volumeValue = savedInstanceState.getInt(ARG_ALARM_VOLUME_VALUE, volumeValue);
         }
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.alarm_volume_dialog, null);
+        View view = LayoutInflater.from(mContext).inflate(com.better.alarmhelper.R.layout.alarm_volume_dialog, null);
 
-        mSeekBar = view.findViewById(R.id.alarm_volume_seekbar);
-        mVolumeValue = view.findViewById(R.id.alarm_volume_value);
-        mVolumeMinus = view.findViewById(R.id.volume_minus_icon);
-        mVolumePlus = view.findViewById(R.id.volume_plus_icon);
+        mSeekBar = view.findViewById(com.better.alarmhelper.R.id.alarm_volume_seekbar);
+        mVolumeValue = view.findViewById(com.better.alarmhelper.R.id.alarm_volume_value);
+        mVolumeMinus = view.findViewById(com.better.alarmhelper.R.id.volume_minus_icon);
+        mVolumePlus = view.findViewById(com.better.alarmhelper.R.id.volume_plus_icon);
 
         AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
@@ -190,7 +189,7 @@ public class AlarmVolumeDialogFragment  extends DialogFragment {
         });
 
         final MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(mContext)
-                .setTitle(R.string.alarm_volume_title)
+                .setTitle(com.better.alarmhelper.R.string.alarm_volume_title)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     stopRingtonePreview();

@@ -56,16 +56,16 @@ public class CustomSpinnerTimePickerDialog {
                                                     boolean is24Hour, OnTimeSetListener listener) {
 
         LayoutInflater inflater = fragment.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.custom_spinner_time_picker, null);
+        View dialogView = inflater.inflate(com.better.alarmhelper.R.layout.custom_spinner_time_picker, null);
 
-        NumberPicker hourPicker = dialogView.findViewById(R.id.hour);
-        NumberPicker minutePicker = dialogView.findViewById(R.id.minute);
-        NumberPicker amPmPicker = dialogView.findViewById(R.id.amPm);
+        NumberPicker hourPicker = dialogView.findViewById(com.better.alarmhelper.R.id.hour);
+        NumberPicker minutePicker = dialogView.findViewById(com.better.alarmhelper.R.id.minute);
+        NumberPicker amPmPicker = dialogView.findViewById(com.better.alarmhelper.R.id.amPm);
 
         setupNumberPickers(dialogView, hour, minute, is24Hour, hourPicker, minutePicker, amPmPicker);
 
-        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(context, R.style.SpinnerDialogTheme)
-                .setTitle(R.string.time_picker_dialog_title)
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(context, com.better.alarmhelper.R.style.SpinnerDialogTheme)
+                .setTitle(com.better.alarmhelper.R.string.time_picker_dialog_title)
                 .setView(dialogView)
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, null);
@@ -153,7 +153,7 @@ public class CustomSpinnerTimePickerDialog {
         // AM/PM setup
         if (!is24Hour) {
             // Dynamic positioning of AM/PM
-            LinearLayout layout = dialogView.findViewById(R.id.timePickerLayout);
+            LinearLayout layout = dialogView.findViewById(com.better.alarmhelper.R.id.timePickerLayout);
             layout.removeView(amPmPicker);
             if (isAmPmAtStart()) {
                 layout.addView(amPmPicker, 0);
@@ -178,13 +178,13 @@ public class CustomSpinnerTimePickerDialog {
         }
 
         // Divider setup
-        TextView divider = dialogView.findViewById(R.id.divider);
+        TextView divider = dialogView.findViewById(com.better.alarmhelper.R.id.divider);
         divider.setText(getTimeSeparator(is24Hour));
 
         // Set up the correct focus navigation order
-        hourPicker.setNextFocusForwardId(R.id.minute);
+        hourPicker.setNextFocusForwardId(com.better.alarmhelper.R.id.minute);
         if (!is24Hour) {
-            minutePicker.setNextFocusForwardId(R.id.amPm);
+            minutePicker.setNextFocusForwardId(com.better.alarmhelper.R.id.amPm);
             amPmPicker.setNextFocusForwardId(View.NO_ID);
         } else {
             minutePicker.setNextFocusForwardId(View.NO_ID);

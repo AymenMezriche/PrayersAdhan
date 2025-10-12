@@ -8,7 +8,6 @@ package com.best.deskclock.events;
 
 import androidx.annotation.StringRes;
 
-import com.best.deskclock.R;
 import com.best.deskclock.controller.Controller;
 
 /**
@@ -28,7 +27,7 @@ public final class Events {
      * @param label  resource id of event label
      */
     public static void sendAlarmEvent(@StringRes int action, @StringRes int label) {
-        sendEvent(R.string.category_alarm, action, label);
+        sendEvent(com.better.alarmhelper.R.string.category_alarm, action, label);
     }
 
     /**
@@ -38,7 +37,7 @@ public final class Events {
      * @param label  resource id of event label
      */
     public static void sendClockEvent(@StringRes int action, @StringRes int label) {
-        sendEvent(R.string.category_clock, action, label);
+        sendEvent(com.better.alarmhelper.R.string.category_clock, action, label);
     }
 
     /**
@@ -48,7 +47,7 @@ public final class Events {
      * @param label  resource id of event label
      */
     public static void sendTimerEvent(@StringRes int action, @StringRes int label) {
-        sendEvent(R.string.category_timer, action, label);
+        sendEvent(com.better.alarmhelper.R.string.category_timer, action, label);
     }
 
     /**
@@ -58,7 +57,7 @@ public final class Events {
      * @param label  resource id of event label
      */
     public static void sendStopwatchEvent(@StringRes int action, @StringRes int label) {
-        sendEvent(R.string.category_stopwatch, action, label);
+        sendEvent(com.better.alarmhelper.R.string.category_stopwatch, action, label);
     }
 
     /**
@@ -68,7 +67,7 @@ public final class Events {
      * @param label  resource id of event label
      */
     public static void sendScreensaverEvent(@StringRes int action, @StringRes int label) {
-        sendEvent(R.string.category_screensaver, action, label);
+        sendEvent(com.better.alarmhelper.R.string.category_screensaver, action, label);
     }
 
     /**

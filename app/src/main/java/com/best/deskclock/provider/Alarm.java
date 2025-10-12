@@ -398,7 +398,7 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
     }
 
     public String getLabelOrDefault(Context context) {
-        return label.isEmpty() ? context.getString(R.string.default_label) : label;
+        return label.isEmpty() ? context.getString(com.better.alarmhelper.R.string.default_label) : label;
     }
 
     /**

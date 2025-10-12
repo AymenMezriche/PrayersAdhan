@@ -176,13 +176,13 @@ public class AutoSilenceDurationDialogFragment extends DialogFragment {
             isEndOfRingtone = savedInstanceState.getBoolean(ARG_END_OF_RINGTONE, isEndOfRingtone);
         }
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.alarm_auto_silence_duration_dialog, null);
+        View view = LayoutInflater.from(mContext).inflate(com.better.alarmhelper.R.layout.alarm_auto_silence_duration_dialog, null);
 
-        mMinutesInputLayout = view.findViewById(R.id.dialog_input_layout_minutes);
-        mMinutesInputLayout.setHelperText(getString(R.string.timer_button_time_minutes_warning_box_text));
+        mMinutesInputLayout = view.findViewById(com.better.alarmhelper.R.id.dialog_input_layout_minutes);
+        mMinutesInputLayout.setHelperText(getString(com.better.alarmhelper.R.string.timer_button_time_minutes_warning_box_text));
 
-        mEditMinutes = view.findViewById(R.id.edit_minutes);
-        mEndOfRingtoneCheckbox = view.findViewById(R.id.end_of_ringtone);
+        mEditMinutes = view.findViewById(com.better.alarmhelper.R.id.edit_minutes);
+        mEndOfRingtoneCheckbox = view.findViewById(com.better.alarmhelper.R.id.end_of_ringtone);
 
         mEditMinutes.setText(String.valueOf(editMinutes));
         if (editMinutes == ALARM_TIMEOUT_END_OF_RINGTONE) {
@@ -212,7 +212,7 @@ public class AutoSilenceDurationDialogFragment extends DialogFragment {
         });
 
         final MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(mContext)
-                .setTitle(R.string.auto_silence_title)
+                .setTitle(com.better.alarmhelper.R.string.auto_silence_title)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, (dialog, which) ->
                         setAutoSilenceDuration()
@@ -306,7 +306,7 @@ public class AutoSilenceDurationDialogFragment extends DialogFragment {
      * The outline color of the edit box and the hint color are also changed.
      */
     private void updateDialogForInvalidInput() {
-        final Drawable drawable = AppCompatResources.getDrawable(mContext, R.drawable.ic_error);
+        final Drawable drawable = AppCompatResources.getDrawable(mContext, com.better.alarmhelper.R.drawable.ic_error);
         if (drawable != null) {
             drawable.setTint(MaterialColors.getColor(
                     mContext, com.google.android.material.R.attr.colorOnSurface, Color.BLACK));
@@ -314,12 +314,12 @@ public class AutoSilenceDurationDialogFragment extends DialogFragment {
 
         AlertDialog alertDialog = (AlertDialog) requireDialog();
         alertDialog.setIcon(drawable);
-        alertDialog.setTitle(getString(R.string.timer_time_warning_box_title));
+        alertDialog.setTitle(getString(com.better.alarmhelper.R.string.timer_time_warning_box_title));
 
         String minutesText = Objects.requireNonNull(mEditMinutes.getText()).toString();
         boolean minutesInvalid = (!minutesText.isEmpty() && Integer.parseInt(minutesText) < 0)
                 || (!minutesText.isEmpty() && Integer.parseInt(minutesText) > 60);
-        int invalidColor = ContextCompat.getColor(mContext, R.color.md_theme_error);
+        int invalidColor = ContextCompat.getColor(mContext, com.better.alarmhelper.R.color.md_theme_error);
         int validColor = MaterialColors.getColor(mContext, com.google.android.material.R.attr.colorPrimary, Color.BLACK);
 
         mMinutesInputLayout.setBoxStrokeColor(minutesInvalid ? invalidColor : validColor);
@@ -335,7 +335,7 @@ public class AutoSilenceDurationDialogFragment extends DialogFragment {
     private void updateDialogForValidInput() {
         AlertDialog alertDialog = (AlertDialog) requireDialog();
         alertDialog.setIcon(null);
-        alertDialog.setTitle(getString(R.string.auto_silence_title));
+        alertDialog.setTitle(getString(com.better.alarmhelper.R.string.auto_silence_title));
 
         int validColor = MaterialColors.getColor(mContext, com.google.android.material.R.attr.colorPrimary, Color.BLACK);
         mMinutesInputLayout.setBoxStrokeColor(validColor);

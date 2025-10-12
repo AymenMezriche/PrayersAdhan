@@ -14,7 +14,7 @@ public class PrayerTimesProvider {
             put("Maghrib", new int[]{19, 25});
             put("Isha", new int[]{21, 0});
         }});
-        put("20-2025", new HashMap<String, int[]>() {{
+        put("20-2025", new HashMap<>() {{
             put("Fajr", new int[]{4, 31});
             put("Dhuhr", new int[]{12, 44});
             put("Asr", new int[]{16, 16});
@@ -44,22 +44,7 @@ public class PrayerTimesProvider {
         }});
     }};
 
-    /**
-     * Returns hour/minute for a given alarm day + label (prayer name).
-     */
-    public static int[] getPrayerTimeForTest(Calendar day, String label) {
-        // Example key: "19-2025"
-        String key = day.get(Calendar.DAY_OF_MONTH) + "-" + day.get(Calendar.YEAR);
 
-        if (TEST_PRAYER_TIMES.containsKey(key)) {
-            Map<String, int[]> prayersForDay = TEST_PRAYER_TIMES.get(key);
-            if (prayersForDay.containsKey(label)) {
-                return prayersForDay.get(label);
-            }
-        }
-        // Default fallback
-        return new int[]{day.get(Calendar.HOUR_OF_DAY), day.get(Calendar.MINUTE)};
-    }
 
 
 }

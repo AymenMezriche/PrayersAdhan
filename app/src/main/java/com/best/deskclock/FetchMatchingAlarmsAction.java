@@ -71,7 +71,7 @@ class FetchMatchingAlarmsAction implements Runnable {
                 if (badInput) {
                     final String[] ampm = new DateFormatSymbols().getAmPmStrings();
                     final String amPm = isPm ? ampm[1] : ampm[0];
-                    final String reason = mContext.getString(R.string.invalid_time, hour, minutes,
+                    final String reason = mContext.getString(com.better.alarmhelper.R.string.invalid_time, hour, minutes,
                             amPm);
                     notifyFailureAndLog(reason, mActivity);
                     return;
@@ -85,7 +85,7 @@ class FetchMatchingAlarmsAction implements Runnable {
                     }
                 }
                 if (mMatchingAlarms.isEmpty()) {
-                    final String reason = mContext.getString(R.string.no_alarm_at, hour24, minutes);
+                    final String reason = mContext.getString(com.better.alarmhelper.R.string.no_alarm_at, hour24, minutes);
                     notifyFailureAndLog(reason, mActivity);
                 }
             }
@@ -105,7 +105,7 @@ class FetchMatchingAlarmsAction implements Runnable {
                 }
                 final AlarmInstance nextAlarm = AlarmStateManager.getNextFiringAlarm(mContext);
                 if (nextAlarm == null) {
-                    final String reason = mContext.getString(R.string.no_scheduled_alarms);
+                    final String reason = mContext.getString(com.better.alarmhelper.R.string.no_scheduled_alarms);
                     notifyFailureAndLog(reason, mActivity);
                     return;
                 }
@@ -122,7 +122,7 @@ class FetchMatchingAlarmsAction implements Runnable {
                 // EXTRA_MESSAGE has to be set in this mode
                 final String label = mIntent.getStringExtra(AlarmClock.EXTRA_MESSAGE);
                 if (label == null) {
-                    final String reason = mContext.getString(R.string.no_label_specified);
+                    final String reason = mContext.getString(com.better.alarmhelper.R.string.no_label_specified);
                     notifyFailureAndLog(reason, mActivity);
                     return;
                 }
@@ -134,7 +134,7 @@ class FetchMatchingAlarmsAction implements Runnable {
                     }
                 }
                 if (mMatchingAlarms.isEmpty()) {
-                    final String reason = mContext.getString(R.string.no_alarms_with_label);
+                    final String reason = mContext.getString(com.better.alarmhelper.R.string.no_alarms_with_label);
                     notifyFailureAndLog(reason, mActivity);
                 }
             }

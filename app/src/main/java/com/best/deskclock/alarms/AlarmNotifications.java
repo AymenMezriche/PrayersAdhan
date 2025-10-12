@@ -30,7 +30,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.best.deskclock.AlarmClockFragment;
 import com.best.deskclock.DeskClock;
-import com.best.deskclock.R;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.provider.AlarmInstance;
 import com.best.deskclock.utils.AlarmUtils;
@@ -95,12 +94,12 @@ public final class AlarmNotifications {
 
         if (!alarm.daysOfWeek.isRepeating()) {
             if (alarm.deleteAfterUse) {
-                contentTitle = context.getString(R.string.occasional_alarm_alert_predismiss_title);
+                contentTitle = context.getString(com.better.alarmhelper.R.string.occasional_alarm_alert_predismiss_title);
             } else {
-                contentTitle = context.getString(R.string.alarm_alert_predismiss_title);
+                contentTitle = context.getString(com.better.alarmhelper.R.string.alarm_alert_predismiss_title);
             }
         } else {
-            contentTitle = context.getString(R.string.alarm_alert_predismiss_title);
+            contentTitle = context.getString(com.better.alarmhelper.R.string.alarm_alert_predismiss_title);
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
@@ -108,8 +107,8 @@ public final class AlarmNotifications {
                 .setShowWhen(false)
                 .setContentTitle(contentTitle)
                 .setContentText(AlarmUtils.getAlarmText(context, instance, true))
-                .setColor(context.getColor(R.color.md_theme_primary))
-                .setSmallIcon(R.drawable.ic_tab_alarm_static)
+                .setColor(context.getColor(com.better.alarmhelper.R.color.md_theme_primary))
+                .setSmallIcon(com.better.alarmhelper.R.drawable.ic_tab_alarm_static)
                 .setAutoCancel(false)
                 .setSortKey(createSortKey(instance))
                 .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -123,14 +122,14 @@ public final class AlarmNotifications {
         final int id = instance.hashCode();
         final String dismissActionTitle;
         if (!alarm.daysOfWeek.isRepeating() && alarm.deleteAfterUse) {
-            dismissActionTitle = context.getString(R.string.alarm_alert_dismiss_and_delete_text);
+            dismissActionTitle = context.getString(com.better.alarmhelper.R.string.alarm_alert_dismiss_and_delete_text);
         } else {
-            dismissActionTitle = context.getString(R.string.alarm_alert_dismiss_text);
+            dismissActionTitle = context.getString(com.better.alarmhelper.R.string.alarm_alert_dismiss_text);
         }
 
         Intent dismissIntent = AlarmStateManager.createStateChangeIntent(context,
                 AlarmStateManager.ALARM_DISMISS_TAG, instance, AlarmInstance.PREDISMISSED_STATE);
-        builder.addAction(R.drawable.ic_alarm_off, dismissActionTitle,
+        builder.addAction(com.better.alarmhelper.R.drawable.ic_alarm_off, dismissActionTitle,
                 PendingIntent.getService(context, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT
                         | PendingIntent.FLAG_IMMUTABLE));
 
@@ -221,8 +220,8 @@ public final class AlarmNotifications {
             summary = new NotificationCompat.Builder(context, ALARM_UPCOMING_NOTIFICATION_CHANNEL_ID)
                     .setShowWhen(false)
                     .setContentIntent(firstUpcoming.contentIntent)
-                    .setColor(context.getColor(R.color.md_theme_primary))
-                    .setSmallIcon(R.drawable.ic_tab_alarm_static)
+                    .setColor(context.getColor(com.better.alarmhelper.R.color.md_theme_primary))
+                    .setSmallIcon(com.better.alarmhelper.R.drawable.ic_tab_alarm_static)
                     .setGroup(UPCOMING_GROUP_KEY)
                     .setGroupSummary(true)
                     .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -258,8 +257,8 @@ public final class AlarmNotifications {
             summary = new NotificationCompat.Builder(context, ALARM_MISSED_NOTIFICATION_CHANNEL_ID)
                     .setShowWhen(false)
                     .setContentIntent(firstMissed.contentIntent)
-                    .setColor(context.getColor(R.color.md_theme_primary))
-                    .setSmallIcon(R.drawable.ic_tab_alarm_static)
+                    .setColor(context.getColor(com.better.alarmhelper.R.color.md_theme_primary))
+                    .setSmallIcon(com.better.alarmhelper.R.drawable.ic_tab_alarm_static)
                     .setGroup(MISSED_GROUP_KEY)
                     .setGroupSummary(true)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -285,10 +284,10 @@ public final class AlarmNotifications {
                 context, ALARM_SNOOZE_NOTIFICATION_CHANNEL_ID)
                 .setShowWhen(false)
                 .setContentTitle(instance.getLabelOrDefault(context))
-                .setContentText(context.getString(R.string.alarm_alert_snooze_until,
+                .setContentText(context.getString(com.better.alarmhelper.R.string.alarm_alert_snooze_until,
                         AlarmUtils.getFormattedTime(context, instance.getAlarmTime())))
-                .setColor(context.getColor(R.color.md_theme_primary))
-                .setSmallIcon(R.drawable.ic_tab_alarm_static)
+                .setColor(context.getColor(com.better.alarmhelper.R.color.md_theme_primary))
+                .setSmallIcon(com.better.alarmhelper.R.drawable.ic_tab_alarm_static)
                 .setAutoCancel(false)
                 .setSortKey(createSortKey(instance))
                 .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -303,7 +302,7 @@ public final class AlarmNotifications {
 
         final int id = instance.hashCode();
 
-        builder.addAction(R.drawable.ic_alarm_off, context.getString(R.string.alarm_alert_dismiss_text), PendingIntent.getService(context, id,
+        builder.addAction(com.better.alarmhelper.R.drawable.ic_alarm_off, context.getString(com.better.alarmhelper.R.string.alarm_alert_dismiss_text), PendingIntent.getService(context, id,
                 dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
 
         // Setup content action if instance is owned by alarm
@@ -336,12 +335,12 @@ public final class AlarmNotifications {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 context, ALARM_MISSED_NOTIFICATION_CHANNEL_ID)
                 .setShowWhen(false)
-                .setContentTitle(context.getString(R.string.alarm_missed_title))
+                .setContentTitle(context.getString(com.better.alarmhelper.R.string.alarm_missed_title))
                 .setContentText(instance.mLabel.isEmpty() ? alarmTime :
-                        context.getString(R.string.alarm_missed_text, alarmTime, label))
-                .setColor(context.getColor(R.color.md_theme_primary))
+                        context.getString(com.better.alarmhelper.R.string.alarm_missed_text, alarmTime, label))
+                .setColor(context.getColor(com.better.alarmhelper.R.color.md_theme_primary))
                 .setSortKey(createSortKey(instance))
-                .setSmallIcon(R.drawable.ic_tab_alarm_static)
+                .setSmallIcon(com.better.alarmhelper.R.drawable.ic_tab_alarm_static)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_EVENT)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -387,8 +386,8 @@ public final class AlarmNotifications {
                 service, FIRING_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(instance.getLabelOrDefault(service))
                 .setContentText(AlarmUtils.getFormattedTime(service, instance.getAlarmTime()))
-                .setColor(service.getColor(R.color.md_theme_primary))
-                .setSmallIcon(R.drawable.ic_tab_alarm_static)
+                .setColor(service.getColor(com.better.alarmhelper.R.color.md_theme_primary))
+                .setSmallIcon(com.better.alarmhelper.R.drawable.ic_tab_alarm_static)
                 .setOngoing(true)
                 .setAutoCancel(false)
                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
@@ -405,7 +404,7 @@ public final class AlarmNotifications {
             snoozeIntent.putExtra(AlarmStateManager.FROM_NOTIFICATION_EXTRA, true);
             PendingIntent snoozePendingIntent = PendingIntent.getService(service,
                     ALARM_FIRING_NOTIFICATION_ID, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-            notification.addAction(R.drawable.ic_snooze, resources.getString(R.string.alarm_alert_snooze_text), snoozePendingIntent);
+            notification.addAction(com.better.alarmhelper.R.drawable.ic_snooze, resources.getString(com.better.alarmhelper.R.string.alarm_alert_snooze_text), snoozePendingIntent);
         }
 
         // Setup Dismiss Action
@@ -420,12 +419,12 @@ public final class AlarmNotifications {
         // Setup up dismiss action
         if (!alarm.daysOfWeek.isRepeating()) {
             if (alarm.deleteAfterUse) {
-                dismissActionTitle = resources.getString(R.string.alarm_alert_dismiss_and_delete_text);
+                dismissActionTitle = resources.getString(com.better.alarmhelper.R.string.alarm_alert_dismiss_and_delete_text);
             } else {
-                dismissActionTitle = resources.getString(R.string.alarm_alert_dismiss_text);
+                dismissActionTitle = resources.getString(com.better.alarmhelper.R.string.alarm_alert_dismiss_text);
             }
         } else {
-            dismissActionTitle = resources.getString(R.string.alarm_alert_dismiss_text);
+            dismissActionTitle = resources.getString(com.better.alarmhelper.R.string.alarm_alert_dismiss_text);
         }
 
         Intent dismissIntent = AlarmStateManager.createStateChangeIntent(service,
@@ -433,7 +432,7 @@ public final class AlarmNotifications {
         dismissIntent.putExtra(AlarmStateManager.FROM_NOTIFICATION_EXTRA, true);
         PendingIntent dismissPendingIntent = PendingIntent.getService(service,
                 ALARM_FIRING_NOTIFICATION_ID, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        notification.addAction(R.drawable.ic_alarm_off, dismissActionTitle, dismissPendingIntent);
+        notification.addAction(com.better.alarmhelper.R.drawable.ic_alarm_off, dismissActionTitle, dismissPendingIntent);
         // Stop alarm if user clears notification.
         notification.setDeleteIntent(dismissPendingIntent);
 

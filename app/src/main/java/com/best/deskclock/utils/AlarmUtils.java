@@ -89,8 +89,8 @@ public class AlarmUtils {
      * Clock views can call this to refresh their alarm to the next upcoming value.
      */
     public static void refreshAlarm(Context context, View clock) {
-        final TextView nextAlarmIconView = clock.findViewById(R.id.nextAlarmIcon);
-        final TextView nextAlarmView = clock.findViewById(R.id.nextAlarm);
+        final TextView nextAlarmIconView = clock.findViewById(com.better.alarmhelper.R.id.nextAlarmIcon);
+        final TextView nextAlarmView = clock.findViewById(com.better.alarmhelper.R.id.nextAlarm);
         if (nextAlarmView == null) {
             return;
         }
@@ -111,7 +111,7 @@ public class AlarmUtils {
             nextAlarmView.setVisibility(View.GONE);
             nextAlarmIconView.setVisibility(View.GONE);
         } else {
-            String description = context.getString(R.string.next_alarm_description, alarmFormattedTime);
+            String description = context.getString(com.better.alarmhelper.R.string.next_alarm_description, alarmFormattedTime);
             nextAlarmView.setText(alarmFormattedTime);
             nextAlarmView.setContentDescription(description);
             nextAlarmView.setVisibility(View.VISIBLE);
@@ -145,7 +145,7 @@ public class AlarmUtils {
     @VisibleForTesting
     static String formatElapsedTimeUntilAlarm(Context context, long delta) {
         // If the alarm will ring within 60 seconds, just report "less than a minute."
-        final String[] formats = context.getResources().getStringArray(R.array.alarm_set);
+        final String[] formats = context.getResources().getStringArray(com.better.alarmhelper.R.array.alarm_set);
         if (delta < DateUtils.MINUTE_IN_MILLIS) {
             return formats[0];
         }
@@ -164,9 +164,9 @@ public class AlarmUtils {
 
         long minutes = remainingMillis / (1000 * 60);
 
-        String daySeq = Utils.getNumberFormattedQuantityString(context, R.plurals.days, (int) days);
-        String hourSeq = Utils.getNumberFormattedQuantityString(context, R.plurals.hours, (int) hours);
-        String minSeq = Utils.getNumberFormattedQuantityString(context, R.plurals.minutes, (int) minutes);
+        String daySeq = Utils.getNumberFormattedQuantityString(context, com.better.alarmhelper.R.plurals.days, (int) days);
+        String hourSeq = Utils.getNumberFormattedQuantityString(context, com.better.alarmhelper.R.plurals.hours, (int) hours);
+        String minSeq = Utils.getNumberFormattedQuantityString(context, com.better.alarmhelper.R.plurals.minutes, (int) minutes);
 
         final boolean showDays = days > 0;
         final boolean showHours = hours > 0;

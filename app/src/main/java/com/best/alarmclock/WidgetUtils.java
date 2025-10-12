@@ -141,10 +141,10 @@ public class WidgetUtils {
     public static void updateWidgetCount(Context context, Class<?> widgetClass, int count, @StringRes int eventCategoryId) {
         int delta = WidgetDAO.updateWidgetCount(getDefaultSharedPreferences(context), widgetClass, count);
         for (; delta > 0; delta--) {
-            Events.sendEvent(eventCategoryId, R.string.action_create, 0);
+            Events.sendEvent(eventCategoryId, com.better.alarmhelper.R.string.action_create, 0);
         }
         for (; delta < 0; delta++) {
-            Events.sendEvent(eventCategoryId, R.string.action_delete, 0);
+            Events.sendEvent(eventCategoryId, com.better.alarmhelper.R.string.action_delete, 0);
         }
     }
 
@@ -187,7 +187,7 @@ public class WidgetUtils {
      */
     public static String getDateFormat(Context context) {
         Locale locale = Locale.getDefault();
-        final String skeleton = context.getString(R.string.abbrev_wday_month_day_no_year);
+        final String skeleton = context.getString(com.better.alarmhelper.R.string.abbrev_wday_month_day_no_year);
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat(DateFormat.getBestDateTimePattern(locale, skeleton), locale);
 

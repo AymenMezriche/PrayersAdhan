@@ -96,14 +96,14 @@ public final class AsyncRingtonePlayer {
      * @return Uri of the ringtone to play when the user is in a telephone call
      */
     private static Uri getInCallRingtoneUri(Context context) {
-        return RingtoneUtils.getResourceUri(context, R.raw.alarm_expire);
+        return RingtoneUtils.getResourceUri(context, com.better.alarmhelper.R.raw.alarm_expire);
     }
 
     /**
      * @return Uri of the ringtone to play when the chosen ringtone fails to play
      */
     private static Uri getFallbackRingtoneUri(Context context) {
-        return RingtoneUtils.getResourceUri(context, R.raw.alarm_expire);
+        return RingtoneUtils.getResourceUri(context, com.better.alarmhelper.R.raw.alarm_expire);
     }
 
     /**

@@ -295,14 +295,14 @@ public final class Weekdays {
         }
 
         if (mBits == ALL_DAYS) {
-            return context.getString(R.string.every_day);
+            return context.getString(com.better.alarmhelper.R.string.every_day);
         }
 
         final boolean longNames = forceLongNames || getCount() <= 1;
         final DateFormatSymbols dfs = new DateFormatSymbols();
         final String[] weekdays = longNames ? dfs.getWeekdays() : dfs.getShortWeekdays();
 
-        final String separator = context.getString(R.string.day_concat);
+        final String separator = context.getString(com.better.alarmhelper.R.string.day_concat);
 
         final StringBuilder builder = new StringBuilder(40);
         for (int calendarDay : order.getCalendarDays()) {

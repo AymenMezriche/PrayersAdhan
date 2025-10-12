@@ -65,7 +65,7 @@ import java.util.Locale;
  * A ViewHolder containing views for an alarm item in expanded state.
  */
 public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
-    public static final int VIEW_TYPE = R.layout.alarm_time_expanded;
+    public static final int VIEW_TYPE = com.better.alarmhelper.R.layout.alarm_time_expanded;
 
     private final SharedPreferences mPrefs;
     private final ImageView editLabelIcon;
@@ -103,38 +103,38 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         mHasVibrator = hasVibrator;
         mHasFlash = hasFlash;
 
-        editLabelIcon = itemView.findViewById(R.id.edit_label_icon);
-        editLabel = itemView.findViewById(R.id.edit_label);
-        repeatDays = itemView.findViewById(R.id.repeat_days);
-        emptyView = itemView.findViewById(R.id.empty_view);
-        scheduleAlarm = itemView.findViewById(R.id.schedule_alarm);
-        selectedDate = itemView.findViewById(R.id.selected_date);
-        addDate = itemView.findViewById(R.id.add_date);
-        removeDate = itemView.findViewById(R.id.remove_date);
-        ringtone = itemView.findViewById(R.id.choose_ringtone);
-        vibrate = itemView.findViewById(R.id.vibrate_onoff);
-        flash = itemView.findViewById(R.id.flash_onoff);
-        deleteOccasionalAlarmAfterUse = itemView.findViewById(R.id.delete_occasional_alarm_after_use);
-        autoSilenceDurationTitle = itemView.findViewById(R.id.auto_silence_duration_title);
-        autoSilenceDurationValue = itemView.findViewById(R.id.auto_silence_duration_value);
-        snoozeDurationTitle = itemView.findViewById(R.id.snooze_duration_title);
-        snoozeDurationValue = itemView.findViewById(R.id.snooze_duration_value);
-        crescendoDurationTitle = itemView.findViewById(R.id.crescendo_duration_title);
-        crescendoDurationValue = itemView.findViewById(R.id.crescendo_duration_value);
-        alarmVolumeTitle = itemView.findViewById(R.id.alarm_volume_title);
-        alarmVolumeValue = itemView.findViewById(R.id.alarm_volume_value);
-        delete = itemView.findViewById(R.id.delete);
-        duplicate = itemView.findViewById(R.id.duplicate);
+        editLabelIcon = itemView.findViewById(com.better.alarmhelper.R.id.edit_label_icon);
+        editLabel = itemView.findViewById(com.better.alarmhelper.R.id.edit_label);
+        repeatDays = itemView.findViewById(com.better.alarmhelper.R.id.repeat_days);
+        emptyView = itemView.findViewById(com.better.alarmhelper.R.id.empty_view);
+        scheduleAlarm = itemView.findViewById(com.better.alarmhelper.R.id.schedule_alarm);
+        selectedDate = itemView.findViewById(com.better.alarmhelper.R.id.selected_date);
+        addDate = itemView.findViewById(com.better.alarmhelper.R.id.add_date);
+        removeDate = itemView.findViewById(com.better.alarmhelper.R.id.remove_date);
+        ringtone = itemView.findViewById(com.better.alarmhelper.R.id.choose_ringtone);
+        vibrate = itemView.findViewById(com.better.alarmhelper.R.id.vibrate_onoff);
+        flash = itemView.findViewById(com.better.alarmhelper.R.id.flash_onoff);
+        deleteOccasionalAlarmAfterUse = itemView.findViewById(com.better.alarmhelper.R.id.delete_occasional_alarm_after_use);
+        autoSilenceDurationTitle = itemView.findViewById(com.better.alarmhelper.R.id.auto_silence_duration_title);
+        autoSilenceDurationValue = itemView.findViewById(com.better.alarmhelper.R.id.auto_silence_duration_value);
+        snoozeDurationTitle = itemView.findViewById(com.better.alarmhelper.R.id.snooze_duration_title);
+        snoozeDurationValue = itemView.findViewById(com.better.alarmhelper.R.id.snooze_duration_value);
+        crescendoDurationTitle = itemView.findViewById(com.better.alarmhelper.R.id.crescendo_duration_title);
+        crescendoDurationValue = itemView.findViewById(com.better.alarmhelper.R.id.crescendo_duration_value);
+        alarmVolumeTitle = itemView.findViewById(com.better.alarmhelper.R.id.alarm_volume_title);
+        alarmVolumeValue = itemView.findViewById(com.better.alarmhelper.R.id.alarm_volume_value);
+        delete = itemView.findViewById(com.better.alarmhelper.R.id.delete);
+        duplicate = itemView.findViewById(com.better.alarmhelper.R.id.duplicate);
 
         // Collapse handler
         itemView.setOnClickListener(v -> {
-            Events.sendAlarmEvent(R.string.action_collapse_implied, R.string.label_deskclock);
+            Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_collapse_implied, com.better.alarmhelper.R.string.label_deskclock);
             getItemHolder().collapse();
         });
 
         // Arrow handler
         arrow.setOnClickListener(v -> {
-            Events.sendAlarmEvent(R.string.action_collapse, R.string.label_deskclock);
+            Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_collapse, com.better.alarmhelper.R.string.label_deskclock);
             getItemHolder().collapse();
         });
 
@@ -146,8 +146,8 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final List<Integer> weekdays = SettingsDAO.getWeekdayOrder(mPrefs).getCalendarDays();
         for (int i = 0; i < 7; i++) {
-            final View dayButtonFrame = inflater.inflate(R.layout.day_button, repeatDays, false);
-            final CompoundButton dayButton = dayButtonFrame.findViewById(R.id.day_button_box);
+            final View dayButtonFrame = inflater.inflate(com.better.alarmhelper.R.layout.day_button, repeatDays, false);
+            final CompoundButton dayButton = dayButtonFrame.findViewById(com.better.alarmhelper.R.id.day_button_box);
             final int weekday = weekdays.get(i);
             dayButton.setText(UiDataModel.getUiDataModel().getShortWeekday(weekday));
             dayButton.setContentDescription(UiDataModel.getUiDataModel().getLongWeekday(weekday));
@@ -235,13 +235,13 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         // Delete alarm handler
         delete.setOnClickListener(v -> {
             getAlarmTimeClickHandler().onDeleteClicked(getItemHolder());
-            v.announceForAccessibility(context.getString(R.string.alarm_deleted));
+            v.announceForAccessibility(context.getString(com.better.alarmhelper.R.string.alarm_deleted));
         });
 
         // Duplicate alarm handler
         duplicate.setOnClickListener(v -> {
             getAlarmTimeClickHandler().onDuplicateClicked(getItemHolder());
-            v.announceForAccessibility(context.getString(R.string.alarm_created));
+            v.announceForAccessibility(context.getString(com.better.alarmhelper.R.string.alarm_created));
         });
 
         itemView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -308,20 +308,20 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         editLabel.setText(alarm.label);
         editLabel.setTypeface(alarmLabelIsEmpty || !alarm.enabled ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD);
         editLabel.setContentDescription(alarmLabelIsEmpty
-                ? context.getString(R.string.no_label_specified)
-                : context.getString(R.string.label_description) + " " + alarm.label);
+                ? context.getString(com.better.alarmhelper.R.string.no_label_specified)
+                : context.getString(com.better.alarmhelper.R.string.label_description) + " " + alarm.label);
     }
 
     private void bindAutoSilenceValue(Context context, Alarm alarm) {
         int autoSilenceDuration = alarm.autoSilenceDuration;
 
         if (autoSilenceDuration == ALARM_TIMEOUT_NEVER) {
-            autoSilenceDurationValue.setText(context.getString(R.string.auto_silence_never));
+            autoSilenceDurationValue.setText(context.getString(com.better.alarmhelper.R.string.auto_silence_never));
         } else if (autoSilenceDuration == ALARM_TIMEOUT_END_OF_RINGTONE) {
-            autoSilenceDurationValue.setText(context.getString(R.string.auto_silence_end_of_ringtone));
+            autoSilenceDurationValue.setText(context.getString(com.better.alarmhelper.R.string.auto_silence_end_of_ringtone));
         } else {
             autoSilenceDurationValue.setText(context.getResources().getQuantityString(
-                    R.plurals.minutes_short, autoSilenceDuration, autoSilenceDuration));
+                    com.better.alarmhelper.R.plurals.minutes_short, autoSilenceDuration, autoSilenceDuration));
         }
     }
 
@@ -332,15 +332,15 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         int m = snoozeDuration % 60;
 
         if (h > 0 && m > 0) {
-            String hoursString = context.getResources().getQuantityString(R.plurals.hours_short, h, h);
-            String minutesString = context.getResources().getQuantityString(R.plurals.minutes_short, m, m);
+            String hoursString = context.getResources().getQuantityString(com.better.alarmhelper.R.plurals.hours_short, h, h);
+            String minutesString = context.getResources().getQuantityString(com.better.alarmhelper.R.plurals.minutes_short, m, m);
             snoozeDurationValue.setText(String.format("%s %s", hoursString, minutesString));
         } else if (h > 0) {
-            snoozeDurationValue.setText(context.getResources().getQuantityString(R.plurals.hours_short, h, h));
+            snoozeDurationValue.setText(context.getResources().getQuantityString(com.better.alarmhelper.R.plurals.hours_short, h, h));
         } else if (snoozeDuration == ALARM_SNOOZE_DURATION_DISABLED) {
-            snoozeDurationValue.setText(context.getString(R.string.snooze_duration_none));
+            snoozeDurationValue.setText(context.getString(com.better.alarmhelper.R.string.snooze_duration_none));
         } else {
-            snoozeDurationValue.setText(context.getResources().getQuantityString(R.plurals.minutes_short, m, m));
+            snoozeDurationValue.setText(context.getResources().getQuantityString(com.better.alarmhelper.R.plurals.minutes_short, m, m));
         }
     }
 
@@ -351,15 +351,15 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         int s = crescendoDuration % 60;
 
         if (m > 0 && s > 0) {
-            String minutesString = context.getResources().getQuantityString(R.plurals.minutes_short, m, m);
-            String secondsString = s + " " + context.getString(R.string.seconds_label);
+            String minutesString = context.getResources().getQuantityString(com.better.alarmhelper.R.plurals.minutes_short, m, m);
+            String secondsString = s + " " + context.getString(com.better.alarmhelper.R.string.seconds_label);
             crescendoDurationValue.setText(String.format("%s %s", minutesString, secondsString));
         } else if (m > 0) {
-            crescendoDurationValue.setText(context.getResources().getQuantityString(R.plurals.minutes_short, m, m));
+            crescendoDurationValue.setText(context.getResources().getQuantityString(com.better.alarmhelper.R.plurals.minutes_short, m, m));
         } else if (crescendoDuration == DEFAULT_ALARM_VOLUME_CRESCENDO_DURATION) {
-            crescendoDurationValue.setText(context.getString(R.string.label_off));
+            crescendoDurationValue.setText(context.getString(com.better.alarmhelper.R.string.label_off));
         } else {
-            String secondsString = s + " " + context.getString(R.string.seconds_label);
+            String secondsString = s + " " + context.getString(com.better.alarmhelper.R.string.seconds_label);
             crescendoDurationValue.setText(secondsString);
         }
     }
@@ -378,8 +378,8 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
             alarmVolumeValue.setText(formatted);
 
             Drawable icon = ContextCompat.getDrawable(context, volumePercent < 50
-                    ? R.drawable.ic_volume_down
-                    : R.drawable.ic_volume_up);
+                    ? com.better.alarmhelper.R.drawable.ic_volume_down
+                    : com.better.alarmhelper.R.drawable.ic_volume_up);
 
             if (icon != null) {
                 alarmVolumeTitle.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
@@ -467,17 +467,17 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         final String title = DataModel.getDataModel().getRingtoneTitle(alarm.alert);
         ringtone.setText(title);
 
-        final String description = context.getString(R.string.ringtone_description);
+        final String description = context.getString(com.better.alarmhelper.R.string.ringtone_description);
         ringtone.setContentDescription(description + " " + title);
 
         final Drawable iconRingtone;
         if (RingtoneUtils.RINGTONE_SILENT.equals(alarm.alert)) {
-            iconRingtone = AppCompatResources.getDrawable(context, R.drawable.ic_ringtone_silent);
+            iconRingtone = AppCompatResources.getDrawable(context, com.better.alarmhelper.R.drawable.ic_ringtone_silent);
         } else if (RingtoneUtils.isRandomRingtone(alarm.alert)
                 || RingtoneUtils.isRandomCustomRingtone(alarm.alert)) {
-            iconRingtone = AppCompatResources.getDrawable(context, R.drawable.ic_random);
+            iconRingtone = AppCompatResources.getDrawable(context, com.better.alarmhelper.R.drawable.ic_random);
         } else {
-            iconRingtone = AppCompatResources.getDrawable(context, R.drawable.ic_ringtone);
+            iconRingtone = AppCompatResources.getDrawable(context, com.better.alarmhelper.R.drawable.ic_ringtone);
         }
 
         ringtone.setCompoundDrawablesRelativeWithIntrinsicBounds(iconRingtone, null, null, null);
@@ -538,12 +538,12 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
                     super.onAnimationEnd(animator);
 
                     itemView.setOnClickListener(v -> {
-                        Events.sendAlarmEvent(R.string.action_collapse_implied, R.string.label_deskclock);
+                        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_collapse_implied, com.better.alarmhelper.R.string.label_deskclock);
                         getItemHolder().collapse();
                     });
 
                     arrow.setOnClickListener(v -> {
-                        Events.sendAlarmEvent(R.string.action_collapse, R.string.label_deskclock);
+                        Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_collapse, com.better.alarmhelper.R.string.label_deskclock);
                         getItemHolder().collapse();
                     });
                 }

@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.TextClock;
 import android.widget.TextView;
 
-import com.best.deskclock.R;
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.widget.AnalogClock;
 
@@ -141,7 +140,7 @@ public class ClockUtils {
      * Clock views can call this to refresh their date.
      **/
     public static void updateDate(String dateSkeleton, String descriptionSkeleton, View clock) {
-        final TextView dateDisplay = clock.findViewById(R.id.date);
+        final TextView dateDisplay = clock.findViewById(com.better.alarmhelper.R.id.date);
         if (dateDisplay == null) {
             return;
         }
@@ -193,12 +192,12 @@ public class ClockUtils {
      * Apply the clock icon font to the next alarm view.
      */
     public static void setClockIconTypeface(View clock) {
-        final TextView nextAlarmIconView = clock.findViewById(R.id.nextAlarmIcon);
+        final TextView nextAlarmIconView = clock.findViewById(com.better.alarmhelper.R.id.nextAlarmIcon);
         nextAlarmIconView.setTypeface(getAlarmIconTypeface(clock.getContext()));
     }
 
     /**
-     * To display the alarm clock in this font, use the character {@link R.string#clock_emoji}.
+     * To display the alarm clock in this font, use the character }.
      *
      * @return a special font containing a glyph that draws an alarm clock
      */

@@ -18,8 +18,6 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.best.deskclock.R;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -64,28 +62,28 @@ public class NotificationUtils {
 
     static {
         CHANNEL_PROPS.put(ALARM_MISSED_NOTIFICATION_CHANNEL_ID, new int[]{
-                R.string.alarm_missed_channel,
+                com.better.alarmhelper.R.string.alarm_missed_channel,
                 IMPORTANCE_HIGH
         });
         CHANNEL_PROPS.put(ALARM_SNOOZE_NOTIFICATION_CHANNEL_ID, new int[]{
-                R.string.alarm_snooze_channel,
+                com.better.alarmhelper.R.string.alarm_snooze_channel,
                 IMPORTANCE_LOW
         });
         CHANNEL_PROPS.put(ALARM_UPCOMING_NOTIFICATION_CHANNEL_ID, new int[]{
-                R.string.alarm_upcoming_channel,
+                com.better.alarmhelper.R.string.alarm_upcoming_channel,
                 IMPORTANCE_LOW
         });
         CHANNEL_PROPS.put(FIRING_NOTIFICATION_CHANNEL_ID, new int[]{
-                R.string.firing_alarms_timers_channel,
+                com.better.alarmhelper.R.string.firing_alarms_timers_channel,
                 IMPORTANCE_HIGH,
                 ENABLE_LIGHTS
         });
         CHANNEL_PROPS.put(STOPWATCH_NOTIFICATION_CHANNEL_ID, new int[]{
-                R.string.stopwatch_channel,
+                com.better.alarmhelper.R.string.stopwatch_channel,
                 IMPORTANCE_LOW
         });
         CHANNEL_PROPS.put(TIMER_MODEL_NOTIFICATION_CHANNEL_ID, new int[]{
-                R.string.timer_channel,
+                com.better.alarmhelper.R.string.timer_channel,
                 IMPORTANCE_LOW
         });
     }

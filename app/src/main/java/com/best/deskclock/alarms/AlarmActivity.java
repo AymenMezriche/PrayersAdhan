@@ -227,7 +227,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         }
 
-        setContentView(R.layout.alarm_activity);
+        setContentView(com.better.alarmhelper.R.layout.alarm_activity);
 
         final String darkMode = SettingsDAO.getDarkMode(mPrefs);
         final boolean isAmoledMode = ThemeUtils.isNight(getResources()) && darkMode.equals(AMOLED_DARK_MODE);
@@ -243,21 +243,21 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         mAlarmTitleFontSize = SettingsDAO.getAlarmTitleFontSize(mPrefs);
         mAlarmTitleColor = SettingsDAO.getAlarmTitleColor(mPrefs);
 
-        mAlertView = findViewById(R.id.alert);
-        mAlertTitleView = mAlertView.findViewById(R.id.alert_title);
-        mAlertInfoView = mAlertView.findViewById(R.id.alert_info);
+        mAlertView = findViewById(com.better.alarmhelper.R.id.alert);
+        mAlertTitleView = mAlertView.findViewById(com.better.alarmhelper.R.id.alert_title);
+        mAlertInfoView = mAlertView.findViewById(com.better.alarmhelper.R.id.alert_info);
 
-        mContentView = findViewById(R.id.content);
-        mSnoozeButton = mContentView.findViewById(R.id.snooze_button);
-        mDismissButton = mContentView.findViewById(R.id.dismiss_button);
-        mSlideZoneLayout = mContentView.findViewById(R.id.slide_zone_layout);
-        mAlarmButton = mSlideZoneLayout.findViewById(R.id.alarm_button);
-        mSnoozeActionText = mSlideZoneLayout.findViewById(R.id.snooze_text);
-        mDismissActionText = mSlideZoneLayout.findViewById(R.id.dismiss_text);
-        mPillView = mSlideZoneLayout.findViewById(R.id.pill);
+        mContentView = findViewById(com.better.alarmhelper.R.id.content);
+        mSnoozeButton = mContentView.findViewById(com.better.alarmhelper.R.id.snooze_button);
+        mDismissButton = mContentView.findViewById(com.better.alarmhelper.R.id.dismiss_button);
+        mSlideZoneLayout = mContentView.findViewById(com.better.alarmhelper.R.id.slide_zone_layout);
+        mAlarmButton = mSlideZoneLayout.findViewById(com.better.alarmhelper.R.id.alarm_button);
+        mSnoozeActionText = mSlideZoneLayout.findViewById(com.better.alarmhelper.R.id.snooze_text);
+        mDismissActionText = mSlideZoneLayout.findViewById(com.better.alarmhelper.R.id.dismiss_text);
+        mPillView = mSlideZoneLayout.findViewById(com.better.alarmhelper.R.id.pill);
 
-        final AnalogClock analogClock = findViewById(R.id.analog_clock);
-        final TextClock digitalClock = mContentView.findViewById(R.id.digital_clock);
+        final AnalogClock analogClock = findViewById(com.better.alarmhelper.R.id.analog_clock);
+        final TextClock digitalClock = mContentView.findViewById(com.better.alarmhelper.R.id.digital_clock);
         final DataModel.ClockStyle alarmClockStyle = SettingsDAO.getAlarmClockStyle(mPrefs);
         final boolean isAlarmSecondsHandDisplayed = SettingsDAO.isAlarmSecondsHandDisplayed(mPrefs);
         ClockUtils.setClockStyle(alarmClockStyle, digitalClock, analogClock);
@@ -266,7 +266,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         digitalClock.setTextSize(TypedValue.COMPLEX_UNIT_SP, alarmDigitalClockFontSize);
         digitalClock.setTextColor(alarmClockColor);
 
-        final TextView titleView = mContentView.findViewById(R.id.alarm_title);
+        final TextView titleView = mContentView.findViewById(com.better.alarmhelper.R.id.alarm_title);
         titleView.setText(mAlarmInstance.getLabelOrDefault(this));
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mAlarmTitleFontSize);
         titleView.setTextColor(mAlarmTitleColor);
@@ -283,7 +283,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             int alarmButtonColor = SettingsDAO.getAlarmButtonColor(mPrefs, this);
             int slideZoneColor = SettingsDAO.getSlideZoneColor(mPrefs);
 
-            final Drawable alarmSlideZoneBackground = AppCompatResources.getDrawable(this, R.drawable.bg_alarm_slide_zone);
+            final Drawable alarmSlideZoneBackground = AppCompatResources.getDrawable(this, com.better.alarmhelper.R.drawable.bg_alarm_slide_zone);
             if (alarmSlideZoneBackground != null) {
                 DrawableCompat.setTint(alarmSlideZoneBackground, slideZoneColor);
             }
@@ -294,22 +294,22 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             if (mAlarmInstance.mSnoozeDuration == ALARM_SNOOZE_DURATION_DISABLED) {
                 if (isOccasionalAlarmDeletedAfterUse()) {
                     mAlarmButton.setContentDescription(getString(
-                            R.string.description_direction_both_for_occasional_non_repeatable_alarm));
+                            com.better.alarmhelper.R.string.description_direction_both_for_occasional_non_repeatable_alarm));
                 } else {
                     mAlarmButton.setContentDescription(getString(
-                            R.string.description_direction_both_for_non_repeatable_alarm));
+                            com.better.alarmhelper.R.string.description_direction_both_for_non_repeatable_alarm));
                 }
             } else {
                 if (isOccasionalAlarmDeletedAfterUse()) {
                     mAlarmButton.setContentDescription(getString(
-                            R.string.description_direction_both_for_occasional_alarm));
+                            com.better.alarmhelper.R.string.description_direction_both_for_occasional_alarm));
                 } else {
-                    mAlarmButton.setContentDescription(getString(R.string.description_direction_both));
+                    mAlarmButton.setContentDescription(getString(com.better.alarmhelper.R.string.description_direction_both));
                 }
             }
 
             mSnoozeActionText.setText(mAlarmInstance.mSnoozeDuration == ALARM_SNOOZE_DURATION_DISABLED
-                    ? getString(R.string.button_action_dismiss) : getString(R.string.button_action_snooze));
+                    ? getString(com.better.alarmhelper.R.string.button_action_dismiss) : getString(com.better.alarmhelper.R.string.button_action_snooze));
             mSnoozeActionText.setTextColor(snoozeTitleColor);
 
             mDismissActionText.setTextColor(dismissTitleColor);
@@ -401,24 +401,24 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             mDismissButton.setBackgroundColor(SettingsDAO.getDismissButtonColor(mPrefs, this));
 
             if (mAlarmInstance.mSnoozeDuration == ALARM_SNOOZE_DURATION_DISABLED) {
-                mSnoozeButton.setText(getString(R.string.button_action_dismiss));
+                mSnoozeButton.setText(getString(com.better.alarmhelper.R.string.button_action_dismiss));
 
                 if (isOccasionalAlarmDeletedAfterUse()) {
                     mSnoozeButton.setContentDescription(getString(
-                            R.string.description_dismiss_button_for_occasional_alarm));
+                            com.better.alarmhelper.R.string.description_dismiss_button_for_occasional_alarm));
                 } else {
-                    mSnoozeButton.setContentDescription(getString(
+                    mSnoozeButton.setContentDescription(getString(com.better.alarmhelper.
                                 R.string.description_dismiss_button));
                 }
             } else {
-                mSnoozeButton.setText(getString(R.string.button_action_snooze));
-                mSnoozeButton.setContentDescription(getString(R.string.description_snooze_button));
+                mSnoozeButton.setText(getString(com.better.alarmhelper.R.string.button_action_snooze));
+                mSnoozeButton.setContentDescription(getString(com.better.alarmhelper.R.string.description_snooze_button));
             }
 
             if (isOccasionalAlarmDeletedAfterUse()) {
-                mDismissButton.setContentDescription(getString(R.string.description_dismiss_button_for_occasional_alarm));
+                mDismissButton.setContentDescription(getString(com.better.alarmhelper.R.string.description_dismiss_button_for_occasional_alarm));
             } else {
-                mDismissButton.setContentDescription(getString(R.string.description_dismiss_button));
+                mDismissButton.setContentDescription(getString(com.better.alarmhelper.R.string.description_dismiss_button));
             }
 
             // Allow text scrolling (all other attributes are indicated in the "alarm_activity.xml" file)
@@ -428,8 +428,8 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
         boolean isRingtoneTitleDisplayed = SettingsDAO.isRingtoneTitleDisplayed(mPrefs);
         if (isRingtoneTitleDisplayed) {
-            mRingtoneTitle = mContentView.findViewById(R.id.ringtone_title);
-            mRingtoneIcon = mContentView.findViewById(R.id.ringtone_icon);
+            mRingtoneTitle = mContentView.findViewById(com.better.alarmhelper.R.id.ringtone_title);
+            mRingtoneIcon = mContentView.findViewById(com.better.alarmhelper.R.id.ringtone_icon);
             displayRingtoneTitle();
         }
 
@@ -726,30 +726,30 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             int action;
 
             if (isOccasionalAlarmDeletedAfterUse()) {
-                titleResId = R.string.alarm_alert_off_and_deleted_text;
-                action = R.string.action_delete_alarm_after_use;
+                titleResId = com.better.alarmhelper.R.string.alarm_alert_off_and_deleted_text;
+                action = com.better.alarmhelper.R.string.action_delete_alarm_after_use;
             } else {
-                titleResId = R.string.alarm_alert_off_text;
-                action = R.string.action_dismiss;
+                titleResId = com.better.alarmhelper.R.string.alarm_alert_off_text;
+                action = com.better.alarmhelper.R.string.action_dismiss;
             }
 
             showAlert(titleResId, null, getString(titleResId));
 
             AlarmStateManager.deleteInstanceAndUpdateParent(this, mAlarmInstance);
 
-            Events.sendAlarmEvent(action, R.string.label_deskclock);
+            Events.sendAlarmEvent(action, com.better.alarmhelper.R.string.label_deskclock);
         } else {
             int snoozeDuration = mAlarmInstance.mSnoozeDuration;
             final String infoText = getResources().getQuantityString(
-                    R.plurals.alarm_alert_snooze_duration, snoozeDuration, snoozeDuration);
+                    com.better.alarmhelper.R.plurals.alarm_alert_snooze_duration, snoozeDuration, snoozeDuration);
             final String accessibilityText = getResources().getQuantityString(
-                    R.plurals.alarm_alert_snooze_set, snoozeDuration, snoozeDuration);
+                    com.better.alarmhelper.R.plurals.alarm_alert_snooze_set, snoozeDuration, snoozeDuration);
 
-            showAlert(R.string.alarm_alert_snoozed_text, infoText, accessibilityText);
+            showAlert(com.better.alarmhelper.R.string.alarm_alert_snoozed_text, infoText, accessibilityText);
 
             AlarmStateManager.setSnoozeState(this, mAlarmInstance, false);
 
-            Events.sendAlarmEvent(R.string.action_snooze, R.string.label_deskclock);
+            Events.sendAlarmEvent(com.better.alarmhelper.R.string.action_snooze, com.better.alarmhelper.R.string.label_deskclock);
         }
 
         // Unbind here, otherwise alarm will keep ringing until activity finishes.
@@ -767,18 +767,18 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         int action;
 
         if (isOccasionalAlarmDeletedAfterUse()) {
-            titleResId = R.string.alarm_alert_off_and_deleted_text;
-            action = R.string.action_delete_alarm_after_use;
+            titleResId = com.better.alarmhelper.R.string.alarm_alert_off_and_deleted_text;
+            action = com.better.alarmhelper.R.string.action_delete_alarm_after_use;
         } else {
-            titleResId = R.string.alarm_alert_off_text;
-            action = R.string.action_dismiss;
+            titleResId = com.better.alarmhelper.R.string.alarm_alert_off_text;
+            action = com.better.alarmhelper.R.string.action_dismiss;
         }
 
         showAlert(titleResId, null, getString(titleResId));
 
         AlarmStateManager.deleteInstanceAndUpdateParent(this, mAlarmInstance);
 
-        Events.sendAlarmEvent(action, R.string.label_deskclock);
+        Events.sendAlarmEvent(action, com.better.alarmhelper.R.string.label_deskclock);
 
         // Unbind here, otherwise alarm will keep ringing until activity finishes.
         unbindAlarmService();
@@ -831,8 +831,8 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         final boolean silent = RingtoneUtils.RINGTONE_SILENT.equals(mAlarmInstance.mRingtone);
         final String title = DataModel.getDataModel().getRingtoneTitle(mAlarmInstance.mRingtone);
         final Drawable iconRingtone = silent
-                ? AppCompatResources.getDrawable(this, R.drawable.ic_ringtone_silent)
-                : AppCompatResources.getDrawable(this, R.drawable.ic_music_note);
+                ? AppCompatResources.getDrawable(this, com.better.alarmhelper.R.drawable.ic_ringtone_silent)
+                : AppCompatResources.getDrawable(this, com.better.alarmhelper.R.drawable.ic_music_note);
         final int ringtoneTitleColor = SettingsDAO.getRingtoneTitleColor(mPrefs);
 
         if (iconRingtone != null) {
