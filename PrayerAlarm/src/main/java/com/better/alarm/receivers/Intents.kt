@@ -15,30 +15,30 @@
  */
 package com.better.alarm.receivers
 
-import com.better.alarm.BuildConfig
+import com.better.alarm.BuildConfigCustom
 
 object Intents {
   /** Alarm fires */
-  const val ALARM_ALERT_ACTION = BuildConfig.APPLICATION_ID + ".ALARM_ALERT"
+  const val ALARM_ALERT_ACTION = BuildConfigCustom.APPLICATION_ID + ".ALARM_ALERT"
 
   /** Alarm fires */
-  const val ALARM_PREALARM_ACTION = BuildConfig.APPLICATION_ID + ".ALARM_PREALARM_ACTION"
+  const val ALARM_PREALARM_ACTION = BuildConfigCustom.APPLICATION_ID + ".ALARM_PREALARM_ACTION"
 
   /** Alarm is snoozed */
-  const val ALARM_SNOOZE_ACTION = BuildConfig.APPLICATION_ID + ".ALARM_SNOOZE"
+  const val ALARM_SNOOZE_ACTION = BuildConfigCustom.APPLICATION_ID + ".ALARM_SNOOZE"
 
   /** Cancel a snoozed alarm */
-  const val ACTION_CANCEL_SNOOZE = BuildConfig.APPLICATION_ID + ".ACTION_CANCEL_SNOOZE"
+  const val ACTION_CANCEL_SNOOZE = BuildConfigCustom.APPLICATION_ID + ".ACTION_CANCEL_SNOOZE"
 
   /** Alarm is dismissed */
-  const val ALARM_DISMISS_ACTION = BuildConfig.APPLICATION_ID + ".ALARM_DISMISS"
+  const val ALARM_DISMISS_ACTION = BuildConfigCustom.APPLICATION_ID + ".ALARM_DISMISS"
 
   /** Alarm sound expired */
-  const val ACTION_SOUND_EXPIRED = BuildConfig.APPLICATION_ID + ".ACTION_SOUND_EXPIRED"
+  const val ACTION_SOUND_EXPIRED = BuildConfigCustom.APPLICATION_ID + ".ACTION_SOUND_EXPIRED"
 
   const val EXTRA_ID = "intent.extra.alarm"
-  const val ACTION_MUTE = BuildConfig.APPLICATION_ID + ".ACTION_MUTE"
-  const val ACTION_DEMUTE = BuildConfig.APPLICATION_ID + ".ACTION_DEMUTE"
-  const val ALARM_SHOW_SKIP = BuildConfig.APPLICATION_ID + ".ALARM_SHOW_SKIP"
-  const val ALARM_REMOVE_SKIP = BuildConfig.APPLICATION_ID + ".ALARM_REMOVE_SKIP"
+  const val ACTION_MUTE = BuildConfigCustom.APPLICATION_ID + ".ACTION_MUTE"
+  const val ACTION_DEMUTE = BuildConfigCustom.APPLICATION_ID + ".ACTION_DEMUTE"
+  const val ALARM_SHOW_SKIP = BuildConfigCustom.APPLICATION_ID + ".ALARM_SHOW_SKIP"
+  const val ALARM_REMOVE_SKIP = BuildConfigCustom.APPLICATION_ID + ".ALARM_REMOVE_SKIP"
 }

@@ -27,7 +27,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.better.alarm.R
-import com.better.alarm.bootstrap.AlarmApplication
+import com.better.alarm.bootstrap.AlarmInitializer
 import com.better.alarm.bootstrap.globalLogger
 import com.better.alarm.data.Prefs
 import com.better.alarm.domain.Alarm
@@ -64,7 +64,7 @@ class AlarmAlertFullScreen : FragmentActivity() {
   private var subscription: Disposable? = null
 
   override fun onCreate(icicle: Bundle?) {
-    AlarmApplication.startOnce(application)
+    AlarmInitializer.init(application)
     setTheme(dynamicThemeHandler.alertTheme())
     super.onCreate(icicle)
     requestedOrientation =

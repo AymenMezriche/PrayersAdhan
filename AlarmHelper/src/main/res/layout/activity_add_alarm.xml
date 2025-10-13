@@ -75,6 +75,24 @@
                     android:layout_height="wrap_content"
                     android:text="Log next alarm" />
 
+                <Button
+                    android:id="@+id/openAlarmsLibraryList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Open alarms library list" />
+
+                <Button
+                    android:id="@+id/btnUpdateAndEnable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Update and Enable Prayer Alarms" />
+
+                <Button
+                    android:id="@+id/btnEnableAlarm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enable Alarm" />
+
             </LinearLayout>
         </ScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

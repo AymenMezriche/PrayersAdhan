@@ -3,6 +3,7 @@ package com.better.alarm.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.better.alarm.BuildConfigCustom
 import com.better.alarm.bootstrap.globalInject
 import com.better.alarm.bootstrap.globalLogger
 import com.better.alarm.data.DatastoreMigration
@@ -32,10 +33,10 @@ class TestReceiver : BroadcastReceiver() {
   }
 
   companion object {
-    const val ACTION_DROP = com.better.alarm.BuildConfig.APPLICATION_ID + ".ACTION_DROP"
+    const val ACTION_DROP = BuildConfigCustom.APPLICATION_ID + ".ACTION_DROP"
     const val ACTION_DROP_AND_INSERT_DEFAULTS =
-        com.better.alarm.BuildConfig.APPLICATION_ID + ".ACTION_DROP_AND_INSERT_DEFAULTS"
+      BuildConfigCustom.APPLICATION_ID + ".ACTION_DROP_AND_INSERT_DEFAULTS"
     const val ACTION_DROP_AND_MIGRATE_DATABASE =
-        com.better.alarm.BuildConfig.APPLICATION_ID + ".ACTION_DROP_AND_MIGRATE_DATABASE"
+      BuildConfigCustom.APPLICATION_ID + ".ACTION_DROP_AND_MIGRATE_DATABASE"
   }
 }

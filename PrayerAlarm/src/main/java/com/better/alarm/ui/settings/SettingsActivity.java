@@ -25,7 +25,7 @@ import android.view.MenuItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.better.alarm.R;
-import com.better.alarm.bootstrap.AlarmApplication;
+import com.better.alarm.bootstrap.AlarmInitializer;
 import com.better.alarm.bootstrap.InjectKt;
 import com.better.alarm.ui.main.AlarmsListActivity;
 import com.better.alarm.ui.themes.DynamicThemeHandler;
@@ -37,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
-    AlarmApplication.startOnce(getApplication());
+    AlarmInitializer.init(this.getApplication());
     setTheme(dynamicThemeHandler.defaultTheme());
     super.onCreate(savedInstanceState);
     setContentView(R.layout.settings_activity);

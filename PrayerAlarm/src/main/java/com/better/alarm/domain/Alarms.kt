@@ -17,7 +17,8 @@ package com.better.alarm.domain
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.better.alarm.bootstrap.DefaultAlarmsTracker
+import com.better.alarm.alarmapi.DefaultAlarmsTracker
+import com.better.alarm.alarmapi.Formatter.todayString
 import com.better.alarm.data.AlarmStore
 import com.better.alarm.data.AlarmValue
 import com.better.alarm.data.AlarmsRepository
@@ -27,8 +28,6 @@ import com.better.alarm.data.Prefs
 import com.better.alarm.data.contentprovider.DatabaseQuery
 import com.better.alarm.data.modify
 import com.better.alarm.logger.Logger
-import java.time.LocalDate
-import java.util.Calendar
 
 /** The Alarms implements application domain logic */
 @SuppressLint("UseSparseArrays")
@@ -111,21 +110,6 @@ class Alarms(
   override fun insertDefaultAlarms() {
     logger.debug { "insertDefaultAlarms() adding default alarms ..." }
 
-    /*createNewAlarm().edit {
-      copy(
-          daysOfWeek = DaysOfWeek(31),
-          hour = 8,
-          minutes = 30,
-      )
-    }
-    createNewAlarm().edit {
-      copy(
-          daysOfWeek = DaysOfWeek(96),
-          hour = 9,
-          minutes = 0,
-      )
-    }*/
-
       createNewAlarm().edit {
           copy(
               daysOfWeek = DaysOfWeek(0x7F),
@@ -177,15 +161,6 @@ class Alarms(
       Log.d("PrayerUpdate", "✅ Default prayer alarms added")
 
   }
-    // Helper function to get today's date as string
-    fun todayString(): String {
-        val cal = Calendar.getInstance()
-        return String.format("%04d-%02d-%02d",
-            cal.get(Calendar.YEAR),
-            cal.get(Calendar.MONTH) + 1, // MONTH is 0-based
-            cal.get(Calendar.DAY_OF_MONTH)
-        )
-    }
 
   override fun migrateDatabase() {
     val alarmsInDatabase = databaseQuery.query()

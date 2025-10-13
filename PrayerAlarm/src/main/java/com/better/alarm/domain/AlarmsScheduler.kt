@@ -15,7 +15,7 @@
  */
 package com.better.alarm.domain
 
-import com.better.alarm.BuildConfig
+import com.better.alarm.BuildConfigCustom
 import com.better.alarm.data.AlarmValue
 import com.better.alarm.data.CalendarType
 import com.better.alarm.data.Prefs
@@ -166,8 +166,8 @@ class AlarmsScheduler(
 
   companion object {
     val DATE_FORMAT: SimpleDateFormat = SimpleDateFormat("dd-MM-yy HH:mm:ss", Locale.GERMANY)
-    const val ACTION_FIRED = BuildConfig.APPLICATION_ID + ".ACTION_FIRED"
-    const val ACTION_INEXACT_FIRED = BuildConfig.APPLICATION_ID + ".ACTION_INEXACT_FIRED"
+    const val ACTION_FIRED = BuildConfigCustom.APPLICATION_ID + ".ACTION_FIRED"
+    const val ACTION_INEXACT_FIRED = BuildConfigCustom.APPLICATION_ID + ".ACTION_INEXACT_FIRED"
     const val EXTRA_ID = "intent.extra.alarm"
     const val EXTRA_TYPE = "intent.extra.type"
   }

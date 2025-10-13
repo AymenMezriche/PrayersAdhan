@@ -21,7 +21,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.AlarmClock
-import com.better.alarm.bootstrap.AlarmApplication
+import com.better.alarm.bootstrap.AlarmInitializer
 import com.better.alarm.bootstrap.globalLogger
 import com.better.alarm.data.AlarmsRepository
 import com.better.alarm.domain.Alarm
@@ -40,7 +40,7 @@ class HandleSetAlarm : Activity() {
 
   override fun onCreate(icicle: Bundle?) {
     super.onCreate(icicle)
-    AlarmApplication.startOnce(application)
+    AlarmInitializer.init(application)
     val intent = intent
     when {
       intent == null || intent.action != AlarmClock.ACTION_SET_ALARM -> {

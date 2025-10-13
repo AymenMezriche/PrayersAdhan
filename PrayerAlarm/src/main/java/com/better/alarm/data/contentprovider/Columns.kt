@@ -3,6 +3,7 @@ package com.better.alarm.data.contentprovider
 import android.net.Uri
 import android.provider.BaseColumns
 import com.better.alarm.BuildConfig
+import com.better.alarm.BuildConfigCustom
 
 // ////////////////////////////
 // Column definitions
@@ -11,7 +12,7 @@ class Columns : BaseColumns {
   companion object {
     /** The content:// style URL for this table */
     private val CONTENT_URI: Uri by lazy {
-      Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".model/alarm")
+      Uri.parse("content://" + BuildConfigCustom.APPLICATION_ID + ".model/alarm")
     }
 
     @JvmStatic fun contentUri() = CONTENT_URI

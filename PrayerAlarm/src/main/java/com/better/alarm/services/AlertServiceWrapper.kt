@@ -12,7 +12,7 @@ import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
 import com.better.alarm.R
-import com.better.alarm.bootstrap.AlarmApplication
+import com.better.alarm.bootstrap.AlarmInitializer
 import com.better.alarm.bootstrap.logger
 import com.better.alarm.data.Prefs
 import com.better.alarm.domain.IAlarmsManager
@@ -137,7 +137,7 @@ class AlertServiceWrapper : Service() {
   private lateinit var alertService: AlertService
 
   override fun onCreate() {
-    AlarmApplication.startOnce(application)
+      AlarmInitializer.init(application)
     alertService =
         koinApplication {
               modules(module())

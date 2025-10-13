@@ -11,6 +11,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -24,10 +25,16 @@ import com.best.deskclock.alarms.AlarmUpdateHandler;
 import com.best.deskclock.data.Weekdays;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.provider.AlarmInstance;
+import com.better.alarm.alarmapi.PrayerAlarmManager;
+import com.better.alarm.data.PrayerTime;
+import com.better.alarm.ui.main.AlarmsListActivity;
 import com.better.alarmhelper.databinding.ActivityAddAlarmBinding;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import kotlin.Unit;
 
 public class AddAlarmActivity extends AppCompatActivity {
 
@@ -58,8 +65,67 @@ public class AddAlarmActivity extends AppCompatActivity {
         binding.btnLogNextAlarm.setOnClickListener(v -> {
             testGetNextAlarm();
         });
+        binding.openAlarmsLibraryList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddAlarmActivity.this, AlarmsListActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        handleAlarmsState();
+        binding.btnUpdateAndEnable.setOnClickListener(v -> updateAndEnableAlarms());
+        binding.btnEnableAlarm.setOnClickListener(v -> enableAlarm());
+
+        //handleAlarmsState();
+    }
+
+    private void updateAndEnableAlarms() {
+        getToDayPrayerTimes(dayPrayerTimes -> {
+            if (dayPrayerTimes != null) {
+                List<PrayerTime> prayerTimes = fromDayPrayerTimes(dayPrayerTimes);
+                PrayerAlarmManager.updateAndEnablePrayerAlarms(prayerTimes);
+                runOnUiThread(() -> Toast.makeText(this, "Prayer alarms updated and enabled", Toast.LENGTH_SHORT).show());
+            } else {
+                runOnUiThread(() -> Toast.makeText(this, "No prayer times found for today", Toast.LENGTH_SHORT).show());
+            }
+        });
+    }
+
+    private void enableAlarm() {
+        String label = "Fajr"; // Example label
+        int alarmIdToToggle = 0; // Example alarm ID to enable
+        PrayerAlarmManager.setAlarmEnabled(alarmIdToToggle, true, result -> {
+            // The 'result' object is either Result.Success or Result.Error from your Kotlin sealed class
+
+            runOnUiThread(() -> {
+                if (result.isSuccess()) {
+                    // The operation was successful
+                    Toast.makeText(AddAlarmActivity.this, label + " alarm enabled successfully.", Toast.LENGTH_SHORT).show();
+
+                } else if (result.isError()) {
+                    // There was an error
+                    Throwable error = result.getError();
+                    if (error != null) {
+                        Toast.makeText(AddAlarmActivity.this, "Failed to enable " + label + " alarm: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("AddAlarmActivity", "Error setting alarm state", error);
+                    } else
+                        Log.e("AddAlarmActivity", "Error setting alarm state");
+
+                }
+            });
+            // The 'invoke' method must return kotlin.Unit.INSTANCE from Java
+            return Unit.INSTANCE;
+        });
+    }
+
+    private List<PrayerTime> fromDayPrayerTimes(DayPrayerTimes dayPrayerTimes) {
+        List<PrayerTime> prayerTimes = new ArrayList<>();
+        prayerTimes.add(new PrayerTime("Fajr", Integer.parseInt(dayPrayerTimes.getFajr().split(":")[0]), Integer.parseInt(dayPrayerTimes.getFajr().split(":")[1])));
+        prayerTimes.add(new PrayerTime("Dhuhr", Integer.parseInt(dayPrayerTimes.getDhuhr().split(":")[0]), Integer.parseInt(dayPrayerTimes.getDhuhr().split(":")[1])));
+        prayerTimes.add(new PrayerTime("Asr", Integer.parseInt(dayPrayerTimes.getAsr().split(":")[0]), Integer.parseInt(dayPrayerTimes.getAsr().split(":")[1])));
+        prayerTimes.add(new PrayerTime("Maghrib", Integer.parseInt(dayPrayerTimes.getMaghrib().split(":")[0]), Integer.parseInt(dayPrayerTimes.getMaghrib().split(":")[1])));
+        prayerTimes.add(new PrayerTime("Isha", Integer.parseInt(dayPrayerTimes.getIsha().split(":")[0]), Integer.parseInt(dayPrayerTimes.getIsha().split(":")[1])));
+        return prayerTimes;
     }
 
     private void handleAlarmsState() {
@@ -175,6 +241,7 @@ public class AddAlarmActivity extends AppCompatActivity {
                 dayPrayerTimes.getIsha()
         };
 
+
         int[][] prayerTimes = new int[prayerTimesStr.length][2];
         for (int i = 0; i < prayerTimesStr.length; i++) {
             String[] parts = prayerTimesStr[i].split(":");
@@ -223,6 +290,7 @@ public class AddAlarmActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Prayer alarms added", Toast.LENGTH_SHORT).show();
     }
+
 
     private void testGetNextAlarm() {
         Calendar calendar = Calendar.getInstance();

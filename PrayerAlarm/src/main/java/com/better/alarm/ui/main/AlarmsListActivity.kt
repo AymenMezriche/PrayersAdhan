@@ -38,9 +38,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
-import com.better.alarm.BuildConfig
 import com.better.alarm.R
-import com.better.alarm.bootstrap.AlarmApplication
+import com.better.alarm.bootstrap.AlarmInitializer
 import com.better.alarm.bootstrap.globalLogger
 import com.better.alarm.data.AlarmValue
 import com.better.alarm.data.AlarmsRepository
@@ -73,7 +72,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
-import kotlin.text.format
 
 /** This activity displays a list of alarms and optionally a details fragment. */
 class AlarmsListActivity() : AppCompatActivity() {
@@ -103,24 +101,25 @@ class AlarmsListActivity() : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("version", BuildConfig.VERSION_CODE)
+        //outState.putInt("version", BuildConfig.VERSION_CODE)
         viewModel.editing().value?.writeInto(outState)
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
-        AlarmApplication.startOnce(application)
+        AlarmInitializer.init(application)
         setTheme(dynamicThemeHandler.defaultTheme())
         super.onCreate(savedInstanceState)
         viewModel.openDrawerOnCreate = intent?.getBooleanExtra("openDrawerOnCreate", false) ?: false
-        val prevVersion = savedInstanceState?.getInt("version", BuildConfig.VERSION_CODE)
+        /*todo we comment this to avoid build error of 'BuildConfig.VERSION_CODE'
+            val prevVersion = savedInstanceState?.getInt("version", BuildConfig.VERSION_CODE)
         if (prevVersion == BuildConfig.VERSION_CODE) {
             val restored = editedAlarmFromSavedInstanceState(savedInstanceState)
             logger.trace { "Restored $this with $restored" }
             restored?.let { viewModel.edit(it) }
         } else {
             viewModel.hideDetails()
-        }
+        }*/
 
         if (!resources.getBoolean(R.bool.isTablet)) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -464,7 +463,7 @@ class AlarmsListActivity() : AppCompatActivity() {
             try {
                 // Get the alarms manager and store
                 val alarmsManager: com.better.alarm.domain.IAlarmsManager = org.koin.java.KoinJavaComponent.getKoin().get()
-                val store: com.better.alarm.domain.Store = org.koin.java.KoinJavaComponent.getKoin().get()
+                val store: Store = org.koin.java.KoinJavaComponent.getKoin().get()
                 
                 var enabledCount = 0
                 var totalCount = 0

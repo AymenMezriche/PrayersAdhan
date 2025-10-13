@@ -28,7 +28,7 @@ import com.better.alarm.ui.themes.resolveColor
 import com.better.alarm.ui.timepicker.TimePickerDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import com.melnykov.fab.FloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import kotlinx.coroutines.channels.Channel
@@ -145,7 +145,7 @@ class AlarmsListFragment : Fragment() {
       fabSync?.trySend(Unit)?.getOrThrow()
     }
 
-    (fab as FloatingActionButton).attachToListView(listView)
+//    (fab as FloatingActionButton).attachToListView(listView)
 
     alarmsSub =
         store.alarms().subscribe { alarms ->

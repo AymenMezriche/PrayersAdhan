@@ -47,30 +47,32 @@ private constructor(private val preferences: SharedPreferences, private val logg
     }
   }
 
-  private val keyChanges =
-      Observable.create<String> { emitter ->
-            // we need to hold a strong reference to this listener
-            val listener =
-                object : SharedPreferences.OnSharedPreferenceChangeListener {
-                  override fun onSharedPreferenceChanged(
-                      preferences: SharedPreferences,
-                      key: String
-                  ) {
-                    emitter.onNext(key)
-                  }
-
-                  protected fun finalize() {
-                    logger.error { "finalized ${javaClass.name}" }
-                  }
+    private val keyChanges =
+        Observable.create<String> { emitter ->
+            val listener = object : SharedPreferences.OnSharedPreferenceChangeListener {
+                override fun onSharedPreferenceChanged(
+                    sharedPreferences: SharedPreferences?,
+                    key: String?
+                ) {
+                    if (key != null) {
+                        emitter.onNext(key)
+                    }
                 }
 
+                @Suppress("deprecation")
+                protected fun finalize() {
+                    logger.error { "finalized ${javaClass.name}" }
+                }
+            }
+
             emitter.setCancellable {
-              preferences.unregisterOnSharedPreferenceChangeListener(listener)
+                preferences.unregisterOnSharedPreferenceChangeListener(listener)
             }
 
             preferences.registerOnSharedPreferenceChangeListener(listener)
-          }
-          .share()
+        }
+            .share()
+
 
   override fun booleanDataStore(key: String, defaultValue: Boolean): RxDataStore<Boolean> {
     return object : RxDataStore<Boolean> {

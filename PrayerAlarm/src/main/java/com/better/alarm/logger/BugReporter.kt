@@ -16,10 +16,10 @@ class BugReporter(
     private val context: Context,
 ) {
   fun sendUserReport() {
-    if (BuildConfig.ACRA_EMAIL.isNotEmpty()) {
+    /*if (BuildConfig.ACRA_EMAIL.isNotEmpty()) {
       ACRA.errorReporter.putCustomData("LOGS", rollingLogs())
       ACRA.errorReporter.handleSilentException(Exception())
-    }
+    }*/
   }
 
   private fun rollingLogs() =
@@ -47,12 +47,11 @@ class BugReporter(
       applicationLogFileDir = Directory.ROOT
       // setApplicationLogFile(context.getFileStreamPath("app.log").absolutePath)
       mailSender {
-        mailTo = BuildConfig.ACRA_EMAIL
+        mailTo = "mino0675655531@gmail.com"
         reportAsFile = true
         reportFileName = "application-logs.txt"
         enabled = true
-        subject =
-            "${context.getString(R.string.simple_alarm_clock)} ${BuildConfig.FLAVOR} ${BuildConfig.VERSION_NAME} Bug Report"
+        subject = "Bug Report"
         body = context.getString(R.string.dialog_bugreport_hint)
       }
     }

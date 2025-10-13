@@ -10,7 +10,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
-import com.better.alarm.BuildConfig
+import com.better.alarm.BuildConfigCustom
 import com.better.alarm.R
 import com.better.alarm.bootstrap.globalLogger
 import com.better.alarm.data.Alarmtone
@@ -89,7 +89,7 @@ fun checkSetAlarmPermissions(activity: Activity) {
         .setPositiveButton(android.R.string.ok) { _, _ ->
           activity.startActivity(
               Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                data = ("package:${BuildConfig.APPLICATION_ID}").toUri()
+                data = ("package:${BuildConfigCustom.APPLICATION_ID}").toUri()
               })
         }
         .setNegativeButton(android.R.string.cancel, null)

@@ -14,6 +14,7 @@ import android.net.Uri;
 
 import androidx.preference.PreferenceManager;
 
+import com.best.adhanclock.AppPrayerTimesProvider;
 import com.best.deskclock.controller.Controller;
 import com.best.deskclock.controller.ThemeController;
 import com.best.deskclock.data.DataModel;
@@ -21,6 +22,8 @@ import com.best.deskclock.events.LogEventTracker;
 import com.best.deskclock.uidata.UiDataModel;
 import com.best.deskclock.utils.LogUtils;
 import com.best.deskclock.utils.SdkUtils;
+import com.better.alarm.alarmapi.AlarmDependencies;
+import com.better.alarm.bootstrap.AlarmInitializer;
 
 import java.io.File;
 import java.util.Objects;
@@ -33,6 +36,13 @@ public class DeskClockApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Initialize the AlarmClock library
+        AlarmInitializer.init(this);
+
+        // Register provider for library to use
+        AlarmDependencies.INSTANCE.setPrayerTimesProvider(new AppPrayerTimesProvider(this));
+
 
         applicationContext = getApplicationContext();
         final SharedPreferences prefs = getDefaultSharedPreferences(applicationContext);

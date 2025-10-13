@@ -26,7 +26,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import com.better.alarm.BuildConfig;
+
+import com.better.alarm.BuildConfigCustom;
 import com.better.alarm.util.Preconditions;
 
 public class AlarmProvider extends ContentProvider {
@@ -37,8 +38,8 @@ public class AlarmProvider extends ContentProvider {
   private static final UriMatcher sURLMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
   static {
-    sURLMatcher.addURI(BuildConfig.APPLICATION_ID + ".model", "alarm", ALARMS);
-    sURLMatcher.addURI(BuildConfig.APPLICATION_ID + ".model", "alarm/#", ALARMS_ID);
+    sURLMatcher.addURI(BuildConfigCustom.APPLICATION_ID + ".model", "alarm", ALARMS);
+    sURLMatcher.addURI(BuildConfigCustom.APPLICATION_ID + ".model", "alarm/#", ALARMS_ID);
   }
 
   @Override

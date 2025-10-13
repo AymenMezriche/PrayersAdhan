@@ -18,7 +18,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.core.view.MenuItemCompat
-import com.better.alarm.BuildConfig
+import com.better.alarm.BuildConfigCustom
 import com.better.alarm.R
 import com.better.alarm.ui.settings.SettingsActivity
 import com.better.alarm.ui.state.BackPresses
@@ -61,10 +61,10 @@ class ActionBarHandler(
           // it.
           putExtra(
               Intent.EXTRA_SUBJECT,
-              "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID)
+              "https://play.google.com/store/apps/details?id=" + BuildConfigCustom.APPLICATION_ID)
           putExtra(
               Intent.EXTRA_TEXT,
-              "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID)
+              "https://play.google.com/store/apps/details?id=" + BuildConfigCustom.APPLICATION_ID)
         }
 
     val menuItem = menu.findItem(R.id.menu_share)
@@ -148,7 +148,7 @@ class ActionBarHandler(
     val dialogView =
         inflator.inflate(R.layout.dialog_say_thanks, null).apply {
           findViewById<Button>(R.id.dialog_say_thanks_button_review).setOnClickListener {
-            val appId = BuildConfig.APPLICATION_ID
+            val appId = BuildConfigCustom.APPLICATION_ID
             val uri = Uri.parse("market://details?id=$appId")
             val fallback = Uri.parse("https://play.google.com/store/apps/details?id=$appId")
             try {

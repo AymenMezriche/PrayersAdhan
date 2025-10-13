@@ -8,6 +8,8 @@ import android.os.PowerManager
 import android.os.Vibrator
 import android.telephony.TelephonyManager
 import android.text.format.DateFormat
+import androidx.preference.PreferenceManager
+import com.better.alarm.alarmapi.PrayerAlarmUpdater
 import com.better.alarm.data.AlarmsRepository
 import com.better.alarm.data.DataStoreAlarmsRepository
 import com.better.alarm.data.DatastoreMigration
@@ -137,6 +139,13 @@ fun startKoin(context: Context): Koin {
     factory { get<Context>().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
     factory { get<Context>().getSystemService(Context.AUDIO_SERVICE) as AudioManager }
     factory { get<Context>().resources }
+    factory {
+        PrayerAlarmUpdater(
+            alarmsManager = get(),
+            store = get(),
+            prefs = PreferenceManager.getDefaultSharedPreferences(get())
+        )
+      }
 
     factory(named("volumePreferenceDemo")) {
       KlaxonPlugin(

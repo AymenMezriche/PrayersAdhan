@@ -6,13 +6,13 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.better.alarm.BuildConfig
+import com.better.alarm.BuildConfigCustom
 import com.better.alarm.R
 import com.better.alarm.platform.oreo
 
-const val CHANNEL_ID_HIGH_PRIO = "${BuildConfig.APPLICATION_ID}.NotificationsPlugin"
-const val CHANNEL_ID = "${BuildConfig.APPLICATION_ID}.BackgroundNotifications"
-const val CHANNEL_RESERVED = "${BuildConfig.APPLICATION_ID}.AlertServiceWrapper"
+const val CHANNEL_ID_HIGH_PRIO = "${BuildConfigCustom.APPLICATION_ID}.NotificationsPlugin"
+const val CHANNEL_ID = "${BuildConfigCustom.APPLICATION_ID}.BackgroundNotifications"
+const val CHANNEL_RESERVED = "${BuildConfigCustom.APPLICATION_ID}.AlertServiceWrapper"
 
 fun Context.notificationBuilder(
     channelId: String,
