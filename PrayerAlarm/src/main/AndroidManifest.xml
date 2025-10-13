@@ -16,7 +16,10 @@
     <uses-permission
         android:name="android.permission.SCHEDULE_EXACT_ALARM"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <!--    We comment this because it same as SCHEDULE_EXACT_ALARM , but it granted auto , and need
+   Play Console permission declaration . so we remove it and we will ask user at runtime to grant it -->
+    <!--    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />-->
+
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -30,8 +33,7 @@
             android:exported="true"
             android:label="@string/alarm_list_title"
             android:launchMode="singleTask"
-            android:theme="@style/DefaultDarkTheme">
-        </activity>
+            android:theme="@style/DefaultDarkTheme"></activity>
 
         <!-- Application Settings -->
         <activity
@@ -107,7 +109,10 @@
 
 
     <!-- https://github.com/ACRA/acra/issues/787 -->
-    <queries>
+
+    <!--    we uncomment this only if we want access email apps on the device ,
+     or we need to enable the ReportBug class in this library-->
+    <!--<queries>
         <intent>
             <action android:name="android.intent.action.SEND" />
             <data android:mimeType="message/rfc822" />
@@ -117,5 +122,6 @@
             <data android:mimeType="message/rfc822" />
         </intent>
     </queries>
+    -->
 
 </manifest>
