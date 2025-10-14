@@ -60,8 +60,8 @@ public class PreferencesDefaultValues {
     public static final int DEFAULT_AUTO_SILENCE_DURATION = 10;
     public static final int ALARM_TIMEOUT_NEVER = -1;
     public static final int ALARM_TIMEOUT_END_OF_RINGTONE = -2;
-    public static final int DEFAULT_ALARM_SNOOZE_DURATION = 10;
     public static final int ALARM_SNOOZE_DURATION_DISABLED = -1;
+    public static final int DEFAULT_ALARM_SNOOZE_DURATION = ALARM_SNOOZE_DURATION_DISABLED;
     public static final int DEFAULT_ALARM_VOLUME_CRESCENDO_DURATION = 0;
     public static final boolean DEFAULT_ENABLE_PER_ALARM_VOLUME = false;
     public static final boolean DEFAULT_ADVANCED_AUDIO_PLAYBACK = false;
