@@ -52,13 +52,13 @@ private constructor(
     fun create(is24HourFormat: Single<Boolean>, factory: PrimitiveDataStoreFactory): Prefs {
       return Prefs(
           is24HourFormat = is24HourFormat,
-          preAlarmDuration = factory.intStringDataStore(KEY_PREALARM_DURATION, 30),
+          preAlarmDuration = factory.intStringDataStore(KEY_PREALARM_DURATION, -1),
           preAlarmVolume = factory.intDataStore(KEY_PREALARM_VOLUME, 5),
           // we set default to -1, to disable it by default , it can have values from like 1 ior 10 min
           snoozeDuration = factory.intStringDataStore(KEY_ALARM_SNOOZE, -1),
           listRowLayout = factory.stringDataStore(LIST_ROW_LAYOUT, LIST_ROW_LAYOUT_BOLD),
           autoSilence = factory.intStringDataStore(KEY_AUTO_SILENCE, 10),
-          fadeInTimeInSeconds = factory.intStringDataStore(KEY_FADE_IN_TIME_SEC, 0),
+          fadeInTimeInSeconds = factory.intStringDataStore(KEY_FADE_IN_TIME_SEC, 1),
           vibrate = factory.booleanDataStore(KEY_VIBRATE, true),
           skipDuration = factory.intStringDataStore(KEY_SKIP_DURATION, 30),
           longClickDismiss = factory.booleanDataStore(KEY_LONGCLICK_DISMISS, false),

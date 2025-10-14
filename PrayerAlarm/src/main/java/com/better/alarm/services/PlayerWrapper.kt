@@ -11,6 +11,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
+import com.better.alarm.R
 import com.better.alarm.logger.Logger
 
 class PlayerWrapper(
@@ -18,87 +19,96 @@ class PlayerWrapper(
     val context: Context,
     val log: Logger,
 ) : Player {
-  override fun setDataSource(uri: String) {
-    player?.setDataSource(context, uri.toUri())
-  }
+    override fun setDataSource(uri: String) {
+        //we use this line to only play adhan sound
+        setDataSourceFromResource(R.raw.adhan1)
+        //original line , used to play any sound from uri , that user selects from settings
+        //player?.setDataSource(context, uri.toUri())
+    }
 
-  private var player: MediaPlayer? =
-      MediaPlayer().apply {
-        setOnErrorListener { mp, _, _ ->
-          log.e("Error occurred while playing audio.")
-          mp.stop()
-          mp.release()
-          player = null
-          true
+    private var player: MediaPlayer? =
+        MediaPlayer().apply {
+            setOnErrorListener { mp, _, _ ->
+                log.e("Error occurred while playing audio.")
+                mp.stop()
+                mp.release()
+                player = null
+                true
+            }
         }
-      }
 
-  override fun startAlarm() {
-    player?.runCatching {
-      setAudioUsageL()
-      isLooping = true
-      prepare()
-      when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> requestAudioFocusO()
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> requestAudioFocusM()
-      }
-      start()
+    override fun startAlarm() {
+        player?.runCatching {
+            setAudioUsageL()
+            isLooping = false
+            prepare()
+            when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> requestAudioFocusO()
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> requestAudioFocusM()
+            }
+            start()
+        }
     }
-  }
 
-  /** https://github.com/yuriykulikov/AlarmClock/issues/538 */
-  private fun MediaPlayer.setAudioUsageL() {
-    setAudioAttributes(
-        AudioAttributes.Builder()
-            .setUsage(USAGE_ALARM)
-            .setContentType(CONTENT_TYPE_SONIFICATION)
-            .build())
-  }
-
-  @RequiresApi(Build.VERSION_CODES.M)
-  private fun requestAudioFocusM() {
-    context
-        .getSystemService(AudioManager::class.java)
-        .requestAudioFocus(null, AudioManager.STREAM_ALARM, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-  }
-
-  @RequiresApi(Build.VERSION_CODES.O)
-  private fun requestAudioFocusO() {
-    context
-        .getSystemService(AudioManager::class.java)
-        .requestAudioFocus(
-            AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-                .setAudioAttributes(AudioAttributes.Builder().setUsage(USAGE_ALARM).build())
-                .build())
-  }
-
-  override fun setDataSourceFromResource(res: Int) {
-    resources.openRawResourceFd(res)?.run {
-      player?.setDataSource(fileDescriptor, startOffset, length)
-      close()
+    /** https://github.com/yuriykulikov/AlarmClock/issues/538 */
+    private fun MediaPlayer.setAudioUsageL() {
+        setAudioAttributes(
+            AudioAttributes.Builder()
+                .setUsage(USAGE_ALARM)
+                .setContentType(CONTENT_TYPE_SONIFICATION)
+                .build()
+        )
     }
-  }
 
-  override fun setPerceivedVolume(perceived: Float) {
-    val volume = perceived.squared()
-    player?.setVolume(volume, volume)
-  }
-
-  /** Stops alarm audio */
-  override fun stop() {
-    try {
-      player?.run {
-        if (isPlaying) stop()
-        release()
-      }
-    } finally {
-      player = null
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun requestAudioFocusM() {
+        context
+            .getSystemService(AudioManager::class.java)
+            .requestAudioFocus(
+                null,
+                AudioManager.STREAM_ALARM,
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+            )
     }
-  }
 
-  override fun reset() {
-    player?.reset()
-  }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun requestAudioFocusO() {
+        context
+            .getSystemService(AudioManager::class.java)
+            .requestAudioFocus(
+                AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+                    .setAudioAttributes(AudioAttributes.Builder().setUsage(USAGE_ALARM).build())
+                    .build()
+            )
+    }
 
-  private fun Float.squared() = this * this
+    override fun setDataSourceFromResource(res: Int) {
+        resources.openRawResourceFd(res)?.run {
+            player?.setDataSource(fileDescriptor, startOffset, length)
+            close()
+        }
+    }
+
+    override fun setPerceivedVolume(perceived: Float) {
+        val volume = perceived.squared()
+        player?.setVolume(volume, volume)
+    }
+
+    /** Stops alarm audio */
+    override fun stop() {
+        try {
+            player?.run {
+                if (isPlaying) stop()
+                release()
+            }
+        } finally {
+            player = null
+        }
+    }
+
+    override fun reset() {
+        player?.reset()
+    }
+
+    private fun Float.squared() = this * this
 }
