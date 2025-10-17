@@ -209,7 +209,7 @@ public class AddAlarmActivity extends AppCompatActivity {
         });
     }
 
-    private void getToDayPrayerTimes(AlarmStateManager.Callback<DayPrayerTimes> callback) {
+    private void getToDayPrayerTimes(Callback<DayPrayerTimes> callback) {
         Thread thread = new Thread(() -> {
             // Example key: "19-01-2025"
             Calendar day = Calendar.getInstance();

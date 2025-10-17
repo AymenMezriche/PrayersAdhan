@@ -16,6 +16,7 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -24,14 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/kounoz_back"
-            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,8 +69,26 @@
                     android:textStyle="bold" />
             </com.better.alarm.ui.view.DigitalClock>
 
+            <TextView
+                android:id="@+id/alert_text_snooze"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:text="@string/alarm_alert_snooze_text"
+                android:textSize="24sp" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/alert_button_snooze"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp" />
     </RelativeLayout>
 
     <View

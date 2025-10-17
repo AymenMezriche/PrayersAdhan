@@ -43,7 +43,6 @@ public class DeskClockApplication extends Application {
         // Register provider for library to use
         AlarmDependencies.INSTANCE.setPrayerTimesProvider(new AppPrayerTimesProvider(this));
 
-
         applicationContext = getApplicationContext();
         final SharedPreferences prefs = getDefaultSharedPreferences(applicationContext);
 

@@ -32,6 +32,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.best.adhanclock.AppDatabase;
+import com.best.adhanclock.Callback;
 import com.best.adhanclock.DatabaseClient;
 import com.best.adhanclock.DayPrayerTimes;
 import com.best.adhanclock.DayPrayerTimesDao;
@@ -306,7 +307,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
     /**
      * Returns hour/minute for a given alarm day + label (prayer name).
      */
-    public static void getPrayerTimeForTest(Calendar day, String label, AlarmStateManager.Callback<int[]> callback) {
+    public static void getPrayerTimeForTest(Calendar day, String label, Callback<int[]> callback) {
         Thread thread = new Thread(() -> {
             // Example key: "19-01-2025"
             // String key = day.get(Calendar.DAY_OF_MONTH) + "-" + day.get(Calendar.MONTH) + "-" + day.get(Calendar.YEAR);
@@ -1045,7 +1046,5 @@ public final class AlarmStateManager extends BroadcastReceiver {
     }
 
 
-    public interface Callback<T> {
-        void onResult(T value);
-    }
+
 }

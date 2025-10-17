@@ -49,12 +49,12 @@
 
     </style>
 
-    <style name="AlarmAlertFullScreenDarkTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="colorAccent">@color/dark_secondary</item>
-        <item name="colorControlHighlight">@color/dark_ripple</item>
-        <item name="android:colorBackground">@color/dark_background</item>
-        <item name="android:colorForeground">@color/dark_on_background</item>
+    <style name="AlarmAlertFullScreenDarkTheme" parent="AlarmAlertFullScreenLightTheme">
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--        <item name="colorAccent">@color/dark_secondary</item>-->
+<!--        <item name="colorControlHighlight">@color/dark_ripple</item>-->
+<!--        <item name="android:colorBackground">@color/dark_background</item>-->
+<!--        <item name="android:colorForeground">@color/dark_on_background</item>-->
     </style>
 
     <style name="DialogThemeDark" parent="Theme.AppCompat.Dialog">

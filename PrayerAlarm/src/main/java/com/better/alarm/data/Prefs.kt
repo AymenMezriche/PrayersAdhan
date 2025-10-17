@@ -59,10 +59,12 @@ private constructor(
           listRowLayout = factory.stringDataStore(LIST_ROW_LAYOUT, LIST_ROW_LAYOUT_BOLD),
           autoSilence = factory.intStringDataStore(KEY_AUTO_SILENCE, 10),
           fadeInTimeInSeconds = factory.intStringDataStore(KEY_FADE_IN_TIME_SEC, 1),
-          vibrate = factory.booleanDataStore(KEY_VIBRATE, true),
+          //disable by default
+          vibrate = factory.booleanDataStore(KEY_VIBRATE, false),
           skipDuration = factory.intStringDataStore(KEY_SKIP_DURATION, 30),
           longClickDismiss = factory.booleanDataStore(KEY_LONGCLICK_DISMISS, false),
-          theme = factory.stringDataStore(KEY_THEME, "deusex"),
+//          theme = factory.stringDataStore(KEY_THEME, "deusex"),
+          theme = factory.stringDataStore(KEY_THEME,"light"),
           defaultRingtone =
               factory.stringDataStore(KEY_DEFAULT_RINGTONE, Alarmtone.SystemDefault.asString()),
       )

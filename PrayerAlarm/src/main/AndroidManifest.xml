@@ -72,6 +72,7 @@
             android:launchMode="singleInstance"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+        <activity android:name="com.better.alarm.ui.alert.AlarmAlertFullScreenOld" />
 
         <!-- KlaxonPresenter plays sound -->
         <service

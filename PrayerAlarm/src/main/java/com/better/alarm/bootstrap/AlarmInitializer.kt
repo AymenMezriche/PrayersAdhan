@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Build
 import android.view.ViewConfiguration
 import androidx.preference.PreferenceManager
+import com.better.alarm.BuildConfigCustom
 import com.better.alarm.R
 import com.better.alarm.alarmapi.PrayerAlarmUpdater
 import com.better.alarm.data.AlarmValue
@@ -25,7 +26,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 object AlarmInitializer {
     private val started = AtomicBoolean(false)
     private lateinit var applicationContext: Application
-
 
     @JvmStatic
     fun init(application: Application) {
